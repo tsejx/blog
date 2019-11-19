@@ -4,6 +4,7 @@
 
 * [基于 roadhog^2.x 的后台项目构建性能优化](https://github.com/tsejx/blog/issues/1)
 * [AntDesign 组件化开发探索之表单业务设计实践总结](https://github.com/tsejx/blog/issues/2)
+* [可视化配置系统页面批量更新工具的开发实践](https://github.com/tsejx/blog/issues/5)
 
 **理论研究系列：**
 
