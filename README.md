@@ -10,3 +10,6 @@
 
 * [前端相关业务性能优化技术手段总结](https://github.com/tsejx/blog/issues/3)
 * [Vue 响应式系统实现分析](https://github.com/tsejx/blog/issues/4)
+
+**计划总结：**
+* [2019年终总结与2020展望](https://github.com/tsejx/blog/issues/6)
