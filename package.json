@@ -33,7 +33,6 @@
     "typography-theme-wordpress-2016": "^0.16.19"
   },
   "devDependencies": {
-    "gh-pages": "^2.2.0",
     "prettier": "^1.19.1"
   },
   "homepage": "https://tsejx.github.io/blog",
@@ -43,16 +42,16 @@
   "license": "MIT",
   "main": "n/a",
   "repository": {
-    "type": "git",
-    "url": "git+https://github.com/tsejx/blog.git"
+    "type": "http",
+    "url": "https://github.com/tsejx/blog.git"
   },
   "scripts": {
-    "build": "gatsby build",
+    "build": "gatsby build --prefix-paths",
     "develop": "gatsby develop",
     "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
     "start": "npm run develop",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
-    "deploy": "gatsby build && gh-pages -d public -b gh-pages"
+    "deploy": "yarn build && bash ./scripts/deploy.sh"
   }
 }
