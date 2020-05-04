@@ -1,5 +1,5 @@
 <div align="center">
-    <img width="200" src="http://img.mrsingsing.com/blog-favicon.png">
+    <img width="200" src="https://raw.githubusercontent.com/tsejx/blog/master/content/assets/favicon.png">
 </div>
 
 <h1 align="center">BLOG</h1>
