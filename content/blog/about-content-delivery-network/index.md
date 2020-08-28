@@ -24,12 +24,7 @@ CDN = 更智能的镜像 + 缓存 + 流量导流;
 
 最简单的 CDN 网络由一个 DNS 服务器和几台缓存服务器组成，假设您的加速域名为 `www.taobao.com`，接入 CDN 网络，开始使用加速服务后，当终端用户（广州）发起 HTTP 请求时，处理流程如下：
 
-```jsx | inline
-import React from 'react';
-import img from '../../assets/cdn/cdn-workflow.jpg';
-
-export default () => <img alt="CDN Workflow" src={img} width={800} />;
-```
+![CDN Workflow](http://img.mrsingsing.com/about-cdn-cdn-workflow.jpg)
 
 1. 当终端用户（广州）向 `www.taobao.com` 下的某资源发起请求时，首先向 LDNS（本地 DNS）发起域名解析请求。
 2. LDNS 检查缓存中是否有 `www.taobao.com` 的 IP 地址记录。如果有，则直接返回给终端用户；如果没有，则向授权 DNS 查询。
@@ -69,21 +64,11 @@ CDN 通常由源站负责内容生产，主干节点负责二级缓存和加速�
 
 **CDN 切面**
 
-```jsx | inline
-import React from 'react';
-import img from '../../assets/cdn/section.jpg';
-
-export default () => <img alt="CDN 切面" src={img} width={540} />;
-```
+![CDN 切面](http://img.mrsingsing.com/about-cdn-section.jpg)
 
 **CDN 数据流向**
 
-```jsx | inline
-import React from 'react';
-import img from '../../assets/cdn/data-flow.jpg';
-
-export default () => <img alt="CDN 数据流向" src={img} width={540} />;
-```
+![CDN 切面](http://img.mrsingsing.com/about-cdn-data-flow.jpg)
 
 ## 应用场景
 
@@ -91,12 +76,7 @@ export default () => <img alt="CDN 数据流向" src={img} width={540} />;
 
 站点或者应用中大量静态资源的加速分发，建议将站点内容进行动静分离，动态文件可以结合云服务器 ECS，静态资源如各类型 HTML、CSS、JS、图片、文件、短视频等，建议结合对象存储 OSS 存储海量静态资源，可以有效加速内容加载速度，轻松搞定网站图片、短视频等内容分发。
 
-```jsx | inline
-import React from 'react';
-import img from '../../assets/cdn/qiniu-accelerate.png';
-
-export default () => <img alt="七牛云网站加速" src={img} width={540} />;
-```
+![七牛云网站加速](http://img.mrsingsing.com/about-cdn-qiniu-accelerate.png)
 
 建议将 CDN 产品与 OSS 产品结合使用，可以加速资源的加载速度，提高网站图片、短视频等分发效率。
 
@@ -111,12 +91,7 @@ export default () => <img alt="七牛云网站加速" src={img} width={540} />;
 
 大文件下载优化加速分发：网站或应用 App 的主要业务为大文件下载，例如：安装包文件 `apk`、音频文件 `mp3`、驱动程序 `exe`、应用更新文件 `zip` 等，平均单个文件大小在 20M 以上，如游戏、各类客户端下载和 App 下载商店等。
 
-```jsx | inline
-import React from 'react';
-import img from '../../assets/cdn/qiniu-file.png';
-
-export default () => <img alt="七牛云超大文件下载" src={img} width={540} />;
-```
+![七牛云超大文件下载](http://img.mrsingsing.com/about-cdn-qiniu-file.png)
 
 **业务价值：**
 
@@ -199,21 +174,11 @@ CDN 的各类应用场景都各自具有一些具体指标。您可以根据您�
 
 在上传路径中，首包时间主要包含了 DNS 解析时间、TCP 用时、SSL 用时、发送时间和响应时间。上传
 
-```jsx | inline
-import React from 'react';
-import img from '../../assets/cdn/upload-flow.png';
-
-export default () => <img alt="CDN Upload Flow" src={img} width={720} />;
-```
+![CDN Upload Flow](http://img.mrsingsing.com/about-cdn-upload-flow.png)
 
 在下载路径中，首包时间主要包含了 DNS 解析时间、TCP 用时、SSL 用时、发送时间、响应时间和下载用时。下载
 
-```jsx | inline
-import React from 'react';
-import img from '../../assets/cdn/download-flow.png';
-
-export default () => <img alt="CDN Upload Flow" src={img} width={720} />;
-```
+![CDN Download Flow](http://img.mrsingsing.com/about-cdn-download-flow.png)
 
 ### 加速大文件下载的主要指标
 
