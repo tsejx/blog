@@ -47,11 +47,12 @@
   },
   "scripts": {
     "build": "gatsby build --prefix-paths",
+    "build:home": "gatsby build",
     "dev": "gatsby develop",
     "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
     "start": "npm run develop",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
-    "deploy": "yarn build && bash ./scripts/deploy.sh"
+    "deploy": "gatsby clean && yarn build && bash ./scripts/deploy.sh"
   }
 }
