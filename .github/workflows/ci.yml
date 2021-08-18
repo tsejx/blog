@@ -2,7 +2,7 @@ name: BLOG DEPLOY
 on:
   push:
     branches:
-      - master
+      - hexo
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
