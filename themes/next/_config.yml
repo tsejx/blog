@@ -222,9 +222,6 @@ toc:
 creative_commons: by-nc-sa
 #creative_commons:
 
-page:
-  sidebar: true
-
 sidebar:
   # Sidebar Position, available value: left | right (only for Pisces | Gemini).
   # position: left
