@@ -6,7 +6,7 @@
   "author": "tsjx <tsjx@foxmail.com>",
   "scripts": {
     "start": "hexo server",
-    "build": "hexo generate",
+    "build": "npm run clean && hexo generate",
     "clean": "hexo clean"
   },
   "hexo": {
