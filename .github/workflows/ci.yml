@@ -12,10 +12,10 @@ jobs:
         uses: actions/checkout@v1
         with:
           ref: hexo
-      - name: Use Node.js 14
+      - name: Use Node.js 10
         uses: actions/setup-node@v1
         with:
-          node-version: '14'
+          node-version: '10'
       - name: Setup hexo
         env:
           ACTION_DEPLOY_KEY: ${{ secrets.HEXO_DEPLOY_PRI }}
