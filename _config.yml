@@ -80,8 +80,8 @@ theme: Next
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: https://github.com/tsejx/tsejx.github.io.git
-  branch: master
+  repo: git@github.com:tsejx/blog.git
+  branch: gh-pages
 
 auto_excerpt:
 enable: true
