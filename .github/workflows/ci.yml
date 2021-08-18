@@ -2,7 +2,7 @@ name: BLOG DEPLOY
 on:
   push:
     branches:
-      - master
+      - hexo
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -11,7 +11,7 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v1
         with:
-          ref: master
+          ref: hexo
       - name: Use Node.js ${{ matrix.node_version }}
         uses: actions/setup-node@v1
         with:
