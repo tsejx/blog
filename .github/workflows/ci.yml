@@ -2,7 +2,7 @@ name: BLOG DEPLOY
 on:
   push:
     branches:
-      - master
+      - hexo
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -11,11 +11,11 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v1
         with:
-          ref: master
-      - name: Use Node.js ${{ matrix.node_version }}
+          ref: hexo
+      - name: Use Node.js 10
         uses: actions/setup-node@v1
         with:
-          node-version: ${{ matrix.node_version }}
+          node-version: '10'
       - name: Setup hexo
         env:
           ACTION_DEPLOY_KEY: ${{ secrets.HEXO_DEPLOY_PRI }}
