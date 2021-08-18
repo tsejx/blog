@@ -7,6 +7,7 @@
   "scripts": {
     "start": "hexo server",
     "build": "hexo clean && hexo generate",
+    "build:web": "hexo clean && hexo generate --config config/_config.yml",
     "clean": "hexo clean",
     "deploy": "sh scripts/deploy.sh"
   },
