@@ -1,7 +1,6 @@
 ---
 title: 关于 CDN 内容分发网络
 date: '2020-08-20'
-path: 'aboute-content-delivery-network'
 ---
 
 **內容分发网络（Content Delivery Network 或 Content Distribution Network，简称 CDN）** 通过将源站内容分发至 **最接近用户** 的节点，从而 **降低核心系统负载（系统、网络）**，使用户可就近取得所需内容，**提高用户访问的响应速度**。这种技术方案解决了因分布、带宽、服务器性能带来的访问延迟问题，适用于图片小文件、大文件下载、音视频点播、全站加速和安全加速等场景。
