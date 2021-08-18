@@ -12,16 +12,25 @@ jobs:
       uses: actions/checkout@v2 # If you're using actions/checkout@v2 you must set persist-credentials to false in most cases for the deployment to work correctly.
       with:
         persist-credentials: false
-    - name: Setup Node.js 10.x
-      uses: actions/setup-node@master
-      with:
-        node-version: "10.x"
     - name: Install and Build
       run: |
         npm install
         npm run build
-    - name: Deploy 🚀
-      uses: JamesIves/github-pages-deploy-action@4.1.4
+    - name: Checkout gh-pages
+      uses: actions/checkout@v2
       with:
-        branch: gh-pages # The branch the action should deploy to.
-        folder: public # The folder the action should deploy.
+        path: gh-pages-pre
+        ref: gh-pages
+        fetch-depth: 0
+    - name: Publish to gh-pages 🚀
+      env:
+        TZ: Asia/Shanghai
+      run: |
+        mv /public gh-pages
+        cp -r gh-pages-pre/.git gh-pages/
+        cd gh-pages
+        git config --local user.email "tsejx@foxmail.com"
+        git config --local user.name "GitHub Action"
+        git add .
+        git commit -m "Auto Delopy at `date +"%Y-%m-%d %H:%M"`"
+        git push origin gh-pages
