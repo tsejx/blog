@@ -7,7 +7,8 @@
   "scripts": {
     "start": "hexo server",
     "build": "npm run clean && hexo generate",
-    "clean": "hexo clean"
+    "clean": "hexo clean",
+    "deploy": "sh scripts/deploy.sh"
   },
   "hexo": {
     "version": "3.9.0"
