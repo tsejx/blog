@@ -73,7 +73,7 @@ function onDragOver(e) {
 
 我们内部使用的是阿里云的 OSS 对象存储服务，简要流程就是前端通过后端接口获取阿里云 OSS 上传凭证，通过上传凭证直接讲文件上传到 OSS 服务。
 
-![upload-swim](http://img.mrsingsing.com/upload-swim.jpg)
+![upload-swim](https://img.mrsingsing.com/upload-swim.jpg)
 
 ## 音视频文件信息
 
@@ -184,7 +184,7 @@ const captureImagePreview = async (videoFile: File) => {
 
 ### 定位游标
 
-![located-cursor](http://img.mrsingsing.com/located-cursor.gif)
+![located-cursor](https://img.mrsingsing.com/located-cursor.gif)
 
 定位游标是用于定位视频播放的位置、插入互动锚点的位置的标的，定位游标在轨道工作区的位置对应着完整视频的所在的时间点，同时播放器呈现的画面需要定格在对应时间的画面，若处于播放中还需要跳转到指定时间开始播放。
 
@@ -283,13 +283,13 @@ const handleLocatedCursoRedirect = ({
 
 ### 预览游标
 
-![preview-cursor](http://img.mrsingsing.com/preview-cursor.gif)
+![preview-cursor](https://img.mrsingsing.com/preview-cursor.gif)
 
 当鼠标进入轨道工作区，就会自动跟随一根预览游标，预览游标所到之处，播放器需要展示该时间位置对应的画面。所以此处只需要监听 `mousenter` 鼠标进入轨道工作区，利用 `mousemove` 实时变更预览游标偏移值，并调用播放器组件变更预览画面，当然由于鼠标事件触发频率高，需要对调用预览方法进行防抖操作，当 `mouseleave` 离开工作区时隐藏预览游标。
 
 ### 磁吸游标
 
-![magnet-cursor](http://img.mrsingsing.com/magnet-cursor.gif)
+![magnet-cursor](https://img.mrsingsing.com/magnet-cursor.gif)
 
 当用户拖拽视频素材到轨道工作区，或拖拽工作区框架进行排序操作，需要在完整视频开端、结尾及框架与框架之间衔接处显示绿色磁吸游标，方便用户定位拖拽的素材最终在轨道工作区中插入的位置。
 
@@ -297,7 +297,7 @@ const handleLocatedCursoRedirect = ({
 
 为了方便理解，下图红色区域为开始拖拽后生成的磁吸区域。为了减少操作导致页面频繁重排重绘的问题，所有生成的元素都是基于基点进行 `translate` 便偏移。
 
-![magnet-area](http://img.mrsingsing.com/magnet-area.png)
+![magnet-area](https://img.mrsingsing.com/magnet-area.png)
 
 你肯定会有疑问，为什么磁吸区域能检测到拖拽元素位于上方，这与拖拽指令的实现有关，可以留意后面对拖拽指令的详细说明。
 
@@ -421,9 +421,9 @@ const handleLocatedCursoRedirect = ({
 1. 利用 Canvas 绘制刻度尺（Bilibili 云剪辑）
 2. 利用 DOM 绘制刻度尺，采用类似虚拟列表的方式处理海量的 DOM 节点（腾讯云剪辑）
 
-![ruler1](http://img.mrsingsing.com/ruler1.gif)
+![ruler1](https://img.mrsingsing.com/ruler1.gif)
 
-![ruler2](http://img.mrsingsing.com/ruler2.gif)
+![ruler2](https://img.mrsingsing.com/ruler2.gif)
 
 实现思路：
 
@@ -613,7 +613,7 @@ export class RecordVideoTimelineRulerComponent implements OnInit {
 
 我对产品和设计师提出的需求进行了梳理：
 
-![drag-and-drop](http://img.mrsingsing.com/drag-and-drop.png)
+![drag-and-drop](https://img.mrsingsing.com/drag-and-drop.png)
 
 最初，我考虑到使用原生的 drag & drop 方法实现拖拽，但是原生的 drag & drop 方法会影响到文档流其他元素的布局，导致浏览器回流，这显然不是一种优雅的解决方式。查阅相关资料后，发现能通过 mouse 相关方法模拟 drag & drop 的方法，那么如果利用 mouse 相关方法，通过某些判断条件判断为拖拽后，采用绝对布局创建块级格式上下文元素，独立于文档流进行位移，这样一来既能满足功能需求也能满足性能需求。
 
@@ -719,7 +719,7 @@ export class SSDraggableDirective implements OnInit {
 
 基于模版生成的幽灵元素相对比较容易实现，只需要实用 ng-template 定义好 HTML 结构，将模版引用变量作为入参传入指令即可。指令内部根据模版引用变量创建 DOM 元素即可。
 
-![drag-anchor](http://img.mrsingsing.com/drag-anchor.gif)
+![drag-anchor](https://img.mrsingsing.com/drag-anchor.gif)
 
 ```xml
 <!-- 拖拽移动锚点幽灵模版 -->
@@ -740,7 +740,7 @@ export class SSDraggableDirective implements OnInit {
 
 但是浏览器支持的 CSS 属性有几百个，如果每个都需要的话将会提升整个操作的复杂度。因为在这里的使用相关属性的元素的样式是比较固定的，所以只对部分样式属性进行了转移。如果是实现大型的公用包，则应该保证可用性。
 
-![drag-video](http://img.mrsingsing.com/drag-video.gif)
+![drag-video](https://img.mrsingsing.com/drag-video.gif)
 
 ```ts
 export class SSDraggableDirective implements OnInit {
@@ -1387,7 +1387,7 @@ export class SSVideoPreviewDirective implements OnInit {
 
 每个视频框架对应着一个视频素材，用户可以在视频框架上添加锚点，所以在视频框架内是以 视频-锚点-视频-锚点-视频 间隔存在的，锚点后视频的开始时间是上一段视频的结束时间。阿里云的雪碧图是每秒截取一张图片，也就是第 0 秒对应第一张截图，第 100 秒对应的是第二组
 
-![sprite-preview](http://img.mrsingsing.com/sprite-preview.png)
+![sprite-preview](https://img.mrsingsing.com/sprite-preview.png)
 
 > 结合代码说明：
 >
@@ -1451,7 +1451,7 @@ export class SSVideoPreviewDirective implements OnInit {
 
 但是这种实现方式有前提，就是雪碧图必须是 1xn 这种形式的，这是因为 background-image 设置多个值时，背景图片会依次从左向右排列，如果是 10x10 这样的规则，那么雪碧图的宽度会占满，就无法实现一个设置定义一张缩略图了。
 
-![tencent-preview](http://img.mrsingsing.com/tencent-preview.png)
+![tencent-preview](https://img.mrsingsing.com/tencent-preview.png)
 
 但是鉴于阿里云截图只能采用 10 x 10 的规格，所以我们最终仍旧采用已有的方案。
 其他功能
@@ -1470,7 +1470,7 @@ export class SSVideoPreviewDirective implements OnInit {
 
 此处我也实现了一个右键点击的指令，在初始化指令时会先监听 document 的 click 事件，如果指令中缓存的菜单节点为空，或 click 事件对象的 path 属性（也就是事件冒泡的路径）包含菜单节点（也就是在菜单上方 click），则不进行隐藏菜单的操作，否则则需要隐藏。
 
-![contextmenu](http://img.mrsingsing.com/contextmenu.gif)
+![contextmenu](https://img.mrsingsing.com/contextmenu.gif)
 
 ### 游标进度条
 
