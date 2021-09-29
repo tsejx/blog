@@ -22,7 +22,7 @@ date: '2021-06-06'
 
 下图为原版 AI 录播课视频配齐工具
 
-![web-video-editor-img1](http://img.mrsingsing.com/web-video-editor-img1.png)
+![web-video-editor-img1](https://img.mrsingsing.com/web-video-editor-img1.png)
 
 从上图可见原版的配器工具相对比较简陋，通过播放器进度指针的位置插入锚点，然后通过表单配置相关锚点的类型、持续时长、内容等等。
 
@@ -30,7 +30,7 @@ date: '2021-06-06'
 
 如下图所示，AI 录播课视频配齐工具的整体架构由三部分组成：
 
-![web-video-editor-infra-1](http://img.mrsingsing.com/web-video-editor-infra-img1.png)
+![web-video-editor-infra-1](https://img.mrsingsing.com/web-video-editor-infra-img1.png)
 
 - 客户端（前端）：负责用户交互操作，包括视频素材导入、视频剪辑和完整视频的即时预览
 - 服务端（后端）：负责视频配置数据与集团内部其他服务的数据处理，以及与提供云剪辑服务的云平台进行任务调度
@@ -38,7 +38,7 @@ date: '2021-06-06'
 
 前端部分实际上只有一个页面，由三个区域组成，但事实上包含的功能并不少：
 
-![web-video-editor-infra-2](http://img.mrsingsing.com/web-video-editor-infra-img2.png)
+![web-video-editor-infra-2](https://img.mrsingsing.com/web-video-editor-infra-img2.png)
 
 架构和功能都相对复杂，在开发中也确实遭遇不少棘手的技术难点，下一篇我将详述这些细节的实现。
 

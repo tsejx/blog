@@ -34,13 +34,13 @@ RBAC9 是最基础的权限模型，很多产品基于该模型就已经能满�
 
 **应用场景**：例如在电商公司中抽象出几种管理业务的角色，诸如销售经理、项目经理、市场经理等等，小陈既担当营销部门的市场经理又担当销售部的销售经理，那么就需要将这两个角色的赋予给他。
 
-![RBAC0 模型](http://img.mrsingsing.com/authentication-rbac0)
+![RBAC0 模型](https://img.mrsingsing.com/authentication-rbac0)
 
 ### RBAC1 模型
 
 RBAC1 模型其实是 RBAC0 的升级版，它对角色这层元素上进行了细分，引入继承的概念，也就是可以继承某个基础角色生成子角色。
 
-![RBAC1 模型](http://img.mrsingsing.com/authentication-rbac1)
+![RBAC1 模型](https://img.mrsingsing.com/authentication-rbac1)
 
 **应用场景**：承接上面的例子，市场经理岗位可能会分为总监级别、经理级别、副经理级别，这时候如果小陈只是一个副经理级别的，那么他所拥有的市场经理的权限肯定就没有总监级别的多。
 
@@ -57,7 +57,7 @@ RBAC1 模型则更好地在角色层面进行细分，更好地映射了企业�
 - 动态职责分离 DSD
   - 动态的限制用户及其拥有的角色，例如一个用户可以同时拥有两个角色，但是运行时只能激活一个角色
 
-![RBAC2 模型](http://img.mrsingsing.com/authentication-rbac2)
+![RBAC2 模型](https://img.mrsingsing.com/authentication-rbac2)
 
 ### RBAC3 模型
 
@@ -82,7 +82,7 @@ RBAC 模型的优缺点：
 
 还有就是权限层面，权限层面可以划分为查看客户列表、添加客户、删除客户等等。权限和角色是绑定起来的，所以角色和权限的描述可能是这样的：销售经理可以查看客户、添加客户、删除客户；销售仅可以查看客户。
 
-![RBAC 架构设计](http://img.mrsingsing.com/autification-rbac-architect)
+![RBAC 架构设计](https://img.mrsingsing.com/autification-rbac-architect)
 
 在实际的业务开发中，可以对 RBAC 模型做相关的扩展，例如在员工人数众多的情况下，反复地对某个员工进行权限授予是个繁琐的行为，我们可以增加 **用户组** 的概念，直接给用户组分配角色，再把用户加入用户组，这样用户除了自身的权限外，还共享了用户组的所有权限。
 
@@ -96,9 +96,9 @@ RBAC 模型的优缺点：
 - 用户-角色映射：用户和角色之间的映射关系
 - 角色-权限映射：角色和权限之间的映射
 
-![数据库设计](http://img.mrsingsing.com/authentication-rbac-database-table-design)
+![数据库设计](https://img.mrsingsing.com/authentication-rbac-database-table-design)
 
-![功能模块](http://img.mrsingsing.com/authentication-rbac-feature-module)
+![功能模块](https://img.mrsingsing.com/authentication-rbac-feature-module)
 
 ## 前端权限控制思路
 
@@ -110,7 +110,7 @@ RBAC 模型的优缺点：
 - 操作权限：增删改查的权限
 - 数据权限：发送接口到服务端的权限
 
-![Ant Design Pro](http://img.mrsingsing.com/authentication-rbac-management-system)
+![Ant Design Pro](https://img.mrsingsing.com/authentication-rbac-management-system)
 
 在传统的后台系统中会在登录请求中，得到用户所拥有的权限数据，这部分是需要后端的技术支持的。前端根据权限数据展示对应的菜单，点击菜单，才能查看相关的界面。
 

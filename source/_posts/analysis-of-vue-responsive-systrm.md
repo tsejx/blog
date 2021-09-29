@@ -11,7 +11,7 @@ date: '2019-07-04'
 
 Vue 的响应式原理的核心就是观察这些数据，包括 data、props、computed 和 watch 的变化，当这些数据发生变化以后，能通知到对应的观察者（Watcher）以实现相关的逻辑，从而驱动视图的更新。整个响应式原理最核心的实现就是 Dep 类（语义为依赖 Dependency），这个类实际上是连接**数据对象**与**观察者**的桥梁。
 
-![Vue Reactive](http://img.mrsingsing.com/vue-reactive-workflow.png)
+![Vue Reactive](https://img.mrsingsing.com/vue-reactive-workflow.png)
 
 <!-- more -->
 

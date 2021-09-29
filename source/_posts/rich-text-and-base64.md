@@ -26,7 +26,7 @@ date: '2021-03-13'
 
 第一种方案的缺陷比较明显：一是整个游戏由 Egret 引擎搭建，游戏的流程由项目内部代码实现控制，在外层挂载另外的 HTML 节点不好控制；二是题目显示学生答题后，有覆盖题目上层的正确答案（如下图所示），由于不同层级的缘故，无法实现题目内容再上层的覆盖，除非再单独建立一个图层覆盖，但这显示让整件事情变得更复杂、更难操作；三是这种方案在整个画布中不好定位。
 
-![cq-img1](http://img.mrsingsing.com/cq-img1.png)
+![cq-img1](https://img.mrsingsing.com/cq-img1.png)
 
 第二种方案也存在难以解决的一些问题，虽然说目前集团内部已经有比较成熟的题库，但早期还是通过接入外部题库的方式扩充题库，题目录入的富文本编辑器也经过很长时间的迭代，事实上生成的 HTML 字符串也是各不相同，我们无法制定统一的正则表达式完美地匹配所有的情况。
 
@@ -213,7 +213,7 @@ function cutImg(ctx, index, width, height) {
 
 其次，第三个方框是通过 canvas 的 toDataURL 最终生成的 Base64 代码，从第一视觉来看，比正常的差不多大了两倍有多，这里直觉告诉我，也许与设备像素比有关系。
 
-![cq-img2](http://img.mrsingsing.com/cq-img2.png)
+![cq-img2](https://img.mrsingsing.com/cq-img2.png)
 
 [https://github.com/niklasvh/html2canvas/blob/3982df1492bdc40a8e5fa16877cc0291883c8e1a/src/render/canvas/canvas-renderer.ts#L259](https://github.com/niklasvh/html2canvas/blob/3982df1492bdc40a8e5fa16877cc0291883c8e1a/src/render/canvas/canvas-renderer.ts#L259)
 
@@ -267,7 +267,7 @@ function filterImage(box: Bounds, filter: any) {
 
 通过在源码增加支持 Canvas 反相和兼容 Retina 屏幕的代码，解决了字体图片和尺寸问题。
 
-![cq-img3](http://img.mrsingsing.com/cq-img3.png)
+![cq-img3](https://img.mrsingsing.com/cq-img3.png)
 
 但是还有一个问题需要解决，那就是如何利用最小代价在原有项目中更改第三方库的源代码呢？
 
@@ -335,9 +335,9 @@ export class QuestionContent extends eui.Component implements eui.UIComponent {
 
 最终呈现的效果如下图所示：
 
-![cq-img4](http://img.mrsingsing.com/cq-img4.png)
+![cq-img4](https://img.mrsingsing.com/cq-img4.png)
 
-![cq-img5](http://img.mrsingsing.com/cq-img5.png)
+![cq-img5](https://img.mrsingsing.com/cq-img5.png)
 
 参考资料
 

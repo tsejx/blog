@@ -23,7 +23,7 @@ CDN = 更智能的镜像 + 缓存 + 流量导流;
 
 最简单的 CDN 网络由一个 DNS 服务器和几台缓存服务器组成，假设您的加速域名为 `www.taobao.com`，接入 CDN 网络，开始使用加速服务后，当终端用户（广州）发起 HTTP 请求时，处理流程如下：
 
-![CDN Workflow](http://img.mrsingsing.com/about-cdn-cdn-workflow.jpg)
+![CDN Workflow](https://img.mrsingsing.com/about-cdn-cdn-workflow.jpg)
 
 <!-- more -->
 
@@ -65,11 +65,11 @@ CDN 通常由源站负责内容生产，主干节点负责二级缓存和加速�
 
 **CDN 切面**
 
-![CDN 切面](http://img.mrsingsing.com/about-cdn-section.jpg)
+![CDN 切面](https://img.mrsingsing.com/about-cdn-section.jpg)
 
 **CDN 数据流向**
 
-![CDN 切面](http://img.mrsingsing.com/about-cdn-data-flow.jpg)
+![CDN 切面](https://img.mrsingsing.com/about-cdn-data-flow.jpg)
 
 ## 应用场景
 
@@ -77,7 +77,7 @@ CDN 通常由源站负责内容生产，主干节点负责二级缓存和加速�
 
 站点或者应用中大量静态资源的加速分发，建议将站点内容进行动静分离，动态文件可以结合云服务器 ECS，静态资源如各类型 HTML、CSS、JS、图片、文件、短视频等，建议结合对象存储 OSS 存储海量静态资源，可以有效加速内容加载速度，轻松搞定网站图片、短视频等内容分发。
 
-![七牛云网站加速](http://img.mrsingsing.com/about-cdn-qiniu-accelerate.png)
+![七牛云网站加速](https://img.mrsingsing.com/about-cdn-qiniu-accelerate.png)
 
 建议将 CDN 产品与 OSS 产品结合使用，可以加速资源的加载速度，提高网站图片、短视频等分发效率。
 
@@ -92,7 +92,7 @@ CDN 通常由源站负责内容生产，主干节点负责二级缓存和加速�
 
 大文件下载优化加速分发：网站或应用 App 的主要业务为大文件下载，例如：安装包文件 `apk`、音频文件 `mp3`、驱动程序 `exe`、应用更新文件 `zip` 等，平均单个文件大小在 20M 以上，如游戏、各类客户端下载和 App 下载商店等。
 
-![七牛云超大文件下载](http://img.mrsingsing.com/about-cdn-qiniu-file.png)
+![七牛云超大文件下载](https://img.mrsingsing.com/about-cdn-qiniu-file.png)
 
 **业务价值：**
 
@@ -175,11 +175,11 @@ CDN 的各类应用场景都各自具有一些具体指标。您可以根据您�
 
 在上传路径中，首包时间主要包含了 DNS 解析时间、TCP 用时、SSL 用时、发送时间和响应时间。上传
 
-![CDN Upload Flow](http://img.mrsingsing.com/about-cdn-upload-flow.png)
+![CDN Upload Flow](https://img.mrsingsing.com/about-cdn-upload-flow.png)
 
 在下载路径中，首包时间主要包含了 DNS 解析时间、TCP 用时、SSL 用时、发送时间、响应时间和下载用时。下载
 
-![CDN Download Flow](http://img.mrsingsing.com/about-cdn-download-flow.png)
+![CDN Download Flow](https://img.mrsingsing.com/about-cdn-download-flow.png)
 
 ### 加速大文件下载的主要指标
 

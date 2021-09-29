@@ -23,25 +23,25 @@ date: '2020-06-07'
 
 营销活动页的目的是为了让你的用户知道你的产品是什么、能提供什么服务、能解决用户什么需求。通过落地页能直接展示或跳转至 APP 内的核心业务，起到承接流量的作用。页面的内容通常比较简洁，会用到大量设计感高的图片和醒目的文案，为用户展示自己的活动和商品，通过类似优惠价格和赠品等手段引导用户点击，获取到用户信息后，后续再与客户联系，最终将这些潜在的用户转化为真正的用户。
 
-![营销活动页](http://img.mrsingsing.com/landing-page-marketing.jpg)
+![营销活动页](https://img.mrsingsing.com/landing-page-marketing.jpg)
 
 ### 信息搜集页
 
 信息搜集页适用于业务复杂或低频类的产品，当产品核心业务设计到大额交易、定制服务、响应周期长等特征的时候，落地页的任务更像是给用户一个承诺，许诺会有大量优惠的福利，留下个人信息以便平台后续专员的电访。回想起很多诸如职业培训的公司，是不是网页加载后都会弹窗让你填写个人信息，然后几天内就会接到他们电话向你推销课程。
 
-![信息搜集页](http://img.mrsingsing.com/landing-page-information.jpg)
+![信息搜集页](https://img.mrsingsing.com/landing-page-information.jpg)
 
 ### 应用推广页
 
 应用推广页的目的很明确，就是引导用户下载应用、注册、登录等。
 
-![应用推广页](http://img.mrsingsing.com/landing-page-application-promotion.jpg)
+![应用推广页](https://img.mrsingsing.com/landing-page-application-promotion.jpg)
 
 ### 唤醒找回页
 
 日活月活是互联网应用很重要的活性指标，唤醒找回页的使命就是激活那些流失掉的用户，通过短信、邮件、消息通知等主动反馈的形式吸引老用户回归应用。
 
-![唤醒找回页](http://img.mrsingsing.com/landing-page-awaken.jpg)
+![唤醒找回页](https://img.mrsingsing.com/landing-page-awaken.jpg)
 
 ## 数据指标与转化率分析
 
@@ -49,7 +49,7 @@ date: '2020-06-07'
 
 落地页的实际效果需要量化指标来衡量，下面从运营角度列出了一些落地页建设需要关注的指标。
 
-![落地页指标](http://img.mrsingsing.com/landing-page-pointer.jpg)
+![落地页指标](https://img.mrsingsing.com/landing-page-pointer.jpg)
 
 - **页面浏览量**：指页面被用户浏览的次数，严格意义上指用户向网站发出并完成下载页面的请求
 - **点击率**：网页内某内容被点击次数与显示次数之比

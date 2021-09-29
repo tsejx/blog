@@ -92,7 +92,7 @@ roadhog 暴露了 commons 参数对应 Webpack 中 plugins 的多个 `webpack.Co
 
 ### 第三方模块不同兼容库重复打包
 
-![优化前打包结果](http://img.mrsingsing.com/roadhog-performance-build-analyze.jpg)
+![优化前打包结果](https://img.mrsingsing.com/roadhog-performance-build-analyze.jpg)
 
 vendor 提取第三方模块后，发现几个比较大的页面资源文件里仍然存在 antd.lib 组件库的代码，而且这些 `ant.lib` 都是完整一个模块被打包进了这些页面当中，但其实 AntDesign 已经被我完整单独地打包成另外一个文件了，这个打包的文件是由 `ant.es` 打包出来的。
 
@@ -114,7 +114,7 @@ import { message } from 'antd';
 
 ### 忽略 moment 语言包的打包
 
-![忽略 moment 语言包](http://img.mrsingsing.com/roadhog-performance-moment-locale.jpg)
+![忽略 moment 语言包](https://img.mrsingsing.com/roadhog-performance-moment-locale.jpg)
 
 打包后 moment 包的体积比较大，其中 locale 语言包部分占据了比较大的体积，由于我们的项目没有国际化需求，因此可以通过配置 roadhog 提供的 `ignoreMomentLocale: true` 减少打包出来的 vendor 尺寸。
 
@@ -190,7 +190,7 @@ gzip 需要在服务器配置开启
 
 ## 优化效果分析
 
-![优化效果分析](http://img.mrsingsing.com/roadhog-performance-optimizition-result.jpg)
+![优化效果分析](https://img.mrsingsing.com/roadhog-performance-optimizition-result.jpg)
 
 - 开发体验：70s => 20s 启动项目时间提升 71%
 - 构建速度：382s => 40s 项目构建速度提升 89%

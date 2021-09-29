@@ -17,7 +17,7 @@ date: '2020-04-20'
 
 容器技术对进程进行封装隔离，属于操作系统层面的虚拟化技术。由于隔离的进程独立于宿主和其他的隔离的进程，因此称为容器。
 
-![服务器中的容器](http://img.mrsingsing.com/docker-in-server.png)
+![服务器中的容器](https://img.mrsingsing.com/docker-in-server.png)
 
 Docker 容器化技术关键核心只需要掌握三个概念：
 
@@ -50,7 +50,7 @@ $ docker build -t totorox-admin .
 
 如下图所示为前端项目镜像的配置文件：
 
-![Dockerfile in Frontend Project](http://img.mrsingsing.com/frontend-dockerfile.png)
+![Dockerfile in Frontend Project](https://img.mrsingsing.com/frontend-dockerfile.png)
 
 在 Dockerfile 中 `FROM` 指令是必然存在的并且作为构建的开头，该指令初始化一个新的构建阶段（也就是有多少个 `FROM` 指令就有多少个镜像构建阶段）并为后续指令设置基础映像。
 
@@ -60,13 +60,13 @@ $ docker build -t totorox-admin .
 
 类似地，由于我们的项目中使用到了 Sass 预编译，Webpack 打包需要用到 `node-sass` 插件，每次都必须下载 `win32-x64-57_binding.node` 文件，所以要不需要漫长的等待（因为从国外源仓库下载），要不下载失败报一系列的错。幸好它提供了人性化的配置，可以通过环境变量改变下载的地址。我们在 `.npmrc` 中将一些依赖包中需要额外下载的文件的链接地址的环境变量指定为国内的镜像地址。当然啦并非所有依赖包都支持这样做，有些写死了下载地址是无法通过这样的方法优化的。除了上面提到的 `node-sass`，其余可以在 [淘宝镜像](https://developer.aliyun.com/mirror/NPM?from=tnpm) 找到对应的镜像地址，后面会提到的页面爬虫项目中使用的 `phantomjs` 也是通过这种方式大幅度压缩了构建时间。
 
-![.npmrc配置文件](http://img.mrsingsing.com/npmrc.jpg)
+![.npmrc配置文件](https://img.mrsingsing.com/npmrc.jpg)
 
 第二阶段我们从镜像仓库获取 Nginx 镜像。一般地，前端项目构建打包后生成静态资源文件，需要 Web 代理服务器进行请求转发，我们这里用的是 Nginx，当然也可以用 Express 实现一个 Web 服务作为代理转发。
 
 Nginx 配置和使用相对来说比较简单，通过简单的配置即可拥有高性能和高可用性，下面是 Nginx 的示例配置：
 
-![Nginx配置](http://img.mrsingsing.com/nginx-conf.png)
+![Nginx配置](https://img.mrsingsing.com/nginx-conf.png)
 
 在该阶段中，主要是将第一阶段生成的产物转移到第二阶段，这是因为镜像最终的启动指令 `CMD` 是在第二阶段，而且分阶段的镜像构建能够使得最终容器内只需放置打包后的静态资源文件即可，不用包含源代码文件，镜像的体积也会因此而大幅度缩减，在某种程度也确保了源代码的不对外泄漏。
 
@@ -74,13 +74,13 @@ Nginx 配置和使用相对来说比较简单，通过简单的配置即可拥�
 
 在镜像构建过程中，如果细心观察打印的日志，会发现有这么一句：
 
-![移除中间容器](http://img.mrsingsing.com/removeing-intermediate-container.jpg)
+![移除中间容器](https://img.mrsingsing.com/removeing-intermediate-container.jpg)
 
 其实从构建的日志中可以看到，实质上镜像构建的每个指令都会生成一个临时的中间容器，每层中间容器都是以前面一层中间容器为基础的。当对应的指令执行完毕后，对应层级就不会再发生改变，会移除该临时创建的中间容器，然后再进行下一个指令操作。
 
 构建成功后，在命令行中输入 `docker images` 即可查看当前宿主机的 Docker 镜像列表：
 
-![容器镜像](http://img.mrsingsing.com/docker-images.jpg)
+![容器镜像](https://img.mrsingsing.com/docker-images.jpg)
 
 由于我们的项目所需要的镜像在公司内部有私有仓库，所以构建时速度有一定的保障，如果是个人开发者在自己的服务器上构建镜像可能需要从公有仓库例如 Docker Hub 拉取所需要的镜像，这里提供一个优化的手段，可以通过修改 Docker Daemon 配置 `/etc/docker/daemon.json` 的镜像地址，实现镜像的加速，Docker 官方和国内很多云服务器平台都提供了国内的加速服务。
 
@@ -88,7 +88,7 @@ Nginx 配置和使用相对来说比较简单，通过简单的配置即可拥�
 
 这里提供的镜像地址仅供参考，可以到对应的云服务商找到对应的镜像加速地址。
 
-![镜像加速](http://img.mrsingsing.com/docker-image-acceleration.png)
+![镜像加速](https://img.mrsingsing.com/docker-image-acceleration.png)
 
 除此之外，在使用 Docker 构建部署应用前最好确认好 Docker 的版本，例如 CentOS 7 系统默认的 Docker 版本是 13，而 `FROM AS` 的语法则需要 Docker 版本 17 以上才支持，这个时候需要先对宿主机的 Docker 进行版本更新。
 
@@ -110,7 +110,7 @@ $ systemctl start docker
 
 接下来我们看看用 Koa 搭建的服务端项目如何部署，类似操作指令就不再重复赘述了，主要谈谈需要注意的地方。
 
-![服务端Dockerfile](http://img.mrsingsing.com/backend-dockerfile.png)
+![服务端Dockerfile](https://img.mrsingsing.com/backend-dockerfile.png)
 
 因为项目中通过开启子进程的方式执行 Webpack 命令进行页面的生成，因此我们需要在容器内全局安装 Webpack。
 
@@ -186,23 +186,23 @@ CMD /scripts/setup.sh ${env}
 
 前面提及每个指令都是新的构建层，所以这里也是通过管道连接的方式实现一连串的操作，这种方式是很好的压缩镜像体积的方法。
 
-![爬虫项目 Dockerfile](http://img.mrsingsing.com/spider-dockerfile.png)
+![爬虫项目 Dockerfile](https://img.mrsingsing.com/spider-dockerfile.png)
 
 ### 数据库项目
 
 下面需要对 MongoDB 数据库实现容器化管理。先给大家看看 MongoDB 数据库的 Dockerfile 文件：
 
-![](http://img.mrsingsing.com/mongodb-dockerfile.png)
+![](https://img.mrsingsing.com/mongodb-dockerfile.png)
 
 由于独立部署版本的龙猫 X 在初始化时需要导入默认的数据，例如组件数据、组件类型数据、标签数据、页面类型数据等。我们从已有的项目中导出数据并进行适当修正后，将数据文件保存到项目指定默认数据的目录下，在 Dockerfile 中指定 `RUN` 通过下面的 shell 脚本对数据库进行初始化，并向数据库中导入数据。
 
-![MongoDB 初始化脚本](http://img.mrsingsing.com/docker-entrypoint-initdb.png)
+![MongoDB 初始化脚本](https://img.mrsingsing.com/docker-entrypoint-initdb.png)
 
 为了提高数据库的扩展性，数据库的用户名、密码、名称可以通过环境变量的方式进行设置，方便不同的团队根据自身需求修改。
 
 我们将四个项目分别通过 `docker build` 命令构建独立的镜像后，通过命令 `docker images` 能够查看到所有已构建的镜像列表，通过 `docker history <image-id>` 命令能够查看镜像构建过程中的细节：包括每层指令执行的指令、构建后的产物占镜像的体积大小等，通过分析构建历史能够让我们掌握依据对 Dockerfile 进行优化。
 
-![容器构建历史](http://img.mrsingsing.com/docker-history.jpg)
+![容器构建历史](https://img.mrsingsing.com/docker-history.jpg)
 
 除此之外，构建好的镜像需要持久化保存的话，需要 `docker tag` 打标签并 `docker push` 到远程仓库中进行保存。
 
@@ -212,7 +212,7 @@ CMD /scripts/setup.sh ${env}
 
 当 Docker 启动时，实际上会自动在宿主机上创建一个 `docker0` 虚拟网桥，相当于 Linux 上的一个 bridge，可以理解为一个软件交换机。它会在挂载到它的网口之间进行转发。
 
-![容器互联](http://img.mrsingsing.com/docker-network.png)
+![容器互联](https://img.mrsingsing.com/docker-network.png)
 
 回到我们的需求上，我们需要将服务端项目、数据库项目和爬虫项目包裹在一个网络当中，也就是建立这三个项目对应容器的“局域网”。将容器加入指定的局域网其实很简单，talk is cheap，show you the code：
 
@@ -302,11 +302,11 @@ Attating to nginx
 
 下面罗列了根据构建好的镜像在服务器上启动运行容器：
 
-![运行容器命令](http://img.mrsingsing.com/docker-run.png)
+![运行容器命令](https://img.mrsingsing.com/docker-run.png)
 
 容器启动后，可以输入 `docker ps -a` 查看宿主机上所有的容器列表。
 
-![查看宿主机容器列表](http://img.mrsingsing.com/docker-container-list.jpg)
+![查看宿主机容器列表](https://img.mrsingsing.com/docker-container-list.jpg)
 
 从上图可以表格中的 STATUS 和 PORTS 可以看出来，有三个容器已经启动，但是 MongoDB 的容器则启动失败了。
 
@@ -322,7 +322,7 @@ Attating to nginx
 
 docker-compose 负责实现对 Docker 容器集群的快速编排。使用者通过 `docker-compose.yml` 模版文件定义一组关联的应用容器为一个项目。它默认管理对象是项目，通过子命令对项目中的一组容器进行便捷地生命周期管理。简单来说，就是把刚才一连串的命令利用静态的配置文件记录下来，启动容器只需通过 `docker compose up -d` 命令运行即可。
 
-![容器编排](http://img.mrsingsing.com/docker-compose.png)
+![容器编排](https://img.mrsingsing.com/docker-compose.png)
 
 首先，我们需要注意 `docker-compose` 的版本问题，有的配置项是 version2.0 没有，而 version3.0 新增的，详情直接看官方文档 [Compose file versions and upgrading](https://docs.docker.com/compose/compose-file/compose-versioning/) 即可。
 

@@ -47,7 +47,7 @@ Host: www.example.com
 Authorization: Basic aHR0cHdhdGNoOmY=
 ```
 
-![HTTP 基本认证流程图](http://img.mrsingsing.com/authentication-http-basic-access-authentication.jpg)
+![HTTP 基本认证流程图](https://img.mrsingsing.com/authentication-http-basic-access-authentication.jpg)
 
 1. 用户在浏览器中访问了受限制的网页资源，但是没有提供用户的身份信息
 2. 服务端接收到请求后返回 401 应答码（Unauthorized，未被授权的）要求进行身份验证，并附带提供了一个认证域（Access Authentication）`WWW-Authenticate` 说明如何进行验证的方法，例如 `WWW-Authenticate: Basic realm="Secure Area"`，`Basic` 就是验证的模式，而 `realm="Secure Area"` 则为保护域（告知认证的范围），用于与其他请求 URI 作区别
@@ -104,7 +104,7 @@ Cookie 主要用于以下三个方面：
 
 下图为 Session-Cookie 认证的工作流程图：
 
-![Session-Cookie 认证流程图](http://img.mrsingsing.com/authentication-session-cookie.jpg)
+![Session-Cookie 认证流程图](https://img.mrsingsing.com/authentication-session-cookie.jpg)
 
 1. 服务端在接收到来自客户端的首次访问时，会自动创建 Session（将 Session 保存在内存中，也可以保存在 Redis 中），然后给这个 Session 生成一个唯一的标识字符串会话身份凭证 `session_id`（通常称为 `sid`），并在响应头 `Set-Cookie` 中设置这个唯一标识符
 2. 签名，对 `sid` 进行加密处理，服务端会根据这个 `secret` 密钥进行解密（非必需步骤）
@@ -230,7 +230,7 @@ const decode = encrypted => CryptoJS.AES.decrypt(encrypted, 'Secret Passphrase')
 
 随着 Restful API、微服务的兴起，基于 Token 的认证现在已经越来越普遍。Token 和 Session-Cookie 认证方式中的 Session ID 不同，并非只是一个标识符。Token 一般会包含 `用户的相关信息`，通过验证 Token 不仅可以完成身份校验，还可以获取预设的信息。像 Twitter、微信、QQ、Github 等公有 API 都是基于这种方式进行认证的，一些开发框架如 OpenStack、Kubernetes 内部 API 调用也是基于 Token 的认证。
 
-![Token 认证流程图](http://img.mrsingsing.com/authentication-token-authencation.jpg)
+![Token 认证流程图](https://img.mrsingsing.com/authentication-token-authencation.jpg)
 
 基于 Token 的身份验证方法：
 
@@ -530,7 +530,7 @@ CAS 票据：
 
 详细步骤：
 
-![CAS 验证流程时序图](http://img.mrsingsing.com/authentication-cas-workflow.png)
+![CAS 验证流程时序图](https://img.mrsingsing.com/authentication-cas-workflow.png)
 
 1. 用户访问系统 A 的受保护资源（域名是 `a.abc.com`），系统 A 检测出用户处于 `未登录` 状态，重定向（应答码 302）至 SSO 服务认证中心的登录接口，同时地址参数携带登录成功后回跳到系统 A 的页面链接（跳转的链接形如 `sso.abc.com/login?service=https%3A%2F%2Fwww.a.abc.com`）
 2. 由于请求没有携带 SSO 服务器上登录的票据凭证（TGC），所以 SSO 认证中心判定用户处于 `未登录` 状态，重定向用户页面至 SSO 的登录界面，用户在 SSO 的登录页面上进行登录操作。
@@ -602,7 +602,7 @@ OAuth 协议又有 1.0 和 2.0 两个版本，2.0 版整个授权验证流程更
 
 授权码模式是 OAuth 2.0 目前最安全最复杂的授权流程。
 
-![授权码模式](http://img.mrsingsing.com/authentication-authorization-code-grant.jpg)
+![授权码模式](https://img.mrsingsing.com/authentication-authorization-code-grant.jpg)
 
 授权码模式的授权流程可以分为三个部分：
 
@@ -646,13 +646,13 @@ OAuth 协议又有 1.0 和 2.0 两个版本，2.0 版整个授权验证流程更
 3. 通过 access_token 进行接口调用，获取用户基本数据资源或帮助用户实现基本操作
 ```
 
-![微信 OAuth2.0 获取 access_token 时序图](http://img.mrsingsing.com/authentication-wx-oauth2-access-token.png)
+![微信 OAuth2.0 获取 access_token 时序图](https://img.mrsingsing.com/authentication-wx-oauth2-access-token.png)
 
 详情可以参阅 [微信登录功能 - 移动应用微信登录开发指南](https://developers.weixin.qq.com/doc/oplatform/Mobile_App/WeChat_Login/Development_Guide.html)，这里的实现就是授权码模式。
 
 ### 隐式授权模式
 
-![隐式授权模式流程图](http://img.mrsingsing.com/authentication-implicit-grant.jpg)
+![隐式授权模式流程图](https://img.mrsingsing.com/authentication-implicit-grant.jpg)
 
 隐式授权模式大致可以分为两部分：
 
@@ -676,7 +676,7 @@ OAuth 协议又有 1.0 和 2.0 两个版本，2.0 版整个授权验证流程更
 
 ### 密码模式
 
-![密码模式流程图](http://img.mrsingsing.com/authentication-resource-owner-password-credentials-grant.jpg)
+![密码模式流程图](https://img.mrsingsing.com/authentication-resource-owner-password-credentials-grant.jpg)
 
 密码模式的授权流程可以分为两部分：
 
@@ -700,7 +700,7 @@ OAuth 协议又有 1.0 和 2.0 两个版本，2.0 版整个授权验证流程更
 
 ### 客户端模式
 
-![客户端模式流程图](http://img.mrsingsing.com/authentication-client-credentials-grant.jpg)
+![客户端模式流程图](https://img.mrsingsing.com/authentication-client-credentials-grant.jpg)
 
 客户端模式的授权流程可以分为两部分：
 
@@ -739,7 +739,7 @@ OAuth 协议又有 1.0 和 2.0 两个版本，2.0 版整个授权验证流程更
 
 按照客户端类型与访问令牌所有者分类：
 
-![OAuth2.0 模式选型](http://img.mrsingsing.com/authentication-oauth2-mode-selection.jpg)
+![OAuth2.0 模式选型](https://img.mrsingsing.com/authentication-oauth2-mode-selection.jpg)
 
 ## 联合登录
 
@@ -755,7 +755,7 @@ OAuth 协议又有 1.0 和 2.0 两个版本，2.0 版整个授权验证流程更
 
 扫码登录通常见于移动端 APP 中，基本操作流程是让已登录用户主动扫描二维码，以使 PC 端的同款应用得以快速登录的方式，常见的具备扫码登录的应用有微信、钉钉、支付宝等。
 
-![扫码登录流程图](http://img.mrsingsing.com/authentication-scan-qrcode-login-workflow.jpg)
+![扫码登录流程图](https://img.mrsingsing.com/authentication-scan-qrcode-login-workflow.jpg)
 
 扫码登录可以分为三个阶段：待扫码、已扫码待确认和已确认。
 
@@ -795,7 +795,7 @@ PC 端的定时器，轮询到二维码状态为已登录状态，并且会获�
 
 下图为一键登录的流程图：
 
-![一键登录流程图](http://img.mrsingsing.com/authentication-one-click-login-workflow.png)
+![一键登录流程图](https://img.mrsingsing.com/authentication-one-click-login-workflow.png)
 
 主要步骤：
 

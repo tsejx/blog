@@ -18,7 +18,7 @@ date: '2020-03-01'
 
 开始前，直接抛出整个业务流程的模式图，以便对该功能有个全貌的认知。
 
-![自动化测试业务流程图](http://img.mrsingsing.com/automatation-test-workflow.jpg)
+![自动化测试业务流程图](https://img.mrsingsing.com/automatation-test-workflow.jpg)
 
 简单阐述一下参与流程的几个服务，包括用户操作自动化测试的前端界面、获取页面数据的龙猫 X 服务、用于进行测试逻辑的服务以及连接测试服务的无头浏览器端。
 
@@ -55,7 +55,7 @@ B 组件（B2 事件）-> C 组件（C1 事件）
 1. 将零散事件关系，以收集组件事件内联的关系表解决单个事件通讯间无法连结的问题，最终组织成事件链
 2. 通过某一事件，能自动触发后续事件（某些龙猫 X 定义为主动事件并非所有由用户触发，也能是组件内部触发）
 
-![事件链示意图](http://img.mrsingsing.com/automatation-test-events-chain.jpg)
+![事件链示意图](https://img.mrsingsing.com/automatation-test-events-chain.jpg)
 
 上述图片展示了实际业务中的事件链示例，该事件链以名为「立即注册」的 Button 按钮组件触发，后续经由 Input 输入框组件获取已前置输入的手机号数据，内部数据流获取数据后触发 Input 组件内的另一个取值的主动事件，然后取值会检验输入框输入数据的有效性，根据有效性分流取值成功与取值失败的被动事件。如果取值失败，则会弹出 Message 组件提示输入框输入数据无效的相关信息；如果取值成功，则会用获取到的手机号和其他相关参数请求接口验证，响应后根据后台返回结果分流为进而请求另一个请求短信验证码的接口还是需要进行鉴定用户为真实用户的图形验证码操作。这就构成一条完整的事件链，整个事件链中除了输入框额外的数据收入外，用户只需触发一次「立即注册」的按钮即可检验后续流程。
 
@@ -119,7 +119,7 @@ Egg 框架的好处是其生态提供了相关的插件，很好地与项目集�
 
 Puppeteer 基于 Chrome DevTool Protocol（简称 CDP），而 CDP 基于 WebSocket，利用 WebSocket 实现与浏览器内核的快速通道。
 
-![Puppeteer 实现模型](http://img.mrsingsing.com/automatation-test-puppeteer-pyramid.png)
+![Puppeteer 实现模型](https://img.mrsingsing.com/automatation-test-puppeteer-pyramid.png)
 
 Puppeteer 广泛应用于各大公司团队的实际业务场景：
 
@@ -139,7 +139,7 @@ Puppeteer 提供一种方法 `page.exposeFunction` 将能在 Node 服务进程�
 
 当我们在触发事件链开端事件时，通过 Node 服务进而操作无头浏览器内的页面，并在专用于发布订阅模式事件关系传递中调用该挂载全局的函数，将相关参数结果返回到 Node 服务的相关服务中。
 
-![无头浏览器事件响应信息响应机制](http://img.mrsingsing.com/automatation-test-case.jpg)
+![无头浏览器事件响应信息响应机制](https://img.mrsingsing.com/automatation-test-case.jpg)
 
 从上图可以看到，每当被动性质事件触发后，事件链中的被动事件会在触发时额外发送消息发送到 Node 服务，获得响应后跑过测试用例即将最终结果返回到前端。
 

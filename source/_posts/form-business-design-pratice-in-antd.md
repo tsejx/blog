@@ -83,7 +83,7 @@ Form.create()(Basic)
 - 通过 Form 组件内部监听函数 onFieldsChange 获取实时变化的表单值，并通过上层组件的 `handleFormChange` 存储在 State 中
 - 上层组件 State 发生变化，表单值通过 Props 传递给子组件，在传递给子组件之前会经过修饰子组件的 Form 组件，组件内部提供 `mapPropsToFields` 方法，这个方法的作用是把父组件的属性映射到表单项上，但是需要对返回值中的表单域数据用 `Form.createFormField` 标记
 
-![real-time-synchronization](http://img.mrsingsing.com/ant-form-real-time-synchronization.png)
+![real-time-synchronization](https://img.mrsingsing.com/ant-form-real-time-synchronization.png)
 
 切换页面时进行数据验证并同步到上层组件的数据同步方案：
 
@@ -92,7 +92,7 @@ Form.create()(Basic)
 
 整个流程相比实时存储的方案会更加简洁，减少因数据同步导致上层组件 Re-Render。
 
-![verifying-synchronization](http://img.mrsingsing.com/ant-form-verifying-synchronization.png)
+![verifying-synchronization](https://img.mrsingsing.com/ant-form-verifying-synchronization.png)
 
 ### 异步请求处理方案
 
@@ -176,7 +176,7 @@ const data = {
 
 从需求出发，无论出原型设计上还是前端组件设计上，都应该保持功能一致，也就是说这个组件应该封装成单独的组件，组件内部有控制开关，根据单项选择展示不同的次级表单项，而且动态增减的只是时间段输入框，而与单项选择和日期选择无关，因此将多个基础组件封装起来并通过 Ant Design 提供的自定义表单控件的组合模式能够更合理地实现此功能。
 
-![time-interval-exhibition](http://img.mrsingsing.com/ant-form-time-interval-exhibition.gif)
+![time-interval-exhibition](https://img.mrsingsing.com/ant-form-time-interval-exhibition.gif)
 
 ## Form 组件使用总结
 
