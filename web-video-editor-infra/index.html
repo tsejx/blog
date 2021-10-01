@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/blog/css/main.css?v=6.3.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/favicon.ico?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon.ico?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon.ico?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/blog/images/favicon.ico?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/blog/',
+    scheme: 'Mist',
+    version: '6.3.0',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="随着业务规模的扩大，业务方对提高生产效率的需求日加激烈。尤其笔者所在业务部门负责的 AI 录播课，主讲老师需在课前对录播视频进行上传、根据课程内容插入锚点和编辑相关互动的内容，因此在夏季课来临之前，我们针对用户的痛点提出改造现有的 AI 录播课视频配齐工具。 需求背景 颗粒化需求   过去 AI 课视频都是以单个完整的视频（大小约 4GB 左右）一次性上传到云服务器，再通过 Web 网页的配齐工具">
+<meta name="keywords" content="前端开发">
+<meta property="og:type" content="article">
+<meta property="og:title" content="云视频剪辑配齐工具实践复盘（架构篇）">
+<meta property="og:url" content="https://tsejx.github.io/blog/web-video-editor-infra/index.html">
+<meta property="og:site_name" content="mrsingsing">
+<meta property="og:description" content="随着业务规模的扩大，业务方对提高生产效率的需求日加激烈。尤其笔者所在业务部门负责的 AI 录播课，主讲老师需在课前对录播视频进行上传、根据课程内容插入锚点和编辑相关互动的内容，因此在夏季课来临之前，我们针对用户的痛点提出改造现有的 AI 录播课视频配齐工具。 需求背景 颗粒化需求   过去 AI 课视频都是以单个完整的视频（大小约 4GB 左右）一次性上传到云服务器，再通过 Web 网页的配齐工具">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://img.mrsingsing.com/web-video-editor-img1.png">
+<meta property="og:image" content="https://img.mrsingsing.com/web-video-editor-infra-img1.png">
+<meta property="og:image" content="https://img.mrsingsing.com/web-video-editor-infra-img2.png">
+<meta property="og:updated_time" content="2021-10-01T10:05:42.417Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="云视频剪辑配齐工具实践复盘（架构篇）">
+<meta name="twitter:description" content="随着业务规模的扩大，业务方对提高生产效率的需求日加激烈。尤其笔者所在业务部门负责的 AI 录播课，主讲老师需在课前对录播视频进行上传、根据课程内容插入锚点和编辑相关互动的内容，因此在夏季课来临之前，我们针对用户的痛点提出改造现有的 AI 录播课视频配齐工具。 需求背景 颗粒化需求   过去 AI 课视频都是以单个完整的视频（大小约 4GB 左右）一次性上传到云服务器，再通过 Web 网页的配齐工具">
+<meta name="twitter:image" content="https://img.mrsingsing.com/web-video-editor-img1.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://tsejx.github.io/blog/web-video-editor-infra/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>云视频剪辑配齐工具实践复盘（架构篇） | mrsingsing</title>
+  
+
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f81f55e9e4db3ad1f98521812f24d5aa";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/blog/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">mrsingsing</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/blog/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/blog/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/blog/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://tsejx.github.io/blog/blog/web-video-editor-infra/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="tsejx">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/blog/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="mrsingsing">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">云视频剪辑配齐工具实践复盘（架构篇）
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2021-06-06 00:00:00" itemprop="dateCreated datePublished" datetime="2021-06-06T00:00:00+00:00">2021-06-06</time>
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>随着业务规模的扩大，业务方对提高生产效率的需求日加激烈。尤其笔者所在业务部门负责的 AI 录播课，主讲老师需在课前对录播视频进行上传、根据课程内容插入锚点和编辑相关互动的内容，因此在夏季课来临之前，我们针对用户的痛点提出改造现有的 AI 录播课视频配齐工具。</p>
+<h2 id="需求背景"><a href="#需求背景" class="headerlink" title="需求背景"></a>需求背景</h2><ol>
+<li>颗粒化需求</li>
+</ol>
+<ul>
+<li>过去 AI 课视频都是以单个完整的视频（大小约 4GB 左右）一次性上传到云服务器，再通过 Web 网页的配齐工具根据播放器时间插入锚点。在公司网络下，由于各家分公司的经营情况不同，大概至少需要 30 分钟到 60 分钟不等。对于配齐的老师来说，在上传等待这段时间是无法处理其他工作的，唯有上传成功后，才能进行视频配齐的工作。</li>
+<li>如果主讲老师在视频配齐阶段发现视频中出现错误或有课程内容需要修改，那么就需要视频编辑部门编辑后，重新上传和配齐，那么之前所完成的工作就需要重新开始，整个流程会让老师做了很多无用功，且消耗大量的时间。</li>
+</ul>
+<ol start="2">
+<li>灵活度需求</li>
+</ol>
+<ul>
+<li>全国不同省份地区的学生水平存在着差距，课堂老师希望通过增加附加题、白板讲解、拓展讲解等可灵活运用的环节，让课堂老师根据课堂实际情况，自行决定是否播放相关的片段。</li>
+</ul>
+<p>最终产品提出上述需求的解决方案：分段上传 + 自由组合。</p>
+<a id="more"></a>
+<p>下图为原版 AI 录播课视频配齐工具</p>
+<p><img src="https://img.mrsingsing.com/web-video-editor-img1.png" alt="web-video-editor-img1"></p>
+<p>从上图可见原版的配器工具相对比较简陋，通过播放器进度指针的位置插入锚点，然后通过表单配置相关锚点的类型、持续时长、内容等等。</p>
+<h2 id="架构设计"><a href="#架构设计" class="headerlink" title="架构设计"></a>架构设计</h2><p>如下图所示，AI 录播课视频配齐工具的整体架构由三部分组成：</p>
+<p><img src="https://img.mrsingsing.com/web-video-editor-infra-img1.png" alt="web-video-editor-infra-1"></p>
+<ul>
+<li>客户端（前端）：负责用户交互操作，包括视频素材导入、视频剪辑和完整视频的即时预览</li>
+<li>服务端（后端）：负责视频配置数据与集团内部其他服务的数据处理，以及与提供云剪辑服务的云平台进行任务调度</li>
+<li>云平台：提供基础支撑，例如视频文件存储、视频编解码、视频截图、视频合成、视频加密等等</li>
+</ul>
+<p>前端部分实际上只有一个页面，由三个区域组成，但事实上包含的功能并不少：</p>
+<p><img src="https://img.mrsingsing.com/web-video-editor-infra-img2.png" alt="web-video-editor-infra-2"></p>
+<p>架构和功能都相对复杂，在开发中也确实遭遇不少棘手的技术难点，下一篇我将详述这些细节的实现。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://www.infoq.cn/article/M2JR9t57w75MvItd7FF3" target="_blank" rel="noopener">爱奇艺云剪辑 Web 端的技术实现</a></li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/rich-text-and-base64/" rel="next" title="富文本题目字符串转 Base64 图片实现">
+                <i class="fa fa-chevron-left"></i> 富文本题目字符串转 Base64 图片实现
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/web-video-editor-practise/" rel="prev" title="云视频剪辑配齐工具实践复盘（实现篇）">
+                云视频剪辑配齐工具实践复盘（实现篇） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/blog/images/avatar.jpeg" alt="tsejx">
+            
+              <p class="site-author-name" itemprop="name">tsejx</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/blog/archives/">
+                
+                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/tsejx" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/blog/images/cc-by-nc-sa.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#需求背景"><span class="nav-number">1.</span> <span class="nav-text">需求背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#架构设计"><span class="nav-number">2.</span> <span class="nav-text">架构设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">3.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tsejx</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/blog/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/blog/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/blog/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/blog/css/main.css?v=6.3.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/favicon.ico?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon.ico?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon.ico?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/blog/images/favicon.ico?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/blog/',
+    scheme: 'Mist',
+    version: '6.3.0',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="谈到权限控制，实际上在我们的生活中无处不在，例如我们无时无刻都在使用的智能手机，打开手机需要生物指纹或者人脸识别；当你进入公司的时候，你需要工卡在门禁滴一下；又如曾经的你是否有过半夜打开心仪女孩的 QQ 空间，欲一探究竟的时候，却告诉需要添加好友才能访问。这些都是我们日常生活中体现权限的地方，而在软件开发中，权限管理也是无处不在的产品设计功能，尤其是后台管理后台无法对权限管理避而不谈，今天尝试深入">
+<meta name="keywords" content="前端开发">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于 RBAC 权限模型的架构设计">
+<meta property="og:url" content="https://tsejx.github.io/blog/architect-design-based-on-rbac/index.html">
+<meta property="og:site_name" content="mrsingsing">
+<meta property="og:description" content="谈到权限控制，实际上在我们的生活中无处不在，例如我们无时无刻都在使用的智能手机，打开手机需要生物指纹或者人脸识别；当你进入公司的时候，你需要工卡在门禁滴一下；又如曾经的你是否有过半夜打开心仪女孩的 QQ 空间，欲一探究竟的时候，却告诉需要添加好友才能访问。这些都是我们日常生活中体现权限的地方，而在软件开发中，权限管理也是无处不在的产品设计功能，尤其是后台管理后台无法对权限管理避而不谈，今天尝试深入">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://img.mrsingsing.com/authentication-rbac0">
+<meta property="og:image" content="https://img.mrsingsing.com/authentication-rbac1">
+<meta property="og:image" content="https://img.mrsingsing.com/authentication-rbac2">
+<meta property="og:image" content="https://img.mrsingsing.com/autification-rbac-architect">
+<meta property="og:image" content="https://img.mrsingsing.com/authentication-rbac-database-table-design">
+<meta property="og:image" content="https://img.mrsingsing.com/authentication-rbac-feature-module">
+<meta property="og:image" content="https://img.mrsingsing.com/authentication-rbac-management-system">
+<meta property="og:updated_time" content="2021-10-01T10:05:42.413Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="基于 RBAC 权限模型的架构设计">
+<meta name="twitter:description" content="谈到权限控制，实际上在我们的生活中无处不在，例如我们无时无刻都在使用的智能手机，打开手机需要生物指纹或者人脸识别；当你进入公司的时候，你需要工卡在门禁滴一下；又如曾经的你是否有过半夜打开心仪女孩的 QQ 空间，欲一探究竟的时候，却告诉需要添加好友才能访问。这些都是我们日常生活中体现权限的地方，而在软件开发中，权限管理也是无处不在的产品设计功能，尤其是后台管理后台无法对权限管理避而不谈，今天尝试深入">
+<meta name="twitter:image" content="https://img.mrsingsing.com/authentication-rbac0">
+
+
+
+
+
+
+  <link rel="canonical" href="https://tsejx.github.io/blog/architect-design-based-on-rbac/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>基于 RBAC 权限模型的架构设计 | mrsingsing</title>
+  
+
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f81f55e9e4db3ad1f98521812f24d5aa";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/blog/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">mrsingsing</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/blog/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/blog/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/blog/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://tsejx.github.io/blog/blog/architect-design-based-on-rbac/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="tsejx">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/blog/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="mrsingsing">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">基于 RBAC 权限模型的架构设计
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-05-15 00:00:00" itemprop="dateCreated datePublished" datetime="2020-05-15T00:00:00+00:00">2020-05-15</time>
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>谈到权限控制，实际上在我们的生活中无处不在，例如我们无时无刻都在使用的智能手机，打开手机需要生物指纹或者人脸识别；当你进入公司的时候，你需要工卡在门禁滴一下；又如曾经的你是否有过半夜打开心仪女孩的 QQ 空间，欲一探究竟的时候，却告诉需要添加好友才能访问。这些都是我们日常生活中体现权限的地方，而在软件开发中，权限管理也是无处不在的产品设计功能，尤其是后台管理后台无法对权限管理避而不谈，今天尝试深入了解权限管理设计中最常用的 RBAC 模型。</p>
+<h2 id="权限模型"><a href="#权限模型" class="headerlink" title="权限模型"></a>权限模型</h2><p><strong>权限</strong> 二字从字面上可拆分为 <code>权力+限制</code>，从使用者的角度来说，也就是在限制的范围内正确地行驶权力，而站在设计者的角度来解读，则是通过合理的手段控制使用者能访问到他们能够访问到的资源。</p>
+<p>在权限设计领域，最常见的权限模型有以下四种：</p>
+<ul>
+<li>ACL（Access Control List）：访问控制列表 <code>用户 -&gt; 权限</code></li>
+<li>RBAC（Role-Based Access Control）：基于 <strong>角色</strong> 的权限控制 <code>用户 -&gt; 角色 -&gt; 权限</code></li>
+<li>ABAC（Attribute-Based Access Control）：基于 <strong>属性</strong> 的权限控制，该模型根据特殊的规则分配权限 <code>（用户、资源、对象属性）-&gt; 权限</code></li>
+<li>PBAC（Policy-Based Access Control）：基于 <strong>策略</strong> 的权限控制，用户（组）隶属于角色，角色隶属于资源（项目）<code>用户 -&gt; 角色 -&gt; （资源/项目 + 权限）</code></li>
+</ul>
+<p>第一种 ACL 模型，权限能直接赋予用户，例如将查看订单列表（权限）赋予某位运营人员（用户）。但是这种模式的缺点在于，但用户量达到一定量级的时候，那么就需要对每个用户都进行一次授权操作，那么这个工作量就会相当大。</p>
+<p>因此就出现了 RBAC 模型，这是软件设计中最常用的权限管理模型，相比于 ACL 模型，RBAC 模型在用户与权限之间多了一个元素「角色」，通过权限关联角色、角色关联用户的方法来间接地赋予用户权限，从而实现用户与权限的解耦。</p>
+<p>后两种大概知道就行，因为一般不会用到，详情可自行 Google 了解。</p>
+<a id="more"></a>
+<h2 id="RBAC-模型的演进"><a href="#RBAC-模型的演进" class="headerlink" title="RBAC 模型的演进"></a>RBAC 模型的演进</h2><p>在 RBAC 模型的演进发展出四个版本，分别是 RBAC 0~3。</p>
+<h3 id="RBAC0-模型"><a href="#RBAC0-模型" class="headerlink" title="RBAC0 模型"></a>RBAC0 模型</h3><p>RBAC9 是最基础的权限模型，很多产品基于该模型就已经能满足设计需求。用户和角色之间可以是一对多也可以是多对多关系，而角色和权限之间则多以多对多的关系为主，用户拥有的权限等于他所有的角色持有的权限之和。</p>
+<p><strong>应用场景</strong>：例如在电商公司中抽象出几种管理业务的角色，诸如销售经理、项目经理、市场经理等等，小陈既担当营销部门的市场经理又担当销售部的销售经理，那么就需要将这两个角色的赋予给他。</p>
+<p><img src="https://img.mrsingsing.com/authentication-rbac0" alt="RBAC0 模型"></p>
+<h3 id="RBAC1-模型"><a href="#RBAC1-模型" class="headerlink" title="RBAC1 模型"></a>RBAC1 模型</h3><p>RBAC1 模型其实是 RBAC0 的升级版，它对角色这层元素上进行了细分，引入继承的概念，也就是可以继承某个基础角色生成子角色。</p>
+<p><img src="https://img.mrsingsing.com/authentication-rbac1" alt="RBAC1 模型"></p>
+<p><strong>应用场景</strong>：承接上面的例子，市场经理岗位可能会分为总监级别、经理级别、副经理级别，这时候如果小陈只是一个副经理级别的，那么他所拥有的市场经理的权限肯定就没有总监级别的多。</p>
+<p>RBAC1 模型则更好地在角色层面进行细分，更好地映射了企业组织架构中的职能的权限，根据实际的管理权限对相似职能的角色进行删减以达到级别分明的效果。</p>
+<h3 id="RBAC2-模型"><a href="#RBAC2-模型" class="headerlink" title="RBAC2 模型"></a>RBAC2 模型</h3><p>在 RBAC2 中对角色层面增加了更多的限制：</p>
+<ul>
+<li>静态职责分离 SSD<ul>
+<li>角色互斥：相同用户不能同时拥有互斥关系的角色，例如会计和出纳两个角色就是互斥的</li>
+<li>基数约束：角色被分配到的用户有数量上限，例如公司中只有一个 CEO 职位，那么这个角色的数量就是有限的</li>
+<li>先决条件角色：要拥有更高级别的角色权限，需要先获取到相对来说低级别的一些权限，例如副经理要想获取到总监级别权限，那么他需要先获取到经理级别的权限</li>
+</ul>
+</li>
+<li>动态职责分离 DSD<ul>
+<li>动态的限制用户及其拥有的角色，例如一个用户可以同时拥有两个角色，但是运行时只能激活一个角色</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://img.mrsingsing.com/authentication-rbac2" alt="RBAC2 模型"></p>
+<h3 id="RBAC3-模型"><a href="#RBAC3-模型" class="headerlink" title="RBAC3 模型"></a>RBAC3 模型</h3><p>RBAC3 模型就是 <code>RBAC1 + RBAC2</code> 两个模型的合集，所以 RBAC3 既有 RBAC1 的角色等级划分，也有 RBAC2 的角色限制。这种模型只有在系统比较复杂的时候才派得上用场，不然设计得过度复杂，对开发和后期维护也不是好事情。</p>
+<p>RBAC 模型的优缺点：</p>
+<p><strong>优点</strong></p>
+<ol>
+<li>简化了用户和权限的关系，权限只要一次赋予角色就能重复使用</li>
+<li>对后续的维护更加友好，用户和权限之间存在更多的斡旋空间，便于基于角色进行权限扩展</li>
+</ol>
+<p><strong>缺点</strong></p>
+<ol>
+<li>RBAC 模型并未提供控制操作顺序的机制，会对有严格操作顺序的系统造成困难</li>
+</ol>
+<h2 id="RBAC-架构设计"><a href="#RBAC-架构设计" class="headerlink" title="RBAC 架构设计"></a>RBAC 架构设计</h2><p>前面我们提到 RBAC 涉及三个层面，就是用户、角色和权限。</p>
+<p>用户我们可以理解为独立的个体，例如张三、李四、王五。而角色的定义是很广泛的，如果我们从职位划分有销售经理、市场经理、项目经理等等，按部门划分的话可以是销售部、市场部、项目部，所以说角色应该按照系统的业务需求来划分。而事实上，在我们的架构设计中需要对用户和角色的关系进行描述，比如其内容应该是张三是销售经理、李四是市场经理、王五是项目经理。</p>
+<p>还有就是权限层面，权限层面可以划分为查看客户列表、添加客户、删除客户等等。权限和角色是绑定起来的，所以角色和权限的描述可能是这样的：销售经理可以查看客户、添加客户、删除客户；销售仅可以查看客户。</p>
+<p><img src="https://img.mrsingsing.com/autification-rbac-architect" alt="RBAC 架构设计"></p>
+<p>在实际的业务开发中，可以对 RBAC 模型做相关的扩展，例如在员工人数众多的情况下，反复地对某个员工进行权限授予是个繁琐的行为，我们可以增加 <strong>用户组</strong> 的概念，直接给用户组分配角色，再把用户加入用户组，这样用户除了自身的权限外，还共享了用户组的所有权限。</p>
+<h2 id="数据库与功能模块设计"><a href="#数据库与功能模块设计" class="headerlink" title="数据库与功能模块设计"></a>数据库与功能模块设计</h2><p>在架构设计的章节中我们提到了除用户、角色和权限外，他们相互联系的关系共五个层面，映射到数据库的设计对应的就是五张表。</p>
+<ul>
+<li>user（用户）：每个用户都有唯一的 UID 识别，并被授予不同的角色</li>
+<li>role（角色）：不同角色具有不同权限</li>
+<li>permission（权限）：访问权限</li>
+<li>用户-角色映射：用户和角色之间的映射关系</li>
+<li>角色-权限映射：角色和权限之间的映射</li>
+</ul>
+<p><img src="https://img.mrsingsing.com/authentication-rbac-database-table-design" alt="数据库设计"></p>
+<p><img src="https://img.mrsingsing.com/authentication-rbac-feature-module" alt="功能模块"></p>
+<h2 id="前端权限控制思路"><a href="#前端权限控制思路" class="headerlink" title="前端权限控制思路"></a>前端权限控制思路</h2><p>前端权限从本质上来说即根据权限表对视图层的展示以及对请求接口的访问进行限制。</p>
+<p>下面我们谈谈前端界面对于权限控制的粒度大小，以传统的后台系统为例，有以页面为维度作为权限控制粒度的，拥有权限的人员方可访问对应的页面；有以操作作为权限控制的，对应的前端界面中的页面元素需要隐藏或提示；也存在用户通过浏览器的开发者工具修改 DOM 元素以绕过权限直接操作的，这时候就需要对接口请求做拦截。</p>
+<ul>
+<li>页面权限（菜单权限）：进入页面的权限</li>
+<li>操作权限：增删改查的权限</li>
+<li>数据权限：发送接口到服务端的权限</li>
+</ul>
+<p><img src="https://img.mrsingsing.com/authentication-rbac-management-system" alt="Ant Design Pro"></p>
+<p>在传统的后台系统中会在登录请求中，得到用户所拥有的权限数据，这部分是需要后端的技术支持的。前端根据权限数据展示对应的菜单，点击菜单，才能查看相关的界面。</p>
+<p>界面的控制：如果用户没有登录，手动在地址栏上跳转到管理界面地址，则需要跳转到登录界面。如果用户已经登录，但是手动输入非权限范围内的界面地址，则需要重定向到预设的 404 界面。</p>
+<p>如果用户通过非常规操作，比如通过浏览器将某些禁用按钮变成启用状态，此时发送的请求，也应该被前端拦截。</p>
+<p>在 React 中，可以通过把权限数据在根节点通过 Context API 向下传递，通过高阶组件对权限控制的菜单、元素进行外层包裹，其次对于数据请求拦截可以在发送 HTTP 请求前做校验。</p>
+<p>可以参考 <a href="https://pro.ant.design/docs/authority-management-cn" target="_blank" rel="noopener">Ant Design Pro</a> 的权限设计。</p>
+<hr>
+<p><strong>参考资料：</strong></p>
+<ul>
+<li><a href="http://www.woshipm.com/pd/1150093.html" target="_blank" rel="noopener">RBAC 模型：基于用户-角色-权限控制的一些思考</a></li>
+<li><a href="https://juejin.im/post/5e048326f265da33f8653c27" target="_blank" rel="noopener">基于 RBAC 的前端权限控制</a></li>
+<li><a href="https://www.uisdc.com/100-solutions-for-character-permission-design" target="_blank" rel="noopener">网易高手：角色权限设计的 100 种解法</a></li>
+<li><a href="http://www.woshipm.com/pd/3745592.html" target="_blank" rel="noopener">角色权限设计：以阿里产品为例，展开体验分析</a></li>
+<li><a href="http://www.woshipm.com/pd/440765.html" target="_blank" rel="noopener">RBAC 权限管理模型：基本模型及角色模型解析及举例</a></li>
+<li><a href="https://www.zhihu.com/question/20313385" target="_blank" rel="noopener">如何设计网站权限系统？</a></li>
+<li><a href="https://www.cnblogs.com/zwq194/archive/2011/03/07/1974821.html" target="_blank" rel="noopener">扩展 RBAC 用户角色权限设计方案</a></li>
+<li><a href="https://juejin.im/post/5e72cfa16fb9a07cc01a4262" target="_blank" rel="noopener">RBAC 权限管理系统设计思路</a></li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/docker-deploy-pratice/" rel="next" title="Web 前后端应用 Docker 容器化独立部署实践">
+                <i class="fa fa-chevron-left"></i> Web 前后端应用 Docker 容器化独立部署实践
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/summary-of-common-development-and-debugging-methods-of-mobile-front-end/" rel="prev" title="常用移动前端开发调试方式">
+                常用移动前端开发调试方式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/blog/images/avatar.jpeg" alt="tsejx">
+            
+              <p class="site-author-name" itemprop="name">tsejx</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/blog/archives/">
+                
+                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/tsejx" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/blog/images/cc-by-nc-sa.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#权限模型"><span class="nav-number">1.</span> <span class="nav-text">权限模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RBAC-模型的演进"><span class="nav-number">2.</span> <span class="nav-text">RBAC 模型的演进</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#RBAC0-模型"><span class="nav-number">2.1.</span> <span class="nav-text">RBAC0 模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RBAC1-模型"><span class="nav-number">2.2.</span> <span class="nav-text">RBAC1 模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RBAC2-模型"><span class="nav-number">2.3.</span> <span class="nav-text">RBAC2 模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RBAC3-模型"><span class="nav-number">2.4.</span> <span class="nav-text">RBAC3 模型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RBAC-架构设计"><span class="nav-number">3.</span> <span class="nav-text">RBAC 架构设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据库与功能模块设计"><span class="nav-number">4.</span> <span class="nav-text">数据库与功能模块设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#前端权限控制思路"><span class="nav-number">5.</span> <span class="nav-text">前端权限控制思路</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tsejx</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/blog/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/blog/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/blog/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,2031 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/blog/css/main.css?v=6.3.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/favicon.ico?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon.ico?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon.ico?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/blog/images/favicon.ico?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/blog/',
+    scheme: 'Mist',
+    version: '6.3.0',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="keywords" content="前端开发">
+<meta property="og:type" content="website">
+<meta property="og:title" content="mrsingsing">
+<meta property="og:url" content="https://tsejx.github.io/blog/index.html">
+<meta property="og:site_name" content="mrsingsing">
+<meta property="og:locale" content="zh-CN">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="mrsingsing">
+
+
+
+
+
+
+  <link rel="canonical" href="https://tsejx.github.io/blog/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>mrsingsing</title>
+  
+
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f81f55e9e4db3ad1f98521812f24d5aa";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right 
+  page-home">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/blog/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">mrsingsing</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/blog/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/blog/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/blog/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+  <section id="posts" class="posts-expand">
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://tsejx.github.io/blog/blog/web-video-editor-practise/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="tsejx">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/blog/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="mrsingsing">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/web-video-editor-practise/" itemprop="url">
+                  云视频剪辑配齐工具实践复盘（实现篇）
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2021-06-12 00:00:00" itemprop="dateCreated datePublished" datetime="2021-06-12T00:00:00+00:00">2021-06-12</time>
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>上篇介绍了云视频剪辑配齐工具的技术架构，对整个项目的构成有了大致的了解，本文将介绍在实现该系统的前端技术难点及解决方案。</p>
+<blockquote>
+<p>该项目基于集团内部的平台实践，前端框架使用 Angular 实现，所以代码示例为 Angular 框架语法。</p>
+</blockquote>
+<h2 id="上传视频"><a href="#上传视频" class="headerlink" title="上传视频"></a>上传视频</h2><p>常见的上传视频方式有两种：用户通过表单打开文件选择器选择需要上传的文件和直接拖拽文件到 Web 页面的指定区域，Web 应用检测可得对应视频文件的内容。</p>
+<h3 id="选择文件上传"><a href="#选择文件上传" class="headerlink" title="选择文件上传"></a>选择文件上传</h3><p>伪代码实现：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">multiple</span> <span class="attr">type</span>=<span class="string">"file"</span> <span class="attr">accept</span>=<span class="string">"video/mp4"</span> (<span class="attr">change</span>)=<span class="string">"handleVideoMaterialUpload"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> axios <span class="keyword">from</span> <span class="string">'axios'</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">handleUpload</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> uploadUrl = <span class="string">'https://upload-url.com/'</span>;</span><br><span class="line">  <span class="keyword">const</span> fileList = e.target.files;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 上传前校验</span></span><br><span class="line">  <span class="comment">// do something</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// do something 上传到指定服务</span></span><br><span class="line">  <span class="keyword">const</span> formData = <span class="keyword">new</span> FormData();</span><br><span class="line"></span><br><span class="line">  formData.append(<span class="string">'file'</span>, filesList[<span class="number">0</span>]);</span><br><span class="line"></span><br><span class="line">  axios</span><br><span class="line">    .post(uploadUrl, formData)</span><br><span class="line">    .then(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">'上传成功'</span>, res);</span><br><span class="line">    &#125;)</span><br><span class="line">    .catch(<span class="function"><span class="params">err</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">'上传失败'</span>, err);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在上传视频文件前不仅要检测视频文件的类型、大小等基础信息，还要对视频文件进行可播放性检测，并且在检测过程中获取视频文件时长、封面等再后续流程中使用到的信息（该部分实现请看下文章节），检测同过后添加到解析队列。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/web-video-editor-practise/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://tsejx.github.io/blog/blog/web-video-editor-infra/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="tsejx">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/blog/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="mrsingsing">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/web-video-editor-infra/" itemprop="url">
+                  云视频剪辑配齐工具实践复盘（架构篇）
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2021-06-06 00:00:00" itemprop="dateCreated datePublished" datetime="2021-06-06T00:00:00+00:00">2021-06-06</time>
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>随着业务规模的扩大，业务方对提高生产效率的需求日加激烈。尤其笔者所在业务部门负责的 AI 录播课，主讲老师需在课前对录播视频进行上传、根据课程内容插入锚点和编辑相关互动的内容，因此在夏季课来临之前，我们针对用户的痛点提出改造现有的 AI 录播课视频配齐工具。</p>
+<h2 id="需求背景"><a href="#需求背景" class="headerlink" title="需求背景"></a>需求背景</h2><ol>
+<li>颗粒化需求</li>
+</ol>
+<ul>
+<li>过去 AI 课视频都是以单个完整的视频（大小约 4GB 左右）一次性上传到云服务器，再通过 Web 网页的配齐工具根据播放器时间插入锚点。在公司网络下，由于各家分公司的经营情况不同，大概至少需要 30 分钟到 60 分钟不等。对于配齐的老师来说，在上传等待这段时间是无法处理其他工作的，唯有上传成功后，才能进行视频配齐的工作。</li>
+<li>如果主讲老师在视频配齐阶段发现视频中出现错误或有课程内容需要修改，那么就需要视频编辑部门编辑后，重新上传和配齐，那么之前所完成的工作就需要重新开始，整个流程会让老师做了很多无用功，且消耗大量的时间。</li>
+</ul>
+<ol start="2">
+<li>灵活度需求</li>
+</ol>
+<ul>
+<li>全国不同省份地区的学生水平存在着差距，课堂老师希望通过增加附加题、白板讲解、拓展讲解等可灵活运用的环节，让课堂老师根据课堂实际情况，自行决定是否播放相关的片段。</li>
+</ul>
+<p>最终产品提出上述需求的解决方案：分段上传 + 自由组合。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/web-video-editor-infra/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://tsejx.github.io/blog/blog/rich-text-and-base64/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="tsejx">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/blog/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="mrsingsing">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/rich-text-and-base64/" itemprop="url">
+                  富文本题目字符串转 Base64 图片实现
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2021-03-13 00:00:00" itemprop="dateCreated datePublished" datetime="2021-03-13T00:00:00+00:00">2021-03-13</time>
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="需求背景"><a href="#需求背景" class="headerlink" title="需求背景"></a>需求背景</h2><p>最近在负责利用 Egret 白鹭游戏引擎开发一款课中互动游戏，其中一个功能需要将 HTML 字符串形式存库的题目内容应用在互动游戏中。但是白鹭引擎是通过 WebGL 进行渲染的，DOM 树中通过一个 <code>&lt;canvas&gt;</code> 标签承载，无法通过 <code>innerHTML</code> 的方式直接使用 HTML 字符串，当时花费了不少时间研究如何优雅地实现类似的需求。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/rich-text-and-base64/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://tsejx.github.io/blog/blog/about-content-delivery-network/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="tsejx">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/blog/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="mrsingsing">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/about-content-delivery-network/" itemprop="url">
+                  关于 CDN 内容分发网络
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-08-20 00:00:00" itemprop="dateCreated datePublished" datetime="2020-08-20T00:00:00+00:00">2020-08-20</time>
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><strong>內容分发网络（Content Delivery Network 或 Content Distribution Network，简称 CDN）</strong> 通过将源站内容分发至 <strong>最接近用户</strong> 的节点，从而 <strong>降低核心系统负载（系统、网络）</strong>，使用户可就近取得所需内容，<strong>提高用户访问的响应速度</strong>。这种技术方案解决了因分布、带宽、服务器性能带来的访问延迟问题，适用于图片小文件、大文件下载、音视频点播、全站加速和安全加速等场景。</p>
+<h2 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h2><p>通过在网络各处放置节点服务器所构成的在现有的互联网基础之上的一层智能虚拟网络，CDN 系统能够实时地根据 <strong>网络流量</strong> 和 <strong>各节点的连接</strong>、<strong>负载状况</strong> 以及 <strong>到用户的距离</strong> 和 <strong>响应时间</strong> 等综合信息将用户的请求重新导向离用户最近的服务节点上。</p>
+<p>利用公式简述 CDN 可表示为：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CDN = 更智能的镜像 + 缓存 + 流量导流;</span><br></pre></td></tr></table></figure>
+<p>简单地说，CDN 是一个经策略性部署的整体系统，包括<strong>分布式存储</strong>、<strong>负载均衡</strong>、<strong>网络请求的重定向</strong> 和 <strong>内容管理</strong> 4 个要件，而内容管理和全局的网络流量管理（Traffic Management）是 CDN 的核心所在。</p>
+<h2 id="工作流程"><a href="#工作流程" class="headerlink" title="工作流程"></a>工作流程</h2><p>用户终端访问 CDN 的过程分为两个步骤，一是用户通过 DNS 找到最近的 CDN 边缘节点 IP，二是数据在网络中送达用户终端。</p>
+<p>最简单的 CDN 网络由一个 DNS 服务器和几台缓存服务器组成，假设您的加速域名为 <code>www.taobao.com</code>，接入 CDN 网络，开始使用加速服务后，当终端用户（广州）发起 HTTP 请求时，处理流程如下：</p>
+<p><img src="https://img.mrsingsing.com/about-cdn-cdn-workflow.jpg" alt="CDN Workflow"></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/about-content-delivery-network/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://tsejx.github.io/blog/blog/authentication/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="tsejx">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/blog/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="mrsingsing">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/authentication/" itemprop="url">
+                  前端开发登录鉴权方案完全梳理
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-06-25 00:00:00" itemprop="dateCreated datePublished" datetime="2020-06-25T00:00:00+00:00">2020-06-25</time>
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>登录鉴权是互联网信息交互中永恒的话题，毕竟在工作中几乎每天都会接触到，适逢最近需要对现有的系统平台进行 SSO 的流程改造，所以趁这个机会好好总结前端工程师接触到的登录方式。</p>
+<p>鉴权也叫身份验证（Authentication），是指验证用户是否拥有访问系统的权利。在日常的生活中，身份验证随处可见，比如：进入高铁站候车室、机场候机楼需要检查票据和身份证件；游玩主题乐园、名胜风景区需要购买门票，并由入口处人员鉴定有效后方可拥有进入园区游玩的权利。</p>
+<p>而在计算机领域中，身份验证的方法有很多种：基于共享密钥的身份验证、基于生物学特征的身份验证和基于公开密钥加密算法的身份验证。不同的身份验证方法，安全性也各自不同。</p>
+<p>下面我将从前端开发工程师的角度出发，梳理 Web 应用前后端数据交互中的各种鉴权方案。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/authentication/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://tsejx.github.io/blog/blog/business-experience-summary-of-lading-page/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="tsejx">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/blog/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="mrsingsing">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/business-experience-summary-of-lading-page/" itemprop="url">
+                  前端深耕落地页业务心得总结
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-06-07 00:00:00" itemprop="dateCreated datePublished" datetime="2020-06-07T00:00:00+00:00">2020-06-07</time>
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>在科技繁荣的今天，计算机给现代社会带来的是信息化的变革，本质上打破的是原有社会人们地理、语言、人种等各维度上的差异，通过互联网人们能通过便捷的方式足不出户口，就可以购买到全国乃至全球的商品货物、享受到各式各样的差异化服务。因此，对于一家互联网企业来说，用户无疑是最重要的资产，让更多的用户知道、了解甚至享受企业的产品，是企业立足的前提条件，毕竟有了用户方有盈利的可能性，企业才能可持续发展。</p>
+<p>对于国内很多大厂的来说，某种程度上在用户这个维度上会投入大量资源，诸如设立专门负责用户增长的组织单位。他们关注用户在产品终端的体验，相关从业人员需要懂得抓住用户心里，结合各种业务场景制定对应的营销策略，最终目的就是留住用户，让用户心甘情愿地消费。</p>
+<p>笔者就职于与某互联网金融企业，由于最近经常需要和产品、推广、运营打交道，多多少少会接触到很多庞杂的知识边界外的领域，所以打算系统整理这段时间来的业务分析方法论和实践心得。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/business-experience-summary-of-lading-page/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://tsejx.github.io/blog/blog/summary-of-common-development-and-debugging-methods-of-mobile-front-end/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="tsejx">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/blog/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="mrsingsing">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/summary-of-common-development-and-debugging-methods-of-mobile-front-end/" itemprop="url">
+                  常用移动前端开发调试方式
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-05-27 00:00:00" itemprop="dateCreated datePublished" datetime="2020-05-27T00:00:00+00:00">2020-05-27</time>
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="常用移动前端开发调试方式"><a href="#常用移动前端开发调试方式" class="headerlink" title="常用移动前端开发调试方式"></a>常用移动前端开发调试方式</h1><p>因为日常开发经常需要在移动设备上调试测试开发的 H5 页面，但是一直都没怎么总结过移动前端开发相关的调试工具或方法，今天稍微总结一下比较好用的调试工具，也罗列了一些没有用过但是值得了解的工具</p>
+<h2 id="通用调试工具方法"><a href="#通用调试工具方法" class="headerlink" title="通用调试工具方法"></a>通用调试工具方法</h2><h3 id="Chrome-移动设备模拟器"><a href="#Chrome-移动设备模拟器" class="headerlink" title="Chrome 移动设备模拟器"></a>Chrome 移动设备模拟器</h3><p>Chrome 浏览器开发者工具内置了可用于模拟移动设备的功能，这也是最常用的调试方式，这里只是简单说明操作步骤：</p>
+<ol>
+<li>在 PC 端打开 Chrome 浏览器并打开目标页面，然后 F12 打开开发者工具</li>
+<li>点击开发者工具左上角的手机图标，刷新页面后即可调试</li>
+<li>页面顶部设备选择下拉菜单可选择默认的多种品牌机型，以及仿真的网络状态</li>
+<li>选择下来菜单中的 <code>Edit</code> 进入适配设备的机型选择，既有浏览器提供的机型，也可以根据需要设定自定义机型（主要是测试宽高比）</li>
+</ol>
+<p>因为使用起来方便，所以开发调试的大部分都能满足需求，但是要更仿真更严谨还是需要在真机中调试。</p>
+<h3 id="vConsole-移动端网页上的调试控制台"><a href="#vConsole-移动端网页上的调试控制台" class="headerlink" title="vConsole 移动端网页上的调试控制台"></a>vConsole 移动端网页上的调试控制台</h3><p><a href="https://github.com/Tencent/vConsole" target="_blank" rel="noopener">vConsole</a> 是一款轻量级、可拓展、针对手机网页的前端开发者调试面板。</p>
+<p>通过该工具可以方便地在移动真机的 Web 页面中通过以下特性实现调试功能：</p>
+<ul>
+<li>查看 console 日志</li>
+<li>查看网络请求信息</li>
+<li>查看页面 element 结构</li>
+<li>查看 Cookie、localStorage 和 SessionStorage</li>
+<li>手动执行 JavaScript 命令行</li>
+<li>自定义插件</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/summary-of-common-development-and-debugging-methods-of-mobile-front-end/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://tsejx.github.io/blog/blog/architect-design-based-on-rbac/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="tsejx">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/blog/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="mrsingsing">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/architect-design-based-on-rbac/" itemprop="url">
+                  基于 RBAC 权限模型的架构设计
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-05-15 00:00:00" itemprop="dateCreated datePublished" datetime="2020-05-15T00:00:00+00:00">2020-05-15</time>
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>谈到权限控制，实际上在我们的生活中无处不在，例如我们无时无刻都在使用的智能手机，打开手机需要生物指纹或者人脸识别；当你进入公司的时候，你需要工卡在门禁滴一下；又如曾经的你是否有过半夜打开心仪女孩的 QQ 空间，欲一探究竟的时候，却告诉需要添加好友才能访问。这些都是我们日常生活中体现权限的地方，而在软件开发中，权限管理也是无处不在的产品设计功能，尤其是后台管理后台无法对权限管理避而不谈，今天尝试深入了解权限管理设计中最常用的 RBAC 模型。</p>
+<h2 id="权限模型"><a href="#权限模型" class="headerlink" title="权限模型"></a>权限模型</h2><p><strong>权限</strong> 二字从字面上可拆分为 <code>权力+限制</code>，从使用者的角度来说，也就是在限制的范围内正确地行驶权力，而站在设计者的角度来解读，则是通过合理的手段控制使用者能访问到他们能够访问到的资源。</p>
+<p>在权限设计领域，最常见的权限模型有以下四种：</p>
+<ul>
+<li>ACL（Access Control List）：访问控制列表 <code>用户 -&gt; 权限</code></li>
+<li>RBAC（Role-Based Access Control）：基于 <strong>角色</strong> 的权限控制 <code>用户 -&gt; 角色 -&gt; 权限</code></li>
+<li>ABAC（Attribute-Based Access Control）：基于 <strong>属性</strong> 的权限控制，该模型根据特殊的规则分配权限 <code>（用户、资源、对象属性）-&gt; 权限</code></li>
+<li>PBAC（Policy-Based Access Control）：基于 <strong>策略</strong> 的权限控制，用户（组）隶属于角色，角色隶属于资源（项目）<code>用户 -&gt; 角色 -&gt; （资源/项目 + 权限）</code></li>
+</ul>
+<p>第一种 ACL 模型，权限能直接赋予用户，例如将查看订单列表（权限）赋予某位运营人员（用户）。但是这种模式的缺点在于，但用户量达到一定量级的时候，那么就需要对每个用户都进行一次授权操作，那么这个工作量就会相当大。</p>
+<p>因此就出现了 RBAC 模型，这是软件设计中最常用的权限管理模型，相比于 ACL 模型，RBAC 模型在用户与权限之间多了一个元素「角色」，通过权限关联角色、角色关联用户的方法来间接地赋予用户权限，从而实现用户与权限的解耦。</p>
+<p>后两种大概知道就行，因为一般不会用到，详情可自行 Google 了解。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/architect-design-based-on-rbac/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://tsejx.github.io/blog/blog/docker-deploy-pratice/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="tsejx">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/blog/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="mrsingsing">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/docker-deploy-pratice/" itemprop="url">
+                  Web 前后端应用 Docker 容器化独立部署实践
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-04-20 00:00:00" itemprop="dateCreated datePublished" datetime="2020-04-20T00:00:00+00:00">2020-04-20</time>
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>在人类社会大分工越来越精细的大背景下，各式各样的软件技术公司层出不穷，为各行各业提供着或大众化或具有特色的软件服务，大部分软件服务是公有性质的，也就是这些服务提供商内部单独的运营软件平台，使用者获取软件使用权后在其平台生产内容，并由服务商提供数据存储服务，这种性质的平台对于软件开发商来说需要考虑数据的隔离，对于使用者来说则减少了维护成本，但是数据并非私自存储无法确保安全性。而相对于公有性软件服务的就是私有化软件服务，这类型产品提供可部署至客户私自的服务器上的版本，数据由客户自身存储，某种程度上保证的了数据的安全性。</p>
+<p>在 PPmoney 内部，龙猫 X 配置平台提供给理财及借贷两个技术团队使用，对于页面、模版、组件、素材都需要在公共空间进行共享存储，而现有的人员权限机制无法对这些要素进行筛选区分，无可避免出现管理混乱的局面。而根据不同的团队、不同的部署环境进行系统部署也是需求的关注点。考虑到对数据的隔离，以及未来龙猫 X 作为软件服务对外提供商业性质的服务，为龙猫 X 增强可独立部署的功能的事宜即提上开发的日程。</p>
+<p>在对龙猫 X 的独立部署的技术选型上我们选择了 Docker 容器化技术。之所以选择 Docker 是因为容器技术对进程进行封装隔离，能够高效地在利用服务器资源以及便捷地在多平台间进行迁移。</p>
+<p>在这篇文章中我尝试把容器化改造过程中遇到的坑位记录下来为后人提供借鉴，也是对整个坎坷的过程的记录。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/docker-deploy-pratice/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://tsejx.github.io/blog/blog/event-chain-based-automatic-test-scheme-of-totorox/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="tsejx">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/blog/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="mrsingsing">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/blog/event-chain-based-automatic-test-scheme-of-totorox/" itemprop="url">
+                  龙猫 X 基于事件链的自动化测试方案复盘
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-03-01 00:00:00" itemprop="dateCreated datePublished" datetime="2020-03-01T00:00:00+00:00">2020-03-01</time>
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><strong>大纲：</strong></p>
+<ul>
+<li>基于龙猫 X 事件机制生成事件链列表</li>
+<li>使用 Egg 和 Socket.IO 搭建自动化测试服务</li>
+<li>利用 Puppeteer 进行自动化测试</li>
+<li>测试用例的执行方案研讨</li>
+</ul>
+<p>龙猫 X 作为服务于产品、运营、开发的页面搭建平台，通过可视化的拖拽、配置生成业务所需的各种页面。在日常的开发中，大多数情况下都是由运营直接完成需求，或是运营产品直接提交工单后由开发进行完成，测试在评审阶段的参与率不高。这就导致测试在功能页面的测试中无法全方位地检测页面的功能效果，同时也由于龙猫 X 项目测试少有参与，测试参与的多是经由龙猫 X 生成的页面的功能测试，所以测试对于龙猫 X 页面的内在逻辑也缺乏了解。因此，为测试方提供能掌握龙猫 X 页面逻辑关系的工具对提升页面的运行质量具有重要意义。</p>
+<p>本文针对上述情况，团队开发出针对龙猫 X 的事件链自动化测试方案，由于与业务耦合度极高，可能对其他公司团队未必具有通用性，权当技术方案参考与交流。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blog/event-chain-based-automatic-test-scheme-of-totorox/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+  </section>
+
+  
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/blog/page/2/">2</a><a class="extend next" rel="next" href="/blog/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+  </nav>
+
+
+
+          </div>
+          
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/blog/images/avatar.jpeg" alt="tsejx">
+            
+              <p class="site-author-name" itemprop="name">tsejx</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/blog/archives/">
+                
+                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/tsejx" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/blog/images/cc-by-nc-sa.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tsejx</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/blog/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

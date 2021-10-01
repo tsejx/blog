@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/blog/css/main.css?v=6.3.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/favicon.ico?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon.ico?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon.ico?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/blog/images/favicon.ico?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/blog/',
+    scheme: 'Mist',
+    version: '6.3.0',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="大纲：  基于龙猫 X 事件机制生成事件链列表 使用 Egg 和 Socket.IO 搭建自动化测试服务 利用 Puppeteer 进行自动化测试 测试用例的执行方案研讨  龙猫 X 作为服务于产品、运营、开发的页面搭建平台，通过可视化的拖拽、配置生成业务所需的各种页面。在日常的开发中，大多数情况下都是由运营直接完成需求，或是运营产品直接提交工单后由开发进行完成，测试在评审阶段的参与率不高。这就导">
+<meta name="keywords" content="前端开发">
+<meta property="og:type" content="article">
+<meta property="og:title" content="龙猫 X 基于事件链的自动化测试方案复盘">
+<meta property="og:url" content="https://tsejx.github.io/blog/event-chain-based-automatic-test-scheme-of-totorox/index.html">
+<meta property="og:site_name" content="mrsingsing">
+<meta property="og:description" content="大纲：  基于龙猫 X 事件机制生成事件链列表 使用 Egg 和 Socket.IO 搭建自动化测试服务 利用 Puppeteer 进行自动化测试 测试用例的执行方案研讨  龙猫 X 作为服务于产品、运营、开发的页面搭建平台，通过可视化的拖拽、配置生成业务所需的各种页面。在日常的开发中，大多数情况下都是由运营直接完成需求，或是运营产品直接提交工单后由开发进行完成，测试在评审阶段的参与率不高。这就导">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://img.mrsingsing.com/automatation-test-workflow.jpg">
+<meta property="og:image" content="https://img.mrsingsing.com/automatation-test-events-chain.jpg">
+<meta property="og:image" content="https://img.mrsingsing.com/automatation-test-puppeteer-pyramid.png">
+<meta property="og:image" content="https://img.mrsingsing.com/automatation-test-case.jpg">
+<meta property="og:updated_time" content="2021-10-01T10:05:42.417Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="龙猫 X 基于事件链的自动化测试方案复盘">
+<meta name="twitter:description" content="大纲：  基于龙猫 X 事件机制生成事件链列表 使用 Egg 和 Socket.IO 搭建自动化测试服务 利用 Puppeteer 进行自动化测试 测试用例的执行方案研讨  龙猫 X 作为服务于产品、运营、开发的页面搭建平台，通过可视化的拖拽、配置生成业务所需的各种页面。在日常的开发中，大多数情况下都是由运营直接完成需求，或是运营产品直接提交工单后由开发进行完成，测试在评审阶段的参与率不高。这就导">
+<meta name="twitter:image" content="https://img.mrsingsing.com/automatation-test-workflow.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="https://tsejx.github.io/blog/event-chain-based-automatic-test-scheme-of-totorox/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>龙猫 X 基于事件链的自动化测试方案复盘 | mrsingsing</title>
+  
+
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f81f55e9e4db3ad1f98521812f24d5aa";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/blog/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">mrsingsing</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/blog/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/blog/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/blog/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://tsejx.github.io/blog/blog/event-chain-based-automatic-test-scheme-of-totorox/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="tsejx">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/blog/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="mrsingsing">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">龙猫 X 基于事件链的自动化测试方案复盘
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-03-01 00:00:00" itemprop="dateCreated datePublished" datetime="2020-03-01T00:00:00+00:00">2020-03-01</time>
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><strong>大纲：</strong></p>
+<ul>
+<li>基于龙猫 X 事件机制生成事件链列表</li>
+<li>使用 Egg 和 Socket.IO 搭建自动化测试服务</li>
+<li>利用 Puppeteer 进行自动化测试</li>
+<li>测试用例的执行方案研讨</li>
+</ul>
+<p>龙猫 X 作为服务于产品、运营、开发的页面搭建平台，通过可视化的拖拽、配置生成业务所需的各种页面。在日常的开发中，大多数情况下都是由运营直接完成需求，或是运营产品直接提交工单后由开发进行完成，测试在评审阶段的参与率不高。这就导致测试在功能页面的测试中无法全方位地检测页面的功能效果，同时也由于龙猫 X 项目测试少有参与，测试参与的多是经由龙猫 X 生成的页面的功能测试，所以测试对于龙猫 X 页面的内在逻辑也缺乏了解。因此，为测试方提供能掌握龙猫 X 页面逻辑关系的工具对提升页面的运行质量具有重要意义。</p>
+<p>本文针对上述情况，团队开发出针对龙猫 X 的事件链自动化测试方案，由于与业务耦合度极高，可能对其他公司团队未必具有通用性，权当技术方案参考与交流。</p>
+<a id="more"></a>
+<p>开始前，直接抛出整个业务流程的模式图，以便对该功能有个全貌的认知。</p>
+<p><img src="https://img.mrsingsing.com/automatation-test-workflow.jpg" alt="自动化测试业务流程图"></p>
+<p>简单阐述一下参与流程的几个服务，包括用户操作自动化测试的前端界面、获取页面数据的龙猫 X 服务、用于进行测试逻辑的服务以及连接测试服务的无头浏览器端。</p>
+<p>主流程就是通过获取页面数据生成事件链，测试人员配置测试用例后触发对应事件，由测试服务和无头浏览器自动完成对应链条的测试需求，最后前端页面显示测试覆盖率及成功率。</p>
+<h2 id="基于龙猫-X-事件机制生成事件链列表"><a href="#基于龙猫-X-事件机制生成事件链列表" class="headerlink" title="基于龙猫 X 事件机制生成事件链列表"></a>基于龙猫 X 事件机制生成事件链列表</h2><p>在说明事件链的生成机制前，我们需要研究一下龙猫 X 的通讯机制。</p>
+<p>龙猫 X 的数据通讯机制由订阅发布模式机制组成，以下罗列了在实际业务中组件间通讯的流向示意图：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">A 组件（A1 事件）-&gt; 发布事件（主动事件） -&gt; 订阅事件（被动事件） -&gt; B 组件（B1 事件）</span><br><span class="line"></span><br><span class="line">B 组件（B2 事件）-&gt; C 组件（C1 事件）</span><br><span class="line"></span><br><span class="line">立即注册（Button 组件）-&gt; 显示弹窗（FixedContainer 组件）</span><br><span class="line"></span><br><span class="line">立即签到（Button 组件）-&gt; 签到接口（Interface 组件）</span><br><span class="line"></span><br><span class="line">签到接口（Interface 组件）-&gt; 签到成功（Interface 组件）</span><br></pre></td></tr></table></figure>
+<p>组件组织方式是扁平化的，事件关系具有零散化的特点。</p>
+<p>用户触发组件 A 的 A1 事件，经过发布订阅机制触达组件 B 的 B1 事件。如果 B1 事件是类似于显示/隐藏、改变样式等操作，那么属于一个数据流向的终点。</p>
+<p>如果 B1 事件是类似于发送请求等事件，请求响应成功即需要执行另一个回调命令，例如我们把 B2 看作请求的响应成功 <code>fetchSuccess</code> 事件，当请求响应成功后，自动执行后续连接的组件 C 的 C1 事件。</p>
+<p>从上述说明中，我们可以构建出龙猫 X 组件间事件流模型 <code>组件 A 事件 A1 -&gt; 组件B事件B1</code>，<code>组件B事件B2 =&gt; 组件C事件C1</code>。</p>
+<p>由于订阅发布通讯机制的存在，发布事件（我们称为主动事件）天然地与订阅事件（我们称为被动事件）自动连接起来，但是关键的节点在于，仍以上述组件 B 的例子数名，组件 B 内存在两个定义的事件 B1 和 B2，它们通过组件内部的代码设定的回调联系起来，但是在我们的配置数据层面并未解决，所以我们需要一份清单总结所有龙猫 X 组件中存在的组件内被动和主动事件非用户触发连接的关系表，这个对于后续构成事件链是关键的一步。</p>
+<ol>
+<li>将零散事件关系，以收集组件事件内联的关系表解决单个事件通讯间无法连结的问题，最终组织成事件链</li>
+<li>通过某一事件，能自动触发后续事件（某些龙猫 X 定义为主动事件并非所有由用户触发，也能是组件内部触发）</li>
+</ol>
+<p><img src="https://img.mrsingsing.com/automatation-test-events-chain.jpg" alt="事件链示意图"></p>
+<p>上述图片展示了实际业务中的事件链示例，该事件链以名为「立即注册」的 Button 按钮组件触发，后续经由 Input 输入框组件获取已前置输入的手机号数据，内部数据流获取数据后触发 Input 组件内的另一个取值的主动事件，然后取值会检验输入框输入数据的有效性，根据有效性分流取值成功与取值失败的被动事件。如果取值失败，则会弹出 Message 组件提示输入框输入数据无效的相关信息；如果取值成功，则会用获取到的手机号和其他相关参数请求接口验证，响应后根据后台返回结果分流为进而请求另一个请求短信验证码的接口还是需要进行鉴定用户为真实用户的图形验证码操作。这就构成一条完整的事件链，整个事件链中除了输入框额外的数据收入外，用户只需触发一次「立即注册」的按钮即可检验后续流程。</p>
+<p>在制定事件链形成方案后，那么摆在面前的仍有几个问题：</p>
+<ul>
+<li>如何启动执行单个事件链？</li>
+<li>如何知道一个事件链流程已经执行完毕？</li>
+<li>在什么时机对执行结果进行断言测试？</li>
+</ul>
+<p>经过分析现有龙猫组件的特点。事件链触发种类主要有以下几个类型：</p>
+<ul>
+<li>浏览器默认事件：页面容器加载完毕、相关 SDK 注册成功等</li>
+<li>用户交互触发：点击按钮、点击图片</li>
+<li>组件钩子（被动性质/间接的主动事件）：接口请求成功失败/收集值成功失败/表单项值改变时/及贷 SDK 的 Ready 事件</li>
+</ul>
+<p>如果对浏览器的的事件循环机制有过了解的，不难联想到这都与 JavaScript 异步事件相关：</p>
+<ul>
+<li>定时器 Timer</li>
+<li>HTML Parsing</li>
+<li>HTTP Request</li>
+<li>I/O（Mouse、Event）</li>
+<li>Promise。then</li>
+</ul>
+<p>总结：</p>
+<ul>
+<li>JavaScript 宿主环境运行中的事件循环机制（定时器、UI Rendering、I/O、HTTP Request）</li>
+<li>用于存储状态的表单高阶组件的取值事件（其实是相当于取值后，在组件内部设定校验逻辑）</li>
+</ul>
+<p>根据上述生成事件链的机制，能将页面配置的事件链自动整理生成列表，后续需要通过测试服务进行自动化测试。</p>
+<h2 id="利用-Puppeteer-进行自动化测试"><a href="#利用-Puppeteer-进行自动化测试" class="headerlink" title="利用 Puppeteer 进行自动化测试"></a>利用 Puppeteer 进行自动化测试</h2><p>测试用的后端项目使用 Egg 的技术搭建，鉴于前后端信息交互可能会比较频繁的原因，搭配 Socket.IO 建立起前后端的通讯。</p>
+<p>这里需要注意的是，Socket.IO 前后端选用的具体库包具有差异：</p>
+<ul>
+<li>前端：<code>socket.io-client</code></li>
+<li>后端：<code>egg-socket.io</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">chat</span><br><span class="line">├── app</span><br><span class="line">│   ├── extend</span><br><span class="line">│   │   └── helper.js</span><br><span class="line">│   ├── io</span><br><span class="line">│   │   ├── controller</span><br><span class="line">│   │   │   └── default.js</span><br><span class="line">│   │   └── middleware</span><br><span class="line">│   │       ├── connection.js</span><br><span class="line">│   │       └── packet.js</span><br><span class="line">│   └── router.js</span><br><span class="line">├── config</span><br><span class="line">└── package.json</span><br></pre></td></tr></table></figure>
+<p>Egg 框架的好处是其生态提供了相关的插件，很好地与项目集成，开发起来体验很好。</p>
+<p>具体实现细节参考 <a href="https://eggjs.org/zh-cn/tutorials/socketio.html" target="_blank" rel="noopener">Egg - Socket.IO 教程</a></p>
+<p>而另一方面，需要使用业内较为成熟的测试方法进行测试，我们经过对比研究后选择 Puppeteer 这款由 Google 出品的开源支持无头浏览器的框架。</p>
+<p>Puppeteer 基于 Chrome DevTool Protocol（简称 CDP），而 CDP 基于 WebSocket，利用 WebSocket 实现与浏览器内核的快速通道。</p>
+<p><img src="https://img.mrsingsing.com/automatation-test-puppeteer-pyramid.png" alt="Puppeteer 实现模型"></p>
+<p>Puppeteer 广泛应用于各大公司团队的实际业务场景：</p>
+<ul>
+<li>通用<ul>
+<li>生成页面的屏幕截图和 PDF</li>
+<li>自动化提交表单、模拟键鼠输入、自动化单元测试</li>
+<li>网站性能分析：可以抓取并跟踪网站的执行时间轴，帮助分析效率问题</li>
+<li>抓取网页内容，也就是我们常说的爬虫</li>
+</ul>
+</li>
+<li>业务实践<ul>
+<li>阿里：<a href="https://yq.aliyun.com/articles/718188" target="_blank" rel="noopener">阿里 99 大促模型识别背后的样本生成</a></li>
+<li>有赞：<a href="https://www.infoq.cn/article/dcSBL_9AzCwVPsaQ70dh" target="_blank" rel="noopener">使用 Puppeteer 搭建统一海报渲染服务</a></li>
+<li>其他：<a href="https://www.jianshu.com/p/42585c78eeec" target="_blank" rel="noopener">基于 Puppeteer 打造前端巡检监控体系</a></li>
+</ul>
+</li>
+</ul>
+<p>那么 Node 服务是如何与 Puppeteer 进行服务的呢？</p>
+<p>Puppeteer 提供一种方法 <code>page.exposeFunction</code> 将能在 Node 服务进程调用的函数方法名挂载在 Puppeteer 创建的测试页面的全局变量 <code>window</code> 上。</p>
+<p>当我们在触发事件链开端事件时，通过 Node 服务进而操作无头浏览器内的页面，并在专用于发布订阅模式事件关系传递中调用该挂载全局的函数，将相关参数结果返回到 Node 服务的相关服务中。</p>
+<p><img src="https://img.mrsingsing.com/automatation-test-case.jpg" alt="无头浏览器事件响应信息响应机制"></p>
+<p>从上图可以看到，每当被动性质事件触发后，事件链中的被动事件会在触发时额外发送消息发送到 Node 服务，获得响应后跑过测试用例即将最终结果返回到前端。</p>
+<p><strong>那么同时多个 Node.js 进程会遭遇性能问题？</strong></p>
+<p>存在的问题：</p>
+<ul>
+<li>启动耗时长<ul>
+<li>复用浏览器实例和页面实例</li>
+<li>Puppeteer 的优化手段 =&gt; Chromium Command Line</li>
+</ul>
+</li>
+<li>性能消耗高<ul>
+<li>定时重启无头浏览器实例的机制 =&gt; 定时器</li>
+</ul>
+</li>
+</ul>
+<p>无头浏览器实例与测试页面 Tab 持久化</p>
+<ul>
+<li>通过请求 Headless Chrome 进程端口，获取无头浏览器实例的 WS URL，通过 <code>browser.connect</code> 重连</li>
+<li>Radis 缓存</li>
+<li>存文件</li>
+<li>存在 Egg App Config 中（相当于全局变量）</li>
+</ul>
+<p>如此这般，就将整个流程都实现了闭环：</p>
+<ol>
+<li>根据页面配置数据生成事件链（列表）</li>
+<li>选择前置数据输入及测试用例</li>
+<li>建立前后端通讯及测试服务和无头浏览器的通讯</li>
+<li>触发用户交互事件</li>
+<li>执行无头浏览器内页面对应事件</li>
+<li>返回响应结果</li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/practice-of-page-batch-update-tool-in-visual-configuration-system/" rel="next" title="可视化配置系统页面批量更新工具的开发实践">
+                <i class="fa fa-chevron-left"></i> 可视化配置系统页面批量更新工具的开发实践
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/docker-deploy-pratice/" rel="prev" title="Web 前后端应用 Docker 容器化独立部署实践">
+                Web 前后端应用 Docker 容器化独立部署实践 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/blog/images/avatar.jpeg" alt="tsejx">
+            
+              <p class="site-author-name" itemprop="name">tsejx</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/blog/archives/">
+                
+                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/tsejx" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/blog/images/cc-by-nc-sa.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基于龙猫-X-事件机制生成事件链列表"><span class="nav-number">1.</span> <span class="nav-text">基于龙猫 X 事件机制生成事件链列表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#利用-Puppeteer-进行自动化测试"><span class="nav-number">2.</span> <span class="nav-text">利用 Puppeteer 进行自动化测试</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tsejx</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/blog/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/blog/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/blog/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

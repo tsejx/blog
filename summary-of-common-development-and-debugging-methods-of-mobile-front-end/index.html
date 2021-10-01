@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/blog/css/main.css?v=6.3.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/favicon.ico?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon.ico?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon.ico?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/blog/images/favicon.ico?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/blog/',
+    scheme: 'Mist',
+    version: '6.3.0',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="常用移动前端开发调试方式因为日常开发经常需要在移动设备上调试测试开发的 H5 页面，但是一直都没怎么总结过移动前端开发相关的调试工具或方法，今天稍微总结一下比较好用的调试工具，也罗列了一些没有用过但是值得了解的工具 通用调试工具方法Chrome 移动设备模拟器Chrome 浏览器开发者工具内置了可用于模拟移动设备的功能，这也是最常用的调试方式，这里只是简单说明操作步骤：  在 PC 端打开 Chr">
+<meta name="keywords" content="前端开发">
+<meta property="og:type" content="article">
+<meta property="og:title" content="常用移动前端开发调试方式">
+<meta property="og:url" content="https://tsejx.github.io/blog/summary-of-common-development-and-debugging-methods-of-mobile-front-end/index.html">
+<meta property="og:site_name" content="mrsingsing">
+<meta property="og:description" content="常用移动前端开发调试方式因为日常开发经常需要在移动设备上调试测试开发的 H5 页面，但是一直都没怎么总结过移动前端开发相关的调试工具或方法，今天稍微总结一下比较好用的调试工具，也罗列了一些没有用过但是值得了解的工具 通用调试工具方法Chrome 移动设备模拟器Chrome 浏览器开发者工具内置了可用于模拟移动设备的功能，这也是最常用的调试方式，这里只是简单说明操作步骤：  在 PC 端打开 Chr">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://img.mrsingsing.com/wireless-debugger-install-charles-certificate.jpg">
+<meta property="og:image" content="https://img.mrsingsing.com/wireless-debugger-always-trust-certificate.jpg">
+<meta property="og:image" content="https://img.mrsingsing.com/wireless-debugger-enable-charles-proxying.jpg">
+<meta property="og:image" content="https://img.mrsingsing.com/wireless-debugger-charles-principle.jpg">
+<meta property="og:updated_time" content="2021-10-01T10:05:42.417Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="常用移动前端开发调试方式">
+<meta name="twitter:description" content="常用移动前端开发调试方式因为日常开发经常需要在移动设备上调试测试开发的 H5 页面，但是一直都没怎么总结过移动前端开发相关的调试工具或方法，今天稍微总结一下比较好用的调试工具，也罗列了一些没有用过但是值得了解的工具 通用调试工具方法Chrome 移动设备模拟器Chrome 浏览器开发者工具内置了可用于模拟移动设备的功能，这也是最常用的调试方式，这里只是简单说明操作步骤：  在 PC 端打开 Chr">
+<meta name="twitter:image" content="https://img.mrsingsing.com/wireless-debugger-install-charles-certificate.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="https://tsejx.github.io/blog/summary-of-common-development-and-debugging-methods-of-mobile-front-end/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>常用移动前端开发调试方式 | mrsingsing</title>
+  
+
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f81f55e9e4db3ad1f98521812f24d5aa";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/blog/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">mrsingsing</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/blog/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/blog/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/blog/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://tsejx.github.io/blog/blog/summary-of-common-development-and-debugging-methods-of-mobile-front-end/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="tsejx">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/blog/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="mrsingsing">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">常用移动前端开发调试方式
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-05-27 00:00:00" itemprop="dateCreated datePublished" datetime="2020-05-27T00:00:00+00:00">2020-05-27</time>
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="常用移动前端开发调试方式"><a href="#常用移动前端开发调试方式" class="headerlink" title="常用移动前端开发调试方式"></a>常用移动前端开发调试方式</h1><p>因为日常开发经常需要在移动设备上调试测试开发的 H5 页面，但是一直都没怎么总结过移动前端开发相关的调试工具或方法，今天稍微总结一下比较好用的调试工具，也罗列了一些没有用过但是值得了解的工具</p>
+<h2 id="通用调试工具方法"><a href="#通用调试工具方法" class="headerlink" title="通用调试工具方法"></a>通用调试工具方法</h2><h3 id="Chrome-移动设备模拟器"><a href="#Chrome-移动设备模拟器" class="headerlink" title="Chrome 移动设备模拟器"></a>Chrome 移动设备模拟器</h3><p>Chrome 浏览器开发者工具内置了可用于模拟移动设备的功能，这也是最常用的调试方式，这里只是简单说明操作步骤：</p>
+<ol>
+<li>在 PC 端打开 Chrome 浏览器并打开目标页面，然后 F12 打开开发者工具</li>
+<li>点击开发者工具左上角的手机图标，刷新页面后即可调试</li>
+<li>页面顶部设备选择下拉菜单可选择默认的多种品牌机型，以及仿真的网络状态</li>
+<li>选择下来菜单中的 <code>Edit</code> 进入适配设备的机型选择，既有浏览器提供的机型，也可以根据需要设定自定义机型（主要是测试宽高比）</li>
+</ol>
+<p>因为使用起来方便，所以开发调试的大部分都能满足需求，但是要更仿真更严谨还是需要在真机中调试。</p>
+<h3 id="vConsole-移动端网页上的调试控制台"><a href="#vConsole-移动端网页上的调试控制台" class="headerlink" title="vConsole 移动端网页上的调试控制台"></a>vConsole 移动端网页上的调试控制台</h3><p><a href="https://github.com/Tencent/vConsole" target="_blank" rel="noopener">vConsole</a> 是一款轻量级、可拓展、针对手机网页的前端开发者调试面板。</p>
+<p>通过该工具可以方便地在移动真机的 Web 页面中通过以下特性实现调试功能：</p>
+<ul>
+<li>查看 console 日志</li>
+<li>查看网络请求信息</li>
+<li>查看页面 element 结构</li>
+<li>查看 Cookie、localStorage 和 SessionStorage</li>
+<li>手动执行 JavaScript 命令行</li>
+<li>自定义插件</li>
+</ul>
+<a id="more"></a>
+<p>这款类库应该是使用最广泛的工具，而且使用起来也比较简单，与 PC 端 Chrome 等开发者调试工具使用方式类似，所以就不多叙述了。</p>
+<p>更多关于此工具的使用教程可以参阅 <a href="https://github.com/Tencent/vConsole/blob/dev/doc/tutorial_CN.md" target="_blank" rel="noopener">vConsole 使用教程</a></p>
+<p>除此之外，有个同样是 AlloyTeam 出品的错误监控上报、支持生产环境通过 URL 带参数唤起 vConsole 的库 <a href="https://github.com/AlloyTeam/AlloyLever" target="_blank" rel="noopener">AlloyLever</a> 也值得关注一下。</p>
+<p>同类型的产品有 <a href="https://github.com/liriliri/eruda" target="_blank" rel="noopener">eruda</a></p>
+<h4 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h4><p>通过在页面注入 JavaScript 脚本实现模拟类似 Chrome DevTool 的调试面板。</p>
+<p>通过重写 <code>XHMLHttpRequest</code>、<code>fetch</code>、<code>console</code> 方法实现网络请求和日志打印的拦截，并输出到控制面板中的 <code>Network</code> 和 <code>Console</code> 标签。</p>
+<p>通过遍历 Cookie、LocalStorage、SessionStorage 对象下的所有存储键值以获取当前网页的本地存储数据。</p>
+<p>而 <code>Element</code> 标签中的页面 DOM 树结构，则通过从 <code>document.documentElement</code> 节点开始向子孙节点递归生成。</p>
+<h3 id="Charles-数据传输抓包工具"><a href="#Charles-数据传输抓包工具" class="headerlink" title="Charles 数据传输抓包工具"></a>Charles 数据传输抓包工具</h3><p>试想以下在日常开发中可能会遇到的场景：</p>
+<ol>
+<li>在本地开发完移动 H5 页面后，想与后端联调接口，但是接口部署在机房服务器上，域名非 IP 地址，这个时候联调会存在跨域问题，应该怎样解决？</li>
+<li>线上 Web App 表现异常，没法在线上页面使用调试面板进行调试，怎样定位问题？</li>
+<li>线上 Web App 表现异常，接口请求响应表现正常，单从代码层面无法定位问题根源，怎样更好地定位问题？</li>
+</ol>
+<p>在 Charles 强大的抓包功能面前，这些问题通通都不是问题。我们先介绍一下 Charles：</p>
+<p><a href="https://www.charlesproxy.com/" target="_blank" rel="noopener">Charles</a> 是一款基于 HTTP 协议的代理服务器，通过截取请求和请求结果达到分析抓包的目的。</p>
+<p>以下是 Charles 的功能特性：</p>
+<ul>
+<li>支持 HTTP 和 HTTPS 代理，截取分析 SSL 请求</li>
+<li>支持流量控制，可以模拟弱网测试环境</li>
+<li>支持接口并发请求</li>
+<li>支持重发网络请求，方便后端调试</li>
+<li>支持修改网络请求参数</li>
+<li>支持网络请求的截获并动态修改</li>
+<li>支持断点调试，构建异常的测试场景</li>
+</ul>
+<h4 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h4><p>使用 Charles 抓包手机向服务器发送请求的操作步骤：</p>
+<ol>
+<li>安装根证书：<code>菜单 -&gt; Help -&gt; SSL Proxying -&gt; Install Charles Root Certificate</code></li>
+</ol>
+<p><img src="https://img.mrsingsing.com/wireless-debugger-install-charles-certificate.jpg" alt="安装根证书"></p>
+<ol start="2">
+<li>找到安装好 Charles 的根证书后，确保证书的所有选项均为始终信任（这个证书后续会下载到你的手机中使用）</li>
+</ol>
+<p><img src="https://img.mrsingsing.com/wireless-debugger-always-trust-certificate.jpg" alt="总是信任"></p>
+<ol start="3">
+<li>然后开启 Charles 的代理服务：<code>Proxy -&gt; Proxy Setting</code>，<code>port</code> 端口填 <code>8888</code>，选中 <code>Enable transparent HTTP proxying</code></li>
+</ol>
+<p>找到当前使用的 Mac 笔记本的 IP 地址（通过 <code>Charles -&gt; Help -&gt; Local IP Address</code> 可以获取）</p>
+<p><img src="https://img.mrsingsing.com/wireless-debugger-enable-charles-proxying.jpg" alt="开启Charles代理"></p>
+<ol start="4">
+<li>给 iPhone 设置代理</li>
+</ol>
+<ul>
+<li>打开 iPhone，连接 Wifi（需要确保 iPhone 与 Mac 连接的是相同的 Wifi）</li>
+<li>打开 Wifi 名后的蓝色感叹号，在最下面找到 <code>HTTP 代理</code>，点击进入</li>
+<li>选择 <code>手动</code>，服务器上填上端口号 <code>8888</code></li>
+</ul>
+<ol start="5">
+<li>随便打开网页，这个时候 Charles 会弹出请求连接的确认菜单，选择左边选项 <code>Allow</code></li>
+</ol>
+<p>6) 在手机浏览器中（最好是 Safari），输入 <code>chls.pro/ssl</code>，会弹出安装证书的请求，输入密码，一直点安装即可</p>
+<ul>
+<li>打开设置，点击 <code>通用 -&gt; 关于本机 -&gt; 证书信任设置</code>，找到当前要作为代理的电脑名，打开信任开关</li>
+</ul>
+<p>这个时候既可以截取到 HTTP/HTTPS 的网络请求了。</p>
+<h4 id="实现原理-1"><a href="#实现原理-1" class="headerlink" title="实现原理"></a>实现原理</h4><p><img src="https://img.mrsingsing.com/wireless-debugger-charles-principle.jpg" alt="Charles实现原理"></p>
+<p>事实上 Charles 就是充当所谓的 <code>中间人</code> 角色，把我们的设备发送的请求拦截下来，并转发给我们的目标服务器，而后将响应的信息返回给我们的设备。</p>
+<p>前提是设备上需要安装并信任 Charles 的证书，这个为了当 HTTPS 传输时，Charles 需要拦截解密数据并利用服务端的证书公钥和 HTTPS 连接的对称密钥做后续的传输加密。</p>
+<p>由于本人使用 Charles 比较多，但其实还有很多类似的抓包工具，例如：</p>
+<ul>
+<li>软件类<ul>
+<li><a href="https://www.telerik.com/fiddler" target="_blank" rel="noopener">Fiddler</a></li>
+<li><a href="https://www.wireshark.org/download.html" target="_blank" rel="noopener">Wireshark</a></li>
+<li><a href="https://github.com/nupthale/weinre" target="_blank" rel="noopener">Weinre</a>：基于 Web Inspector 的远程调试工具，可以在 PC 上直接调试运行在手机上的页面</li>
+</ul>
+</li>
+<li>工具包类<ul>
+<li><a href="https://github.com/wuchangming/spy-debugger" target="_blank" rel="noopener">spy-debugger</a>：一站式页面调试、抓包工具，能远程调试任何手机浏览器页面，任何手机移动端 Webview，无需 USB 连接设备（实现原理与 Charles 类似）</li>
+<li><a href="https://github.com/avwo/whistle" target="_blank" rel="noopener">whistle</a>：基于 Node 实现的跨平台抓包调试代理工具，功能强大，支持 WebSocket、反响代理、插件扩展等特性</li>
+</ul>
+</li>
+</ul>
+<h2 id="基于-iOS-的开发调试"><a href="#基于-iOS-的开发调试" class="headerlink" title="基于 iOS 的开发调试"></a>基于 iOS 的开发调试</h2><h3 id="Safari-数据线-远程设备调试"><a href="#Safari-数据线-远程设备调试" class="headerlink" title="Safari + 数据线 远程设备调试"></a>Safari + 数据线 远程设备调试</h3><p>前期准备：iPhone + MacBook + 各自安装 Safari</p>
+<p>调试方式：</p>
+<ol>
+<li>打开 iPhone <code>设置 -&gt; Safari 浏览器 -&gt; 高级 -&gt; Web 检查器</code></li>
+<li>打开 MacBook 上的 Safari 浏览器 <code>偏好设置 -&gt; 高级 -&gt; 在菜单栏中显示“开发”菜单</code></li>
+<li>用数据线连接 iPhone 和 MacBook，并选择 <code>信任</code> 设备，在 iPhone 上的 Safari 浏览器打开需要调试的页面，并在 MacBook 上的 Safari 中选择 <code>开发 -&gt; （连接设备名称）-&gt; （调试页面域名）</code></li>
+<li>选中后会出现如下图所示的界面，这样就可以实现如 PC 端的调试功能</li>
+</ol>
+<p>如果 Safari 调试面板一片空白可以下载个 <a href="https://developer.apple.com/safari/download/" target="_blank" rel="noopener">Safari Technology Preview</a></p>
+<h2 id="基于-Android-的开发调试"><a href="#基于-Android-的开发调试" class="headerlink" title="基于 Android 的开发调试"></a>基于 Android 的开发调试</h2><h3 id="Chrome-USB-远程设备调试"><a href="#Chrome-USB-远程设备调试" class="headerlink" title="Chrome + USB 远程设备调试"></a>Chrome + USB 远程设备调试</h3><p>通过安卓手机与任意系统的电脑同时安装 Chrome 浏览器，并通过 USB 进行有线连接，可以通过浏览器内置的功能实现远程调试，简单来说就是通过 PC 端 Chrome 的开发者工具调试手机上 Chrome 打开的网页。</p>
+<p>调试方式：</p>
+<ol>
+<li>Android 手机和 PC 电脑同时下载 Chrome 浏览器</li>
+<li>打开 Android 手机 <code>设置 -&gt; 开发者选项 -&gt; USB 调试</code>（可能不同厂商的设定不一致，最终目的就是打开 USB 调试，如果打开路径不一样的，可以自行探索或搜索对应设备打开 USB 调试的方式）。</li>
+<li>利用 USB 数据线，将 Android 手机与 PC 电脑连接，手机理论上会提示是否允许 USB 调试，选择 <code>确认</code> 的选项的就好了</li>
+<li>打开 PC 电脑上的 Chrome 浏览器，打开开发者工具 <code>Console -&gt; 右侧 Customize and control DevTools -&gt; More tools -&gt; Remote devices</code></li>
+<li>每个页面右侧均有一个 Inspect 检查的按钮，点击就会出现你熟悉的画面，</li>
+</ol>
+<p>更详尽的调试方式可以参考 Google 官方的开发者文档相关章节：</p>
+<ul>
+<li><a href="https://developers.google.com/web/tools/chrome-devtools/remote-debugging/" target="_blank" rel="noopener">Android 设备的远程调试入门</a></li>
+<li><a href="https://developers.google.com/web/tools/chrome-devtools/remote-debugging/local-server" target="_blank" rel="noopener">访问本地服务器</a></li>
+<li><a href="https://developers.google.com/web/tools/chrome-devtools/remote-debugging/webviews" target="_blank" rel="noopener">远程调试 WebView</a></li>
+</ul>
+<h2 id="微信"><a href="#微信" class="headerlink" title="微信"></a>微信</h2><h3 id="微信开发者工具"><a href="#微信开发者工具" class="headerlink" title="微信开发者工具"></a>微信开发者工具</h3><p>微信生态包括公共号网页开发、小程序、小游戏等使用微信开发者工具就行了，这没有什么争议，毕竟官方提供的工具。</p>
+<p><a href="https://developers.weixin.qq.com/miniprogram/dev/devtools/devtools.html" target="_blank" rel="noopener">文档：微信开发者工具</a></p>
+<h3 id="缓存清除方法"><a href="#缓存清除方法" class="headerlink" title="缓存清除方法"></a>缓存清除方法</h3><p>这里提提搜到的一个微信内网页缓存的清除方法：</p>
+<ol>
+<li>微信中打开网页 <a href="http://debugx5.qq.com" target="_blank" rel="noopener">http://debugx5.qq.com</a></li>
+<li>滑动到底部，选中四个缓存选项 <code>Cookie</code>、<code>文件缓存</code>、<code>广告过滤缓存</code> 和 <code>DNS 缓存</code>，点击清除即可</li>
+</ol>
+<h2 id="其他付费服务"><a href="#其他付费服务" class="headerlink" title="其他付费服务"></a>其他付费服务</h2><p>在调研过程中也发现了一些挺不错的付费调试工具：</p>
+<ul>
+<li><a href="https://yanshu.effirst.com/" target="_blank" rel="noopener">岩鼠：提供租用的云端真机平台远程调试，覆盖市面热门品牌机型</a></li>
+<li>Charles Proxy on iOS：iOS 版的 Charles，可以直接在 iPhone 手机上调试</li>
+</ul>
+<hr>
+<p><strong>参考资料：</strong></p>
+<ul>
+<li><a href="https://yujiangshui.com/multidevice-frontend-debug/" target="_blank" rel="noopener">移动端前端开发调试</a></li>
+<li><a href="https://github.com/jieyou/remote_inspect_web_on_real_device" target="_blank" rel="noopener">各种真机远程调试方法汇总</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/51794821" target="_blank" rel="noopener">H5 移动调试全攻略</a></li>
+<li><a href="https://juejin.im/post/5b72e1f66fb9a009d018fb94" target="_blank" rel="noopener">移动端调试痛点？送你五款开发利器</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/103642413" target="_blank" rel="noopener">你需要的 App 内 H5 的调试方法</a></li>
+<li><a href="https://www.zhihu.com/question/25456655" target="_blank" rel="noopener">微信开发如何做本地调试</a></li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/architect-design-based-on-rbac/" rel="next" title="基于 RBAC 权限模型的架构设计">
+                <i class="fa fa-chevron-left"></i> 基于 RBAC 权限模型的架构设计
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/business-experience-summary-of-lading-page/" rel="prev" title="前端深耕落地页业务心得总结">
+                前端深耕落地页业务心得总结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/blog/images/avatar.jpeg" alt="tsejx">
+            
+              <p class="site-author-name" itemprop="name">tsejx</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/blog/archives/">
+                
+                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/tsejx" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/blog/images/cc-by-nc-sa.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#常用移动前端开发调试方式"><span class="nav-number">1.</span> <span class="nav-text">常用移动前端开发调试方式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#通用调试工具方法"><span class="nav-number">1.1.</span> <span class="nav-text">通用调试工具方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Chrome-移动设备模拟器"><span class="nav-number">1.1.1.</span> <span class="nav-text">Chrome 移动设备模拟器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vConsole-移动端网页上的调试控制台"><span class="nav-number">1.1.2.</span> <span class="nav-text">vConsole 移动端网页上的调试控制台</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#实现原理"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">实现原理</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Charles-数据传输抓包工具"><span class="nav-number">1.1.3.</span> <span class="nav-text">Charles 数据传输抓包工具</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#使用方式"><span class="nav-number">1.1.3.1.</span> <span class="nav-text">使用方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实现原理-1"><span class="nav-number">1.1.3.2.</span> <span class="nav-text">实现原理</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于-iOS-的开发调试"><span class="nav-number">1.2.</span> <span class="nav-text">基于 iOS 的开发调试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Safari-数据线-远程设备调试"><span class="nav-number">1.2.1.</span> <span class="nav-text">Safari + 数据线 远程设备调试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于-Android-的开发调试"><span class="nav-number">1.3.</span> <span class="nav-text">基于 Android 的开发调试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Chrome-USB-远程设备调试"><span class="nav-number">1.3.1.</span> <span class="nav-text">Chrome + USB 远程设备调试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#微信"><span class="nav-number">1.4.</span> <span class="nav-text">微信</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#微信开发者工具"><span class="nav-number">1.4.1.</span> <span class="nav-text">微信开发者工具</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存清除方法"><span class="nav-number">1.4.2.</span> <span class="nav-text">缓存清除方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他付费服务"><span class="nav-number">1.5.</span> <span class="nav-text">其他付费服务</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tsejx</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/blog/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/blog/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/blog/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

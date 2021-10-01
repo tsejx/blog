@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/blog/css/main.css?v=6.3.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/favicon.ico?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon.ico?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon.ico?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/blog/images/favicon.ico?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/blog/',
+    scheme: 'Mist',
+    version: '6.3.0',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="上篇介绍了云视频剪辑配齐工具的技术架构，对整个项目的构成有了大致的了解，本文将介绍在实现该系统的前端技术难点及解决方案。  该项目基于集团内部的平台实践，前端框架使用 Angular 实现，所以代码示例为 Angular 框架语法。  上传视频常见的上传视频方式有两种：用户通过表单打开文件选择器选择需要上传的文件和直接拖拽文件到 Web 页面的指定区域，Web 应用检测可得对应视频文件的内容。 选">
+<meta name="keywords" content="前端开发">
+<meta property="og:type" content="article">
+<meta property="og:title" content="云视频剪辑配齐工具实践复盘（实现篇）">
+<meta property="og:url" content="https://tsejx.github.io/blog/web-video-editor-practise/index.html">
+<meta property="og:site_name" content="mrsingsing">
+<meta property="og:description" content="上篇介绍了云视频剪辑配齐工具的技术架构，对整个项目的构成有了大致的了解，本文将介绍在实现该系统的前端技术难点及解决方案。  该项目基于集团内部的平台实践，前端框架使用 Angular 实现，所以代码示例为 Angular 框架语法。  上传视频常见的上传视频方式有两种：用户通过表单打开文件选择器选择需要上传的文件和直接拖拽文件到 Web 页面的指定区域，Web 应用检测可得对应视频文件的内容。 选">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://img.mrsingsing.com/upload-swim.jpg">
+<meta property="og:image" content="https://img.mrsingsing.com/located-cursor.gif">
+<meta property="og:image" content="https://img.mrsingsing.com/preview-cursor.gif">
+<meta property="og:image" content="https://img.mrsingsing.com/magnet-cursor.gif">
+<meta property="og:image" content="https://img.mrsingsing.com/magnet-area.png">
+<meta property="og:image" content="https://img.mrsingsing.com/ruler1.gif">
+<meta property="og:image" content="https://img.mrsingsing.com/ruler2.gif">
+<meta property="og:image" content="https://img.mrsingsing.com/drag-and-drop.png">
+<meta property="og:image" content="https://img.mrsingsing.com/drag-anchor.gif">
+<meta property="og:image" content="https://img.mrsingsing.com/drag-video.gif">
+<meta property="og:image" content="https://img.mrsingsing.com/sprite-preview.png">
+<meta property="og:image" content="https://img.mrsingsing.com/tencent-preview.png">
+<meta property="og:image" content="https://img.mrsingsing.com/contextmenu.gif">
+<meta property="og:updated_time" content="2021-10-01T10:05:42.417Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="云视频剪辑配齐工具实践复盘（实现篇）">
+<meta name="twitter:description" content="上篇介绍了云视频剪辑配齐工具的技术架构，对整个项目的构成有了大致的了解，本文将介绍在实现该系统的前端技术难点及解决方案。  该项目基于集团内部的平台实践，前端框架使用 Angular 实现，所以代码示例为 Angular 框架语法。  上传视频常见的上传视频方式有两种：用户通过表单打开文件选择器选择需要上传的文件和直接拖拽文件到 Web 页面的指定区域，Web 应用检测可得对应视频文件的内容。 选">
+<meta name="twitter:image" content="https://img.mrsingsing.com/upload-swim.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="https://tsejx.github.io/blog/web-video-editor-practise/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>云视频剪辑配齐工具实践复盘（实现篇） | mrsingsing</title>
+  
+
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f81f55e9e4db3ad1f98521812f24d5aa";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/blog/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">mrsingsing</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/blog/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/blog/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/blog/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://tsejx.github.io/blog/blog/web-video-editor-practise/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="tsejx">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/blog/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="mrsingsing">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">云视频剪辑配齐工具实践复盘（实现篇）
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2021-06-12 00:00:00" itemprop="dateCreated datePublished" datetime="2021-06-12T00:00:00+00:00">2021-06-12</time>
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>上篇介绍了云视频剪辑配齐工具的技术架构，对整个项目的构成有了大致的了解，本文将介绍在实现该系统的前端技术难点及解决方案。</p>
+<blockquote>
+<p>该项目基于集团内部的平台实践，前端框架使用 Angular 实现，所以代码示例为 Angular 框架语法。</p>
+</blockquote>
+<h2 id="上传视频"><a href="#上传视频" class="headerlink" title="上传视频"></a>上传视频</h2><p>常见的上传视频方式有两种：用户通过表单打开文件选择器选择需要上传的文件和直接拖拽文件到 Web 页面的指定区域，Web 应用检测可得对应视频文件的内容。</p>
+<h3 id="选择文件上传"><a href="#选择文件上传" class="headerlink" title="选择文件上传"></a>选择文件上传</h3><p>伪代码实现：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">multiple</span> <span class="attr">type</span>=<span class="string">"file"</span> <span class="attr">accept</span>=<span class="string">"video/mp4"</span> (<span class="attr">change</span>)=<span class="string">"handleVideoMaterialUpload"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> axios <span class="keyword">from</span> <span class="string">'axios'</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">handleUpload</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> uploadUrl = <span class="string">'https://upload-url.com/'</span>;</span><br><span class="line">  <span class="keyword">const</span> fileList = e.target.files;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 上传前校验</span></span><br><span class="line">  <span class="comment">// do something</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// do something 上传到指定服务</span></span><br><span class="line">  <span class="keyword">const</span> formData = <span class="keyword">new</span> FormData();</span><br><span class="line"></span><br><span class="line">  formData.append(<span class="string">'file'</span>, filesList[<span class="number">0</span>]);</span><br><span class="line"></span><br><span class="line">  axios</span><br><span class="line">    .post(uploadUrl, formData)</span><br><span class="line">    .then(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">'上传成功'</span>, res);</span><br><span class="line">    &#125;)</span><br><span class="line">    .catch(<span class="function"><span class="params">err</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">'上传失败'</span>, err);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在上传视频文件前不仅要检测视频文件的类型、大小等基础信息，还要对视频文件进行可播放性检测，并且在检测过程中获取视频文件时长、封面等再后续流程中使用到的信息（该部分实现请看下文章节），检测同过后添加到解析队列。</p>
+<a id="more"></a>
+<h3 id="拖拽文件上传"><a href="#拖拽文件上传" class="headerlink" title="拖拽文件上传"></a>拖拽文件上传</h3><p>通过监听指定区域的 <code>dragOver</code> 和 <code>drop</code> 事件，能通过入参属性 <code>e.dataTransfer</code> 获取用户所拖拽的文件对象，后续的操作与选择文件上传部分一致。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"drag-area"</span> (<span class="attr">dragOver</span>)=<span class="string">"onDragOver"</span> (<span class="attr">drop</span>)=<span class="string">"onDrop"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">onDragOver</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> fileList = e.dataTransfer.files;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// do something 后面的流程参考「选择文件上传」</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>两种方式的处理逻辑基本一致，只是用户交互方式不一样，难度比较小。</p>
+<h3 id="上传视频最佳实践"><a href="#上传视频最佳实践" class="headerlink" title="上传视频最佳实践"></a>上传视频最佳实践</h3><p>企业内部二进制文件数据一般都由云服务提供的对象存储服务负责存储，比如 <a href="https://help.aliyun.com/product/31815.html" target="_blank" rel="noopener">阿里云 对象存储 OSS</a>、<a href="https://cloud.tencent.com/document/product/436" target="_blank" rel="noopener">腾讯云 对象存储 COS</a>，这需要企业购买使用。这些对象存储的上传实现方式有多种，想了解更详细的内容可以点击上述连接。</p>
+<p>我们内部使用的是阿里云的 OSS 对象存储服务，简要流程就是前端通过后端接口获取阿里云 OSS 上传凭证，通过上传凭证直接讲文件上传到 OSS 服务。</p>
+<p><img src="https://img.mrsingsing.com/upload-swim.jpg" alt="upload-swim"></p>
+<h2 id="音视频文件信息"><a href="#音视频文件信息" class="headerlink" title="音视频文件信息"></a>音视频文件信息</h2><p>获取视频文件后，可以通过浏览器提供的 <code>window.URL.createObjectURL</code> 生成视频文件的 Blob 引用地址，在页面创建并挂载 <code>&lt;video&gt;</code> 标签， 读取内存中的视频文件，当 <code>video</code> 实例触发 <code>canplay</code> 事件后创建 Canvas 画布，根据视频文件宽高适配画布宽高，</p>
+<p>在 <code>video.play</code> 外层包裹 <code>try...catch</code> 如果报错则说明视频损坏不可播放，否则说明视频有效。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> captureImagePreview = <span class="keyword">async</span> (videoFile: File) =&gt; &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    	(<span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">        <span class="keyword">const</span> captureArea = <span class="built_in">document</span>.getElementById(<span class="string">'captureArea'</span>);</span><br><span class="line">      	<span class="comment">// 要截图的视频</span></span><br><span class="line">      	<span class="keyword">const</span> video = <span class="built_in">document</span>.createElement(<span class="string">'video'</span>);</span><br><span class="line">      	video.muted = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">    		<span class="comment">// 生成 blob 地址</span></span><br><span class="line">      	<span class="keyword">const</span> blobUrl = <span class="built_in">window</span>.URL.createObjectURL(videoFile);</span><br><span class="line"></span><br><span class="line">      	video.src = blobUrl;</span><br><span class="line"></span><br><span class="line">    		<span class="comment">// 在预设的节点上挂载 video DOM 节点</span></span><br><span class="line">      	captureArea.appendChild(video);</span><br><span class="line"></span><br><span class="line">    		<span class="comment">// 挂载后会自动加载本地的视频文件</span></span><br><span class="line">      	video.addEventListener(<span class="string">'canplay'</span>, e =&gt; &#123;</span><br><span class="line">        	<span class="keyword">let</span> imgHeight = <span class="number">0</span>,</span><br><span class="line">            imgWidth = <span class="number">0</span>,</span><br><span class="line">            videoWidth = <span class="number">0</span>,</span><br><span class="line">            videoHeight = <span class="number">0</span>;</span><br><span class="line">        	<span class="keyword">const</span> video: any = e.target;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 利用 Canvas 对视频文件进行截屏</span></span><br><span class="line">        <span class="keyword">const</span> canvas = <span class="built_in">document</span>.createElement(<span class="string">'canvas'</span>);</span><br><span class="line">        <span class="keyword">const</span> canvasCtx = canvas.getContext(<span class="string">'2d'</span>);</span><br><span class="line">        <span class="keyword">const</span> blobUrl = <span class="built_in">window</span>.URL.createObjectURL(videoFile);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 获取展示的 video 宽高作为画布的宽高和临时视频截图的宽高</span></span><br><span class="line">        canvas.width = imgWidth = video.offsetWidth;</span><br><span class="line">        canvas.height = imgHeight = video.offsetHeight;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 获取实际视频的宽高，相当于视频分辨率</span></span><br><span class="line">        videoWidth = video.videoWidth;</span><br><span class="line">        videoHeight = video.videoHeight;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">        	<span class="keyword">await</span> (video <span class="keyword">as</span> HTMLVideoElement).play();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (err) &#123;</span><br><span class="line">        	<span class="keyword">this</span>.$notification(<span class="string">'格式有误，请重新上传'</span>);</span><br><span class="line"></span><br><span class="line">          resolve(<span class="literal">null</span>);</span><br><span class="line">          <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        video.pause();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// canvas.drawImage 方法第一个参数允许的图像源包括 HTMLVideoElement 等</span></span><br><span class="line">        canvasCtx.drawImage(</span><br><span class="line">          video,</span><br><span class="line">          imgWidth - videoWidth,</span><br><span class="line">          (imgHeight - videoHeight) / <span class="number">2</span>,</span><br><span class="line">          videoWidth,</span><br><span class="line">          videoHeight,</span><br><span class="line">          imgWidth - videoWidth,</span><br><span class="line">          (imgHeight - videoHeight) / <span class="number">2</span>,</span><br><span class="line">          videoWidth,</span><br><span class="line">          videoHeight,</span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line">        canvas.toBlob(<span class="function"><span class="params">blob</span> =&gt;</span> &#123;</span><br><span class="line">          <span class="comment">// 视频封面图</span></span><br><span class="line">          <span class="keyword">const</span> url = URL.createObjectURL(blob);</span><br><span class="line"></span><br><span class="line">          <span class="keyword">const</span> material: Material = &#123;</span><br><span class="line">            <span class="comment">// 视频时长</span></span><br><span class="line">            duration: video.duration,</span><br><span class="line">            <span class="comment">// 视频封面图 Blob 地址</span></span><br><span class="line">            videoCoverUrl: url,</span><br><span class="line">            <span class="comment">// 视频文件名</span></span><br><span class="line">            videoName: videoFile.name,</span><br><span class="line">            <span class="comment">// 生成 uuid 作为 videoId</span></span><br><span class="line">            videoId: CommonUtils.generateUUID(),</span><br><span class="line">            <span class="comment">// 视频状态（解析中）</span></span><br><span class="line">            status: MaterialStatus.Parse,</span><br><span class="line">            file: videoFile,</span><br><span class="line">            <span class="comment">// 视频大小</span></span><br><span class="line">            fileSize: videoFile.size,</span><br><span class="line">            <span class="comment">// 教材 ID</span></span><br><span class="line">            fileId: <span class="keyword">this</span>.aiMatchBordcastService.fileId,</span><br><span class="line">            <span class="comment">// 视频文件 Blob 地址</span></span><br><span class="line">            blobUrl: blobUrl,</span><br><span class="line">            <span class="comment">// 生成时间</span></span><br><span class="line">            createDttm: +<span class="keyword">new</span> <span class="built_in">Date</span>(),</span><br><span class="line">          &#125;;</span><br><span class="line"></span><br><span class="line">          resolve(material);</span><br><span class="line"></span><br><span class="line">          captureArea.removeChild(video);</span><br><span class="line">      	&#125;)();</span><br><span class="line">      &#125;);</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="游标"><a href="#游标" class="headerlink" title="游标"></a>游标</h2><p>游标是视频剪辑软件中用于辅助用户快速定位，减少误操作的一种手段。在我们的云视频剪辑配齐工具中设计提出了三种功能的游标，分别是预览游标、定位游标和磁吸游标。</p>
+<h3 id="定位游标"><a href="#定位游标" class="headerlink" title="定位游标"></a>定位游标</h3><p><img src="https://img.mrsingsing.com/located-cursor.gif" alt="located-cursor"></p>
+<p>定位游标是用于定位视频播放的位置、插入互动锚点的位置的标的，定位游标在轨道工作区的位置对应着完整视频的所在的时间点，同时播放器呈现的画面需要定格在对应时间的画面，若处于播放中还需要跳转到指定时间开始播放。</p>
+<p>从 UI 层面或交互层面上的实现来看难度尚可，但其实真正实践下来，最大的挑战还是如何处理好各种通知事件引起游标位置的联动。</p>
+<p>定位游标和游览游标分别采用鼠标点击事件和鼠标移动事件触发，利用鼠标事件获取的水平方向偏移量及当前游标尺比例计算出当前位置对应完整合成视频的时间。</p>
+<p>另外为了减少轨道工作区的回流，采用绝对定位和 transform: translateX() 的方式相对于轨道滑动区域开端进行水平方向偏移。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> CONSTANTS = &#123;</span><br><span class="line">  <span class="comment">/** 游标尺整数刻度占据的像素值 */</span></span><br><span class="line">  RULER_INTEGER_SPACING: <span class="number">80</span>,</span><br><span class="line">  <span class="comment">/** 标的元素间距宽度 */</span></span><br><span class="line">  INDICATOR_WIDTH: <span class="number">30</span>,</span><br><span class="line">  <span class="comment">/** 定位游标的初始值 */</span></span><br><span class="line">  CURSOR_INITIAL_VALUE: <span class="number">31</span>,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> handleLocatedCursoRedirect = (&#123;</span><br><span class="line">    cursorShift = CONSTANTS.CURSOR_INITIAL_VALUE,</span><br><span class="line">    duration,</span><br><span class="line">    frameBeginTime,</span><br><span class="line">    framework,</span><br><span class="line">    anchor = <span class="literal">null</span>,</span><br><span class="line">  &#125;) =&gt; &#123;</span><br><span class="line">		<span class="keyword">if</span> (!cursorShift) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 轨道空置时，不设置定位游标</span></span><br><span class="line">    <span class="keyword">if</span> (!<span class="keyword">this</span>.videoTrackList.length) &#123;</span><br><span class="line">      <span class="keyword">this</span>.currentDuration = <span class="number">0</span>;</span><br><span class="line">      <span class="keyword">this</span>.setLocatedCursor = <span class="literal">null</span>;</span><br><span class="line">      <span class="keyword">this</span>.currentLocatedBeginTime = <span class="number">0</span>;</span><br><span class="line">      <span class="keyword">this</span>.currentLocatedFramework = <span class="literal">null</span>;</span><br><span class="line">      <span class="keyword">this</span>.currentLocatedAnchor = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">this</span>.setLocationInfo();</span><br><span class="line"></span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> currentDuration = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// 计算当前定位游标所在的时间</span></span><br><span class="line">    <span class="keyword">if</span> (CommonUtils.isDefined(duration)) &#123;</span><br><span class="line">      currentDuration = duration;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="comment">// 鼠标点击区域对应的时间</span></span><br><span class="line">      <span class="keyword">const</span> mouseDuration =</span><br><span class="line">        ((((cursorShift - CONSTANTS.CURSOR_INITIAL_VALUE) / CONSTANTS.RULER_INTEGER_SPACING) * <span class="keyword">this</span>.scaleRatio).toFixed(<span class="number">2</span>) <span class="keyword">as</span> any) * <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 超出视频框架区域，自动定位到框架区域末尾</span></span><br><span class="line">      <span class="keyword">if</span> (mouseDuration &gt;= <span class="keyword">this</span>.totalDuration) &#123;</span><br><span class="line">        currentDuration = <span class="keyword">this</span>.totalDuration;</span><br><span class="line">        cursorShift =</span><br><span class="line">          <span class="keyword">this</span>.lastFrameworkClientRect.left - <span class="keyword">this</span>.indicatorClientRect.left + <span class="keyword">this</span>.lastFrameworkClientRect.width;</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        currentDuration = mouseDuration;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 定位游标当前时间</span></span><br><span class="line">    <span class="keyword">this</span>.currentDuration = currentDuration;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 变更定位游标位置</span></span><br><span class="line">    <span class="keyword">this</span>.setLocatedCursor = cursorShift;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 根据定位游标位置获取游标所在框架数据、相对于框架的开始时间和锚点数据</span></span><br><span class="line">    <span class="keyword">if</span> (!framework) &#123;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">const</span> &#123; frameBeginTime, frameworkId, anchorId &#125; = <span class="keyword">this</span>.getFrameworkInfoByDuration(cursorShift);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">this</span>.currentLocatedBeginTime = frameBeginTime;</span><br><span class="line">        <span class="keyword">this</span>.currentLocatedFramework = <span class="keyword">this</span>.videoTrackList.find(<span class="function"><span class="params">item</span> =&gt;</span> item.id === frameworkId);</span><br><span class="line">        <span class="keyword">this</span>.currentLocatedAnchor = anchorId</span><br><span class="line">          ? <span class="keyword">this</span>.videoTrackList.find(<span class="function"><span class="params">item</span> =&gt;</span> item.id === frameworkId).dataList.find(<span class="function"><span class="params">item</span> =&gt;</span> <span class="string">`<span class="subst">$&#123;item.id&#125;</span>`</span> === anchorId)</span><br><span class="line">          : <span class="literal">null</span>;</span><br><span class="line">      &#125; <span class="keyword">catch</span> (err) &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(err);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="comment">// 当前游标定位在框架内的开始时间</span></span><br><span class="line">      <span class="keyword">this</span>.currentLocatedBeginTime = frameBeginTime;</span><br><span class="line">      <span class="comment">// 当前游标定位所在的框架</span></span><br><span class="line">      <span class="keyword">this</span>.currentLocatedFramework = framework;</span><br><span class="line">      <span class="comment">// 当前有标定位所在的锚点</span></span><br><span class="line">      <span class="keyword">this</span>.currentLocatedAnchor = anchor;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  	<span class="comment">// 保存当前位置信息</span></span><br><span class="line">    <span class="keyword">this</span>.setLocationInfo();</span><br><span class="line"></span><br><span class="line">  	<span class="comment">// 返回当前游标对应的时间</span></span><br><span class="line">    <span class="keyword">return</span> currentDuration;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="预览游标"><a href="#预览游标" class="headerlink" title="预览游标"></a>预览游标</h3><p><img src="https://img.mrsingsing.com/preview-cursor.gif" alt="preview-cursor"></p>
+<p>当鼠标进入轨道工作区，就会自动跟随一根预览游标，预览游标所到之处，播放器需要展示该时间位置对应的画面。所以此处只需要监听 <code>mousenter</code> 鼠标进入轨道工作区，利用 <code>mousemove</code> 实时变更预览游标偏移值，并调用播放器组件变更预览画面，当然由于鼠标事件触发频率高，需要对调用预览方法进行防抖操作，当 <code>mouseleave</code> 离开工作区时隐藏预览游标。</p>
+<h3 id="磁吸游标"><a href="#磁吸游标" class="headerlink" title="磁吸游标"></a>磁吸游标</h3><p><img src="https://img.mrsingsing.com/magnet-cursor.gif" alt="magnet-cursor"></p>
+<p>当用户拖拽视频素材到轨道工作区，或拖拽工作区框架进行排序操作，需要在完整视频开端、结尾及框架与框架之间衔接处显示绿色磁吸游标，方便用户定位拖拽的素材最终在轨道工作区中插入的位置。</p>
+<p>这里的实现方式是，当检测到用户开始拖拽动作时，通知轨道工作区生成所有磁吸区域的坐标信息列表，并在 DOM 中生成对应数量的磁吸区域。</p>
+<p>为了方便理解，下图红色区域为开始拖拽后生成的磁吸区域。为了减少操作导致页面频繁重排重绘的问题，所有生成的元素都是基于基点进行 <code>translate</code> 便偏移。</p>
+<p><img src="https://img.mrsingsing.com/magnet-area.png" alt="magnet-area"></p>
+<p>你肯定会有疑问，为什么磁吸区域能检测到拖拽元素位于上方，这与拖拽指令的实现有关，可以留意后面对拖拽指令的详细说明。</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 磁吸区域</span></span><br><span class="line"><span class="selector-class">.magnet-area-item</span> &#123;</span><br><span class="line">  <span class="attribute">box-sizing</span>: border-box;</span><br><span class="line">  <span class="attribute">position</span>: absolute;</span><br><span class="line">  <span class="attribute">top</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">max-width</span>: <span class="number">80px</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">100%</span>;</span><br><span class="line">  <span class="attribute">z-index</span>: <span class="number">1450</span>;</span><br><span class="line">  <span class="comment">/* 方便查看效果 */</span></span><br><span class="line">  <span class="attribute">background-color</span>: rgba(<span class="number">255</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0.3</span>);</span><br><span class="line"></span><br><span class="line">  <span class="selector-tag">&amp;</span><span class="selector-class">.first</span> &#123;</span><br><span class="line">    <span class="attribute">transform</span>: translate3d(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="selector-tag">&amp;</span><span class="selector-class">.active</span> &#123;</span><br><span class="line">      <span class="selector-class">.magnet-area-cursor</span> &#123;</span><br><span class="line">        <span class="attribute">left</span>: <span class="number">0</span>;</span><br><span class="line">        <span class="attribute">transform</span>: none;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="selector-tag">&amp;</span><span class="selector-class">.last</span> &#123;</span><br><span class="line">    <span class="attribute">transform</span>: translate3d(-<span class="number">100%</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="selector-tag">&amp;</span><span class="selector-class">.active</span> &#123;</span><br><span class="line">      <span class="selector-class">.magnet-area-cursor</span> &#123;</span><br><span class="line">        <span class="attribute">left</span>: initial;</span><br><span class="line">        <span class="attribute">right</span>: <span class="number">0</span>;</span><br><span class="line">        <span class="attribute">transform</span>: none;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="selector-tag">&amp;</span><span class="selector-class">.active</span> &#123;</span><br><span class="line">    <span class="comment">// 磁吸游标</span></span><br><span class="line">    <span class="selector-class">.magnet-area-cursor</span> &#123;</span><br><span class="line">      <span class="attribute">content</span>: <span class="string">''</span>;</span><br><span class="line">      <span class="attribute">position</span>: absolute;</span><br><span class="line">      <span class="attribute">top</span>: <span class="number">0</span>;</span><br><span class="line">      <span class="attribute">left</span>: <span class="number">50%</span>;</span><br><span class="line">      <span class="attribute">width</span>: <span class="number">2px</span>;</span><br><span class="line">      <span class="attribute">height</span>: <span class="number">100%</span>;</span><br><span class="line">      <span class="attribute">background-color</span>: <span class="number">#1db368</span>;</span><br><span class="line">      <span class="attribute">transform</span>: translateX(-<span class="number">50%</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> initMagnetArea = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">this</span>.currentMagnetAreaList = [];</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 利用定位元素（轨道列表前用于占位的空元素）获取当前轨道区域中所有的视频框架的 DOM 元素引用</span></span><br><span class="line">  <span class="keyword">const</span> frameworkList = <span class="keyword">this</span>.indicatorRef.nativeElement.parentElement.querySelectorAll(</span><br><span class="line">    <span class="string">'.framework-item'</span>,</span><br><span class="line">  ) <span class="keyword">as</span> NodeListOf&lt;HTMLDivElement&gt;;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> indicatorLeft = <span class="keyword">this</span>.indicatorClientRect.left;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">this</span>.currentMagnetAreaList = <span class="built_in">Array</span>.from(frameworkList).reduce(</span><br><span class="line">    (acc: any, <span class="attr">item</span>: HTMLDivElement, <span class="attr">index</span>: number) =&gt; &#123;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 获取单个视频框架对应 DOM 元素的大小及视口位置</span></span><br><span class="line">      <span class="keyword">const</span> frameworkRect = item.getBoundingClientRect();</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 生成磁吸区域的宽度</span></span><br><span class="line">      <span class="comment">// 由于不同时长不同比例下框架实际的宽度不一致</span></span><br><span class="line">      <span class="comment">// 若使用过小的（固定）宽度作为磁吸区域，会导致在较大宽度的框架中需要更靠近两框架衔接处才能显示磁吸游标</span></span><br><span class="line">      <span class="comment">// 所以这里取框架宽度的 30% 作为磁吸区域在当前框架区域所占的宽度</span></span><br><span class="line">      <span class="keyword">const</span> currentWidth = frameworkRect.width * <span class="number">0.3</span>;</span><br><span class="line">      <span class="comment">// 磁吸区域宽度</span></span><br><span class="line">      <span class="keyword">const</span> areaWidth = index === <span class="number">0</span> ? currentWidth : currentWidth + acc.prevWidth;</span><br><span class="line">      <span class="comment">// 磁吸游标在磁吸区域的偏移量</span></span><br><span class="line">      <span class="keyword">const</span> areaShift = index === <span class="number">0</span> ? <span class="number">0</span> : (acc.prevWidth / areaWidth) * <span class="number">100</span>;</span><br><span class="line"></span><br><span class="line">      acc.list.push(&#123;</span><br><span class="line">        id: item.dataset.id,</span><br><span class="line">        areaWidth: areaWidth,</span><br><span class="line">        areaTranform: <span class="string">`translateX(-<span class="subst">$&#123;areaShift&#125;</span>%)`</span>,</span><br><span class="line">        areaLeft: frameworkRect.left - indicatorLeft + <span class="string">'px'</span>,</span><br><span class="line">        cursorLeft: areaShift + <span class="string">'%'</span>,</span><br><span class="line">      &#125;);</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 最后一片磁吸区域，是最后一个视频框架的最后 30% 的区域</span></span><br><span class="line">      <span class="comment">// 拖拽素材新增视频框架，相当于在列表末尾新增</span></span><br><span class="line">      <span class="comment">// 拖拽框架排序，相当于把原位置框架置于列表末尾</span></span><br><span class="line">      <span class="keyword">if</span> (index === frameworkList.length - <span class="number">1</span>) &#123;</span><br><span class="line">        acc.list.push(&#123;</span><br><span class="line">          id: <span class="literal">null</span>,</span><br><span class="line">          areaWidth: currentWidth,</span><br><span class="line">          areaTranform: <span class="string">'translateX(-100%)'</span>,</span><br><span class="line">          areaLeft: frameworkRect.right - indicatorLeft + <span class="string">'px'</span>,</span><br><span class="line">          cursorLeft: <span class="string">'initial'</span>,</span><br><span class="line">        &#125;);</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      acc.prevWidth = currentWidth;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">return</span> acc;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      list: [],</span><br><span class="line">      <span class="comment">// 上个框架碰撞区域的宽度</span></span><br><span class="line">      <span class="comment">//（每个框架有首尾两个碰撞区域，各占框架宽度 30%，总占框架宽度 60%）</span></span><br><span class="line">      prevWidth: <span class="literal">null</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">  ).list;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="游标尺"><a href="#游标尺" class="headerlink" title="游标尺"></a>游标尺</h2><p>游标尺是视频剪辑软件中以时间标记刻度的标尺。我研究了类似的 Web 网页云剪辑应用，有两种实现方式：</p>
+<ol>
+<li>利用 Canvas 绘制刻度尺（Bilibili 云剪辑）</li>
+<li>利用 DOM 绘制刻度尺，采用类似虚拟列表的方式处理海量的 DOM 节点（腾讯云剪辑）</li>
+</ol>
+<p><img src="https://img.mrsingsing.com/ruler1.gif" alt="ruler1"></p>
+<p><img src="https://img.mrsingsing.com/ruler2.gif" alt="ruler2"></p>
+<p>实现思路：</p>
+<ol>
+<li>创建 <code>&lt;canvas&gt;</code> 并根据当前设备 DPR 按比例缩放画布尺寸</li>
+<li>根据当前轨道区域所有分段视频时长，计算出总时长（不足两小时显示两小，大于两小时，按拼接长度增长），从而计算出游标尺中显示刻度的总数</li>
+<li>循环遍历依次对 Canvas 绘制指针进行移动，取模判断是整数刻度还是小数刻度，并绘制相对应的刻度线，直到所有数遍历完成</li>
+<li>最后根据比例尺计算整数刻度显示的时间文案</li>
+</ol>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> RecordVideoTimelineRulerComponent <span class="keyword">implements</span> OnInit &#123;</span><br><span class="line">  <span class="comment">/** 比例尺 */</span></span><br><span class="line">  <span class="meta">@Input</span>()</span><br><span class="line">  scaleRatio: <span class="built_in">number</span>;</span><br><span class="line">  <span class="comment">/** 最大刻度数量 */</span></span><br><span class="line">  <span class="meta">@Input</span>()</span><br><span class="line">  maxScaleValue: <span class="built_in">number</span>;</span><br><span class="line">  <span class="comment">/** 游标尺宽度 */</span></span><br><span class="line">  <span class="keyword">public</span> canvasWidth: <span class="built_in">number</span>;</span><br><span class="line">  <span class="comment">/** 游标尺画布 DOM 元素引用 */</span></span><br><span class="line">  <span class="keyword">public</span> canvasElement: HTMLCanvasElement;</span><br><span class="line">  <span class="comment">/** 游标尺画布上下文引用 */</span></span><br><span class="line">  <span class="keyword">public</span> canvasContext: CanvasRenderingContext2D;</span><br><span class="line"></span><br><span class="line">  ngOnInit(): <span class="built_in">void</span> &#123;</span><br><span class="line">    <span class="keyword">this</span>.initCanvas();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  ngOnChanges(changes: &#123; [propName: <span class="built_in">string</span>]: SimpleChange &#125;) &#123;</span><br><span class="line">    <span class="keyword">const</span> scaleRatio = changes[<span class="string">'scaleRatio'</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (</span><br><span class="line">      scaleRatio &amp;&amp;</span><br><span class="line">      (!scaleRatio.previousValue || scaleRatio.previousValue !== scaleRatio.currentValue)</span><br><span class="line">    ) &#123;</span><br><span class="line">      <span class="keyword">this</span>.drawCanvas();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 初始化刻度尺</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  initCanvas(): <span class="built_in">void</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> canvas = <span class="built_in">document</span>.getElementById(<span class="string">'canvas'</span>) <span class="keyword">as</span> HTMLCanvasElement;</span><br><span class="line">    <span class="keyword">this</span>.canvasElement = canvas;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> ctx = canvas.getContext(<span class="string">'2d'</span>);</span><br><span class="line">    <span class="keyword">this</span>.canvasContext = ctx;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> documentBodyWidth = <span class="built_in">document</span>.body.clientWidth || <span class="built_in">document</span>.documentElement.clientWidth;</span><br><span class="line">    <span class="keyword">this</span>.canvasWidth = documentBodyWidth;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">window</span>.devicePixelRatio) &#123;</span><br><span class="line">      <span class="keyword">const</span> devicePixelRatio = <span class="built_in">window</span>.devicePixelRatio;</span><br><span class="line"></span><br><span class="line">      canvas.width = devicePixelRatio * <span class="keyword">this</span>.canvasWidth;</span><br><span class="line">      canvas.height = devicePixelRatio * <span class="number">26</span>;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 按照比例缩放</span></span><br><span class="line">      ctx.scale(devicePixelRatio, devicePixelRatio);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>.drawCanvas();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 绘制刻度尺</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  drawCanvas(): <span class="built_in">void</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> scrollX = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">const</span> ctx = <span class="keyword">this</span>.canvasContext;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!ctx) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> canvasWidth = <span class="keyword">this</span>.canvasWidth;</span><br><span class="line">    <span class="keyword">const</span> canvasHeight = <span class="number">26</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 水平方向偏移量</span></span><br><span class="line">    <span class="keyword">const</span> offsetX = (scrollX ? <span class="number">30</span> - scrollX : <span class="number">30</span>) + <span class="number">0.5</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 最大刻度值（当前显示的最大刻度值）</span></span><br><span class="line">    <span class="keyword">const</span> totalScaleValue = <span class="keyword">this</span>.maxScaleValue;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> startCount = <span class="built_in">Math</span>.max(<span class="built_in">parseInt</span>(<span class="string">''</span> + <span class="built_in">Math</span>.floor((scrollX - <span class="number">30</span>) / <span class="number">16</span>), <span class="number">10</span>), <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">const</span> endCount = <span class="built_in">Math</span>.min(</span><br><span class="line">      <span class="built_in">parseInt</span>(<span class="string">''</span> + <span class="built_in">Math</span>.ceil((scrollX + canvasWidth - <span class="number">30</span>) / <span class="number">16</span>), <span class="number">10</span>) - <span class="number">1</span>,</span><br><span class="line">      totalScaleValue</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 每个刻度值的距离 分割线</span></span><br><span class="line">    <span class="keyword">const</span> division = <span class="number">15</span>;</span><br><span class="line">    <span class="comment">// 整数刻度高度</span></span><br><span class="line">    <span class="keyword">const</span> integerHeight = <span class="number">14</span> || <span class="built_in">Math</span>.floor(canvasHeight * <span class="number">0.53</span>);</span><br><span class="line">    <span class="comment">// 分度值刻度高度</span></span><br><span class="line">    <span class="keyword">const</span> divisionHeight = <span class="number">8</span> || <span class="built_in">Math</span>.floor(canvasHeight * <span class="number">0.3</span>);</span><br><span class="line">    <span class="comment">// 整数刻度下的文案高度</span></span><br><span class="line">    <span class="keyword">const</span> textHeight = <span class="number">21</span> || <span class="built_in">Math</span>.floor(canvasHeight * <span class="number">0.78</span>);</span><br><span class="line">    <span class="comment">// 每段整数刻度代表的秒数比例</span></span><br><span class="line">    <span class="keyword">const</span> scaleRatio = <span class="keyword">this</span>.scaleRatio;</span><br><span class="line"></span><br><span class="line">    ctx.clearRect(<span class="number">0</span>, <span class="number">0</span>, canvasWidth, canvasHeight);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 当刻度值足够大的时候，只绘制可视范围内的刻度值</span></span><br><span class="line">    <span class="comment">// 画刻度线</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = startCount; i &lt; endCount; i++) &#123;</span><br><span class="line">      ctx.beginPath();</span><br><span class="line">      ctx.save();</span><br><span class="line">      ctx.strokeStyle = <span class="string">'#595959'</span>;</span><br><span class="line">      ctx.lineWidth = <span class="number">1</span>;</span><br><span class="line">      ctx.lineCap = <span class="string">'round'</span>;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">const</span> moveTo = offsetX + i * (division + <span class="number">1</span>);</span><br><span class="line">      ctx.moveTo(moveTo, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> (i % <span class="number">5</span> === <span class="number">0</span>) &#123;</span><br><span class="line">        ctx.lineTo(offsetX + i * (division + <span class="number">1</span>), integerHeight);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        ctx.lineTo(offsetX + i * (division + <span class="number">1</span>), divisionHeight);</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      ctx.stroke();</span><br><span class="line">      ctx.restore();</span><br><span class="line">      ctx.closePath();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 整数刻度文案</span></span><br><span class="line">    ctx.beginPath();</span><br><span class="line">    ctx.font = <span class="string">'10px Arial'</span>;</span><br><span class="line">    ctx.fillStyle = <span class="string">'#AAAAAA'</span>;</span><br><span class="line">    ctx.textAlign = <span class="string">'center'</span>;</span><br><span class="line">    ctx.textBaseline = <span class="string">'middle'</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> seperatedScaleValue = totalScaleValue / <span class="number">5</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; seperatedScaleValue; i++) &#123;</span><br><span class="line">      <span class="keyword">const</span> text = <span class="keyword">this</span>.formatTimeScaleText(i, scaleRatio);</span><br><span class="line">      ctx.fillText(text, offsetX + <span class="number">80</span> * i, textHeight);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ctx.closePath();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 根据正整数索引和比例尺格式化显示时间</span></span><br><span class="line"><span class="comment">   * @param index 刻度尺索引（从 0 开始）</span></span><br><span class="line"><span class="comment">   * @param ratio 每个整数刻度之间的时间长度（以秒为单位）</span></span><br><span class="line"><span class="comment">   * @description 将以秒为单位的数值转化为 HH:MM:SS.ss 格式的时间字符串</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  formatTimeScaleText(index: <span class="built_in">number</span>, ratio: <span class="built_in">number</span>): <span class="built_in">string</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> totalSeconds = index * ratio;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> hour: <span class="built_in">number</span> | <span class="built_in">string</span> = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">let</span> minute: <span class="built_in">number</span> | <span class="built_in">string</span> = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">let</span> second: <span class="built_in">number</span> | <span class="built_in">string</span> = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">const</span> millisecond = <span class="string">'00'</span>;</span><br><span class="line"></span><br><span class="line">    hour = <span class="built_in">Math</span>.floor(totalSeconds / <span class="number">3600</span>);</span><br><span class="line">    minute = <span class="built_in">Math</span>.floor((totalSeconds - hour * <span class="number">3600</span>) / <span class="number">60</span>);</span><br><span class="line">    second = ratio &gt;= <span class="number">60</span> ? <span class="number">0</span> : <span class="built_in">Math</span>.floor(totalSeconds - hour * <span class="number">3600</span> - minute * <span class="number">60</span>);</span><br><span class="line"></span><br><span class="line">    hour = <span class="keyword">this</span>.fixZero(hour);</span><br><span class="line">    minute = <span class="keyword">this</span>.fixZero(minute);</span><br><span class="line">    second = <span class="keyword">this</span>.fixZero(second);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="string">`<span class="subst">$&#123;hour&#125;</span>:<span class="subst">$&#123;minute&#125;</span>:<span class="subst">$&#123;second&#125;</span>.<span class="subst">$&#123;millisecond&#125;</span>`</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 补零函数（只支持个位数补零为十位数）</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  fixZero(value: <span class="built_in">any</span>): <span class="built_in">string</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> value * <span class="number">1</span> &lt; <span class="number">10</span> ? <span class="string">`0<span class="subst">$&#123;value&#125;</span>`</span> : <span class="string">`<span class="subst">$&#123;value&#125;</span>`</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里的比例尺虽然可以通过滑动进行设置，但是为了准确计算，我们只提供了几个固定的档位。</p>
+<p>这里的比例尺代表的是游标尺中一个完整大刻度之间所代表的时间，并以秒作为统一度量衡：</p>
+<ol>
+<li>5 格 1 秒 1 格 0.2s=200ms</li>
+<li>5 格 1 分钟=60s 1 格 0.2min=12s=12000ms</li>
+<li>5 格 3 分钟=180s 1 格 0.6min=36s=36000ms</li>
+<li>5 格 6 分钟=360s 1 格 1.2min=62s=62000ms</li>
+</ol>
+<h2 id="拖拽指令"><a href="#拖拽指令" class="headerlink" title="拖拽指令"></a>拖拽指令</h2><p>对于云剪辑 Web 应用，其与一般纯粹表单表格的应用，在于让用户把更多的操作从键盘转移到鼠标，而拖拽的实现方式，是此次需求中的重中之重。</p>
+<p>我对产品和设计师提出的需求进行了梳理：</p>
+<p><img src="https://img.mrsingsing.com/drag-and-drop.png" alt="drag-and-drop"></p>
+<p>最初，我考虑到使用原生的 drag &amp; drop 方法实现拖拽，但是原生的 drag &amp; drop 方法会影响到文档流其他元素的布局，导致浏览器回流，这显然不是一种优雅的解决方式。查阅相关资料后，发现能通过 mouse 相关方法模拟 drag &amp; drop 的方法，那么如果利用 mouse 相关方法，通过某些判断条件判断为拖拽后，采用绝对布局创建块级格式上下文元素，独立于文档流进行位移，这样一来既能满足功能需求也能满足性能需求。</p>
+<p>HTML 的拖拽 API 分别作用于被拖拽的元素和目标元素：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">针对对象</th>
+<th style="text-align:left">事件名称</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">被拖动的元素</td>
+<td style="text-align:left">dragstart</td>
+<td style="text-align:left">在元素开始拖动时触发</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">drag</td>
+<td style="text-align:left">在元素拖动时反复触发</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">dragend</td>
+<td style="text-align:left">在拖动操作完成时触发</td>
+</tr>
+<tr>
+<td style="text-align:left">目的地对象</td>
+<td style="text-align:left">dragenter</td>
+<td style="text-align:left">当被拖动元素进入目的地元素所占据的屏幕空间时触发</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">dragover</td>
+<td style="text-align:left">当被拖动元素在目的地元素内时触发（每 100ms 触发一次）</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">dragleave</td>
+<td style="text-align:left">当被拖动元素没有放下就离开目的地元素时触发</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">drop</td>
+<td style="text-align:left">释放被拖拽元素时触发</td>
+</tr>
+</tbody>
+</table>
+<h3 id="被拖拽元素"><a href="#被拖拽元素" class="headerlink" title="被拖拽元素"></a>被拖拽元素</h3><p>下面我们开始一步步使用 mouse 事件实现被拖拽元素的 drag 指令。</p>
+<p>我们尝试拆解拖拽这个动作，从浏览器事件角度出发考虑，可以分为 <code>mousedown</code> 和 <code>mousemove</code> 两部分，当 <code>mousemove</code> 坐标与 <code>mousedown</code> 坐标之差的绝对值达到一定阈值后，可认为用户在进行拖拽行为，因此我们需要给这个为指令提供可供使用方自由设置的入参 <code>dragTolerance</code>（默认设为 5，可理解为拖拽位移了 5 像素单位后判定为拖拽）。</p>
+<p>在 HTML 全局属性中，有个 draggable 的属性，当值为 true 时，表示元素可被拖动；当值为 false 时，则表示元素不可被拖动。我们的需求场景中，有同样类似的功能需要实现，举个例子，视频框架和锚点占位元素均为可拖拽的元素，而锚点占位元素是“镶嵌”再视频框架中的，如果将该指令分别设置在各自的元素上，那么当拖拽锚点占位元素时，也会触发视频框架的拖拽事件，这显然不是我们想要的结果。</p>
+<p>仅仅由外部设置为布尔值似乎并不能解决我们的问题。所以，除了布尔值外， 我们允许 <code>draggable</code> 参数为函数类型。当 <code>mousedown</code> 时，会获取当前 <code>draggable</code> 的值，若 darggable 为可执行函数时，将携带数据和被拖拽原始 DOM 元素引用等作为参数执行该校验函数，函数内部处理判断可否拖拽逻辑，最终返回布尔值决定 <code>mousedown</code> 后续的处理。</p>
+<p>这也是抽象公共组件和工具的技巧之一，既能实现将业务代码通过函数作为回调对组件工具逻辑进行影响，同时也减少对抽象组件工具侵入。</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Directive</span>(&#123;</span><br><span class="line">  selector: <span class="string">'[ssDraggable]'</span>,</span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> SSDraggableDirective <span class="keyword">implements</span> OnInit &#123;</span><br><span class="line">  <span class="keyword">constructor</span>(<span class="params"><span class="keyword">public</span> el: ElementRef, <span class="keyword">public</span> zone: NgZone, <span class="keyword">public</span> viewContainer: ViewContainerRef</span>) &#123;</span><br><span class="line">    <span class="keyword">this</span>.currentElement = el.nativeElement;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> ngOnInit(): <span class="built_in">void</span> &#123;</span><br><span class="line">    <span class="keyword">this</span>.onMouseMove = <span class="keyword">this</span>.onMouseMove.bind(<span class="keyword">this</span>);</span><br><span class="line">    <span class="keyword">this</span>.onMouseUp = <span class="keyword">this</span>.onMouseUp.bind(<span class="keyword">this</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> ngAfterContentInit() &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.currentElement) &#123;</span><br><span class="line">      <span class="keyword">this</span>.currentElement.onmousedown = <span class="keyword">this</span>.onMouseDown.bind(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 能否拖拽</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">get</span> currentElementDraggable() &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="keyword">this</span>.draggable === <span class="string">'function'</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">this</span>.draggable(&#123;</span><br><span class="line">        <span class="comment">// 被拖拽元素携带的数据</span></span><br><span class="line">        data: <span class="keyword">this</span>.data,</span><br><span class="line">        <span class="comment">// 被拖拽元素的原始 DOM 元素</span></span><br><span class="line">        mousedownElement: <span class="keyword">this</span>.mousedownElement,</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.draggable;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 拖拽开始前鼠标按下事件</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  onMouseDown(e: MouseEvent): <span class="built_in">void</span> &#123;</span><br><span class="line">    e.preventDefault();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>.mousedownElement = e.target <span class="keyword">as</span> HTMLElement;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!<span class="keyword">this</span>.currentElementDraggable) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>.clicked = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 记录鼠标按下的横纵坐标</span></span><br><span class="line">    <span class="keyword">this</span>.startX = e.pageX;</span><br><span class="line">    <span class="keyword">this</span>.startY = e.pageY;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">document</span>.defaultView?.addEventListener(<span class="string">'mousemove'</span>, <span class="keyword">this</span>.onMouseMove);</span><br><span class="line">    <span class="built_in">document</span>.defaultView?.addEventListener(<span class="string">'mouseup'</span>, <span class="keyword">this</span>.onMouseUp);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 拖拽开始前鼠标按下事件</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  onMouseMove(e: MouseEvent): <span class="built_in">void</span> &#123;</span><br><span class="line">    <span class="comment">// do something</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 监听拖动结束</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  onMouseUp(e: MouseEvent): <span class="built_in">void</span> &#123;</span><br><span class="line">    <span class="comment">// do something</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当鼠标距离 mousedown 距离超出设定阈值后，需触发一次周期函数的 dragStart，表示开始拖拽。与此同时，基于模版创建用于拖拽的幽灵元素。</p>
+<p>为了满足交互需求，这里有两种幽灵元素的实现方式：一种是 Angular 提供的模版语法，一种是 clone 原 DOM 元素。</p>
+<p>基于模版生成的幽灵元素相对比较容易实现，只需要实用 ng-template 定义好 HTML 结构，将模版引用变量作为入参传入指令即可。指令内部根据模版引用变量创建 DOM 元素即可。</p>
+<p><img src="https://img.mrsingsing.com/drag-anchor.gif" alt="drag-anchor"></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 拖拽移动锚点幽灵模版 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">ng-template</span> #<span class="attr">ssDraggableAnchorGhost</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span></span></span><br><span class="line"><span class="tag">    <span class="attr">class</span>=<span class="string">"drag-anchor-ghost"</span></span></span><br><span class="line"><span class="tag">    [<span class="attr">attr.data-type</span>]=<span class="string">"DragGhostElementType.ANCHOR"</span></span></span><br><span class="line"><span class="tag">  &gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"ghost-cursor"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"ghost-placeholder"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ng-template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>另一种根据 DOM 元素创建副本的方式会稍微复杂，我们都知道 DOM 提供的方法中有一个 <code>Node.cloneNode()</code> 的方法，可用于克隆 DOM 节点，但是这个方法有个明显的缺陷，就是只能克隆 DOM 结构，CSS 样式无法克隆。</p>
+<p>在研究了所有可行的方案后，并没有一个十分完美的解决方案，那么就只能走最笨拙的实现方式。原生 DOM 提供了获取元素经过布局、绘制、光栅化和合并后的样式属性方法 getComputedStyle。创建幽灵元素时，先克隆元素及其子孙节点，然后依次遍历每个节点，通过该方法获取节点的计算样式属性，然后再对样式属性逐一赋值到克隆节点上。</p>
+<p>但是浏览器支持的 CSS 属性有几百个，如果每个都需要的话将会提升整个操作的复杂度。因为在这里的使用相关属性的元素的样式是比较固定的，所以只对部分样式属性进行了转移。如果是实现大型的公用包，则应该保证可用性。</p>
+<p><img src="https://img.mrsingsing.com/drag-video.gif" alt="drag-video"></p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> SSDraggableDirective <span class="keyword">implements</span> OnInit &#123;</span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 根据当前元素克隆生成拖拽幽灵元素</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  cloneGhostElement(element: Element): Element &#123;</span><br><span class="line">    <span class="keyword">const</span> clonedElement = element.cloneNode(<span class="literal">true</span>) <span class="keyword">as</span> HTMLElement;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> originalStyles: CSSStyleDeclaration = <span class="built_in">document</span>.defaultView.getComputedStyle(element, <span class="string">''</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">const</span> cssProperty of styleProperties) &#123;</span><br><span class="line">      clonedElement.style[cssProperty] = originalStyles[cssProperty];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    clonedElement.style.pointerEvents = <span class="string">'none'</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> originalElementChildren = element.getElementsByTagName(<span class="string">'*'</span>) <span class="keyword">as</span> HTMLCollectionOf&lt;</span><br><span class="line">      HTMLElement</span><br><span class="line">    &gt;;</span><br><span class="line">    <span class="keyword">const</span> clonedElementChildren = clonedElement.getElementsByTagName(<span class="string">'*'</span>) <span class="keyword">as</span> HTMLCollectionOf&lt;</span><br><span class="line">      HTMLElement</span><br><span class="line">    &gt;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = originalElementChildren.length - <span class="number">1</span>; i--; ) &#123;</span><br><span class="line">      <span class="keyword">const</span> originalChild = originalElementChildren[i];</span><br><span class="line">      <span class="keyword">const</span> clonedChild = clonedElementChildren[i];</span><br><span class="line">      <span class="keyword">const</span> originElementStyles = <span class="built_in">document</span>.defaultView.getComputedStyle(originalChild, <span class="string">''</span>);</span><br><span class="line"></span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">const</span> cssProperty of styleProperties) &#123;</span><br><span class="line">        clonedChild.style[cssProperty] = originElementStyles[cssProperty];</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      clonedChild.style.pointerEvents = <span class="string">'none'</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> clonedElement;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>开始拖拽并生成幽灵函数的代码实现：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> SSDraggableBaseEventArgs &#123;</span><br><span class="line">  originalEvent: MouseEvent;</span><br><span class="line">  ghostElement: Nullable&lt;HTMLElement&gt;;</span><br><span class="line">  startX: <span class="built_in">number</span>;</span><br><span class="line">  startY: <span class="built_in">number</span>;</span><br><span class="line">  pageX: <span class="built_in">number</span>;</span><br><span class="line">  pageY: <span class="built_in">number</span>;</span><br><span class="line">  cancel: <span class="built_in">boolean</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> SSDraggableDirective <span class="keyword">implements</span> OnInit &#123;</span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 鼠标移动事件</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  onMouseMove(e: MouseEvent) &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; pageX, pageY &#125; = e;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.clicked) &#123;</span><br><span class="line">      <span class="keyword">const</span> totalMovedX = pageX - <span class="keyword">this</span>.startX;</span><br><span class="line">      <span class="keyword">const</span> totalMovedY = pageY - <span class="keyword">this</span>.startY;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> (</span><br><span class="line">        !<span class="keyword">this</span>.dragStarted &amp;&amp;</span><br><span class="line">        (<span class="built_in">Math</span>.abs(totalMovedX) &gt; <span class="keyword">this</span>.dragTolerance || <span class="built_in">Math</span>.abs(totalMovedY) &gt; <span class="keyword">this</span>.dragTolerance)</span><br><span class="line">      ) &#123;</span><br><span class="line">        <span class="keyword">const</span> dragStartArgs: SSDraggableBaseEventArgs = &#123;</span><br><span class="line">          originalEvent: e,</span><br><span class="line">          ghostElement: <span class="keyword">this</span>.ghostElement,</span><br><span class="line">          startX: <span class="keyword">this</span>.startX,</span><br><span class="line">          startY: <span class="keyword">this</span>.startY,</span><br><span class="line">          pageX,</span><br><span class="line">          pageY,</span><br><span class="line">          cancel: <span class="literal">false</span>,</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">this</span>.zone.run(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">          <span class="keyword">this</span>.dragStart.emit(dragStartArgs);</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (dragStartArgs.cancel) &#123;</span><br><span class="line">          <span class="keyword">this</span>.destoryEventListener();</span><br><span class="line"></span><br><span class="line">          <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">const</span> clientRect = <span class="keyword">this</span>.currentElement.getBoundingClientRect();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">this</span>.baseX = clientRect.left;</span><br><span class="line">        <span class="keyword">this</span>.baseY = clientRect.top;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">this</span>.dragStarted = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 当移动足够多距离时，幽灵元素才会渲染并被实际开始拖拽</span></span><br><span class="line">        <span class="keyword">this</span>.createGhostElement(pageX, pageY);</span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!<span class="keyword">this</span>.dragStarted) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">const</span> dragMoveArgs: SSDraggableDragMoveArgs = &#123;</span><br><span class="line">        originalEvent: e,</span><br><span class="line">        ghostElement: <span class="keyword">this</span>.ghostElement,</span><br><span class="line">        startX: <span class="keyword">this</span>.startX,</span><br><span class="line">        startY: <span class="keyword">this</span>.startY,</span><br><span class="line">        pageX: <span class="keyword">this</span>.lastX,</span><br><span class="line">        pageY: <span class="keyword">this</span>.lastY,</span><br><span class="line">        nextPageX: e.pageX,</span><br><span class="line">        nextPageY: e.pageY,</span><br><span class="line">        cancel: <span class="literal">false</span>,</span><br><span class="line">      &#125;;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">this</span>.dragMove.emit(dragMoveArgs);</span><br><span class="line"></span><br><span class="line">      <span class="keyword">const</span> setPageX = dragMoveArgs.nextPageX;</span><br><span class="line">      <span class="keyword">const</span> setPageY = dragMoveArgs.nextPageY;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> (!dragMoveArgs.cancel) &#123;</span><br><span class="line">        <span class="keyword">this</span>.ghostLeft = <span class="keyword">this</span>.dragDirection === DragDirection.VERTICAL ? <span class="keyword">this</span>.baseX : setPageX;</span><br><span class="line">        <span class="keyword">this</span>.ghostTop = <span class="keyword">this</span>.dragDirection === DragDirection.HORIZONTAL ? <span class="keyword">this</span>.baseY : setPageY;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">this</span>.dispatchDragEvent(pageX, pageY, e);</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">this</span>.lastX = setPageX;</span><br><span class="line">      <span class="keyword">this</span>.lastY = setPageY;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 根据模版生成拖拽幽灵元素</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  createGhostElement(pageX: <span class="built_in">number</span>, pageY: <span class="built_in">number</span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> dynamicGhostRef;</span><br><span class="line">    <span class="comment">//</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.ghostTemplate) &#123;</span><br><span class="line">      dynamicGhostRef = <span class="keyword">this</span>.viewContainer.createEmbeddedView(<span class="keyword">this</span>.ghostTemplate, <span class="literal">null</span>);</span><br><span class="line">      <span class="keyword">this</span>.ghostElement = dynamicGhostRef.rootNodes[<span class="number">0</span>];</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> clonedElement = <span class="keyword">this</span>.cloneGhostElement(<span class="keyword">this</span>.currentElement);</span><br><span class="line"></span><br><span class="line">      <span class="keyword">const</span> ghostContainer = <span class="built_in">document</span>.createElement(<span class="string">'div'</span>);</span><br><span class="line">      ghostContainer.appendChild(clonedElement);</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">this</span>.currentElement.dataset) &#123;</span><br><span class="line">        <span class="built_in">Object</span>.entries(<span class="keyword">this</span>.currentElement.dataset).forEach(<span class="function">(<span class="params">[key, value]</span>) =&gt;</span> &#123;</span><br><span class="line">          ghostContainer.setAttribute(<span class="string">`data-<span class="subst">$&#123;key&#125;</span>`</span>, value);</span><br><span class="line">        &#125;);</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">this</span>.ghostElement = ghostContainer;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.ghostElement) &#123;</span><br><span class="line">      <span class="keyword">const</span> createEventArgs = &#123;</span><br><span class="line">        ghostElement: <span class="keyword">this</span>.ghostElement,</span><br><span class="line">        cancel: <span class="literal">false</span>,</span><br><span class="line">      &#125;;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">this</span>.ghostCreate.emit(createEventArgs);</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> (createEventArgs.cancel) &#123;</span><br><span class="line">        <span class="keyword">this</span>.ghostElement = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.ghostTemplate &amp;&amp; dynamicGhostRef) &#123;</span><br><span class="line">          dynamicGhostRef.destroy();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">this</span>.ghostElement.style.position = <span class="string">'absolute'</span>;</span><br><span class="line">      <span class="keyword">this</span>.ghostElement.style.pointerEvents = <span class="string">'none'</span>;</span><br><span class="line">      <span class="keyword">this</span>.ghostElement.style.zIndex = <span class="keyword">this</span>.ghostIndex;</span><br><span class="line">      <span class="keyword">this</span>.ghostElement.style.transform =</span><br><span class="line">        <span class="keyword">this</span>.dragDirection === DragDirection.BOTH ? <span class="string">'translate3d(-50%, -50%, 0)'</span> : <span class="literal">null</span>;</span><br><span class="line">      <span class="comment">// 垂直方向可拖拽，那么 left 固定</span></span><br><span class="line">      <span class="keyword">this</span>.ghostElement.style.left =</span><br><span class="line">        <span class="keyword">this</span>.dragDirection === DragDirection.VERTICAL ? <span class="keyword">this</span>.baseX + <span class="string">'px'</span> : pageX + <span class="string">'px'</span>;</span><br><span class="line">      <span class="comment">// 水平方向可拖拽，那么 right 固定</span></span><br><span class="line">      <span class="keyword">this</span>.ghostElement.style.top =</span><br><span class="line">        <span class="keyword">this</span>.dragDirection === DragDirection.HORIZONTAL ? <span class="keyword">this</span>.baseY + <span class="string">'px'</span> : pageY + <span class="string">'px'</span>;</span><br><span class="line">      <span class="keyword">this</span>.ghostElement.style.width = <span class="string">'auto'</span>;</span><br><span class="line">      <span class="keyword">this</span>.ghostElement.style.height = <span class="string">'auto'</span>;</span><br><span class="line">      <span class="keyword">this</span>.ghostElement.style.cursor = <span class="string">'grabbing'</span>;</span><br><span class="line"></span><br><span class="line">      <span class="built_in">document</span>.body.appendChild(<span class="keyword">this</span>.ghostElement);</span><br><span class="line"></span><br><span class="line">      <span class="keyword">this</span>.ghostElement.addEventListener(<span class="string">'pointerup'</span>, <span class="function"><span class="params">args</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">this</span>.onMouseUp(args);</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当拖拽结束，也就是用户释放鼠标 mouseup 后，则除了需要将传达给 drop 目标区域外，还要移除时间的监听。</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> SSDrggableDirective <span class="keyword">implements</span> OnInit &#123;</span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 监听拖动结束</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  onMouseUp(e: MouseEvent) &#123;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="keyword">this</span>.clicked) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>.clicked = <span class="literal">false</span>;</span><br><span class="line">    <span class="keyword">this</span>.dragStarted = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> dragEndArgs = &#123;</span><br><span class="line">      originalEvent: e,</span><br><span class="line">      ghostElement: <span class="keyword">this</span>.ghostElement,</span><br><span class="line">      startX: <span class="keyword">this</span>.startX,</span><br><span class="line">      startY: <span class="keyword">this</span>.startY,</span><br><span class="line">      pageX: e.pageX,</span><br><span class="line">      pageY: e.pageY,</span><br><span class="line">      data: <span class="keyword">this</span>.data,</span><br><span class="line">      cancel: <span class="literal">false</span>,</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>.zone.run(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">this</span>.dragEnd.emit(dragEndArgs);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>.dispatchDropEvent(e.pageX, e.pageY, e);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.ghostElement) &#123;</span><br><span class="line">      <span class="keyword">this</span>.ghostElement.parentNode?.removeChild(<span class="keyword">this</span>.ghostElement);</span><br><span class="line">      <span class="keyword">this</span>.ghostElement = <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>.destoryEventListener();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>你也许会疑问在 mouse 实现 drag &amp; drop 要如何实现将拖拽元素的信息通知给目的地元素，毕竟 drag &amp; drop 能通过 dataTransfer 作为数据传输的载体，而且原生支持数据传递。</p>
+<p>事实上，除了浏览器提供类似 click、mousedown、blur 等内置的标准事件外，浏览器还通过方法让开发者自己创建监听事件。</p>
+<p>创建指定类型的事件示例：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建事件</span></span><br><span class="line"><span class="keyword">const</span> event = documet.createEvent(<span class="string">'Event'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 定义事件名为 build</span></span><br><span class="line">event.initEvent(<span class="string">'build'</span>, <span class="literal">true</span>, <span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 监听事件</span></span><br><span class="line">event.addEventListener(</span><br><span class="line">  <span class="string">'build'</span>,</span><br><span class="line">  <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// e.target</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="literal">false</span></span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 触发对象可以是任何元素或其他事件目标</span></span><br><span class="line">elem.dispatchEvent(Event);</span><br></pre></td></tr></table></figure>
+<p>当元素被拖拽移动时，会实时通过 getElementsAtPoint 获取元素下方的坐标各层级的元素，当存在目的地标识的元素时，执行对应的周期函数，这样就能实现数据的通信了。</p>
+<p>下面为实现 drag 和 drop 相关事件的代码：</p>
+<ul>
+<li>dispatchDragEvent：处理 dragEnter、dragLeave 事件</li>
+<li>dispatchDropEvent：处理 drop 事件</li>
+<li>dispatchEvent：底层封装</li>
+</ul>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> SSDraggableDirective <span class="keyword">implements</span> OnInit &#123;</span><br><span class="line">  dispatchDragEvent(pageX: <span class="built_in">number</span>, pageY: <span class="built_in">number</span>, originalEvent: MouseEvent) &#123;</span><br><span class="line">    <span class="keyword">let</span> dropArea;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> customEventArgs: SSDraggableCustomEventDetail = &#123;</span><br><span class="line">      data: &#123; ...this.data &#125;,</span><br><span class="line">      originalEvent,</span><br><span class="line">      ghostElement: <span class="keyword">this</span>.ghostElement,</span><br><span class="line">      startX: <span class="keyword">this</span>.startX,</span><br><span class="line">      startY: <span class="keyword">this</span>.startY,</span><br><span class="line">      pageX,</span><br><span class="line">      pageY,</span><br><span class="line">      cancel: <span class="literal">false</span>,</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 按照元素冒泡顺序排列的数组</span></span><br><span class="line">    <span class="keyword">const</span> elementsFromPoint = <span class="keyword">this</span>.getElementsAtPoint(pageX, pageY);</span><br><span class="line">    <span class="keyword">const</span> dropAreaFlag = <span class="keyword">this</span>.dropAreaFlag;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">const</span> element of elementsFromPoint) &#123;</span><br><span class="line">      <span class="keyword">if</span> (</span><br><span class="line">        element.getAttribute(dropAreaFlag) === <span class="string">'true'</span> &amp;&amp;</span><br><span class="line">        element !== <span class="keyword">this</span>.ghostElement &amp;&amp;</span><br><span class="line">        element !== <span class="keyword">this</span>.currentElement</span><br><span class="line">      ) &#123;</span><br><span class="line">        dropArea = element;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (dropArea &amp;&amp; (!<span class="keyword">this</span>.lastDropArea || (<span class="keyword">this</span>.lastDropArea &amp;&amp; <span class="keyword">this</span>.lastDropArea !== dropArea))) &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">this</span>.lastDropArea) &#123;</span><br><span class="line">        <span class="keyword">this</span>.dispatchEvent(<span class="keyword">this</span>.lastDropArea, <span class="string">'ssDragLeave'</span>, customEventArgs);</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">this</span>.lastDropArea = dropArea;</span><br><span class="line">      <span class="keyword">this</span>.dispatchEvent(dropArea, <span class="string">'ssDragEnter'</span>, customEventArgs);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!dropArea &amp;&amp; <span class="keyword">this</span>.lastDropArea) &#123;</span><br><span class="line">      <span class="keyword">this</span>.dispatchEvent(<span class="keyword">this</span>.lastDropArea, <span class="string">'ssDragLeave'</span>, customEventArgs);</span><br><span class="line">      <span class="keyword">this</span>.lastDropArea = <span class="literal">null</span>;</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (dropArea) &#123;</span><br><span class="line">      <span class="keyword">this</span>.dispatchEvent(dropArea, <span class="string">'ssDragOver'</span>, customEventArgs);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  dispatchDropEvent(pageX: <span class="built_in">number</span>, pageY: <span class="built_in">number</span>, originalEvent: MouseEvent) &#123;</span><br><span class="line">    <span class="keyword">const</span> customEventArgs = &#123;</span><br><span class="line">      ghostElement: <span class="keyword">this</span>.ghostElement,</span><br><span class="line">      originalEvent,</span><br><span class="line">      startX: <span class="keyword">this</span>.startX,</span><br><span class="line">      startY: <span class="keyword">this</span>.startY,</span><br><span class="line">      pageX,</span><br><span class="line">      pageY,</span><br><span class="line">      data: <span class="keyword">this</span>.data,</span><br><span class="line">      cancel: <span class="literal">false</span>,</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>.dispatchEvent(<span class="keyword">this</span>.lastDropArea, <span class="string">'ssDrop'</span>, customEventArgs);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  dispatchEvent(</span><br><span class="line">    target: Nullable&lt;HTMLElement&gt;,</span><br><span class="line">    eventName: <span class="built_in">string</span>,</span><br><span class="line">    eventArgs: SSDraggableCustomEventDetail</span><br><span class="line">  ) &#123;</span><br><span class="line">    <span class="keyword">if</span> (target) &#123;</span><br><span class="line">      <span class="keyword">const</span> customEvent = <span class="built_in">document</span>.createEvent(<span class="string">'CustomEvent'</span>);</span><br><span class="line">      customEvent.initCustomEvent(eventName, <span class="literal">false</span>, <span class="literal">false</span>, eventArgs);</span><br><span class="line">      target.dispatchEvent(customEvent);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">protected</span> getElementsAtPoint(pageX: <span class="built_in">number</span>, pageY: <span class="built_in">number</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> viewPortX = pageX - <span class="built_in">window</span>.pageXOffset;</span><br><span class="line">    <span class="keyword">const</span> viewPortY = pageY - <span class="built_in">window</span>.pageYOffset;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">document</span>[<span class="string">'msElementsFromPoint'</span>]) &#123;</span><br><span class="line">      <span class="keyword">const</span> elements = <span class="built_in">document</span>[<span class="string">'msElementsFromPoint'</span>](viewPortX, viewPortY);</span><br><span class="line">      <span class="keyword">return</span> elements === <span class="literal">null</span> ? [] : elements;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="built_in">document</span>.elementsFromPoint(viewPortX, viewPortY);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如此这样，拖拽元素的 Angular 指令就这样实现了，诸如边界、标识属性等实现上述代码已经包含在内，下面总结封装一个 mouse 实现 drag 的指令工具需要考虑到的 API 和事件。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">API</th>
+<th style="text-align:left">说明</th>
+<th style="text-align:left">类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">data</td>
+<td style="text-align:left">拖拽元素携带的数据</td>
+<td style="text-align:left">any</td>
+</tr>
+<tr>
+<td style="text-align:left">draggable</td>
+<td style="text-align:left">能否被拖拽</td>
+<td style="text-align:left">boolean \</td>
+<td>() =&gt; boolean</td>
+</tr>
+<tr>
+<td style="text-align:left">ghostTemplate</td>
+<td style="text-align:left">被拖拽幽灵元素的模版引用变量</td>
+<td style="text-align:left"><code>TemplateRef&lt;any&gt;</code></td>
+</tr>
+<tr>
+<td style="text-align:left">ghostIndex</td>
+<td style="text-align:left">幽灵元素的层级</td>
+<td style="text-align:left">string</td>
+</tr>
+<tr>
+<td style="text-align:left">dragTolerance</td>
+<td style="text-align:left">判断拖拽开始的阈值</td>
+<td style="text-align:left">number</td>
+</tr>
+<tr>
+<td style="text-align:left">dragDirection</td>
+<td style="text-align:left">边界</td>
+<td style="text-align:left">DragDirection</td>
+</tr>
+<tr>
+<td style="text-align:left">dropAreaFlag</td>
+<td style="text-align:left">标识被拖动元素的自定义属性</td>
+<td style="text-align:left">string</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>dropAreaFlag 是用于判断是否为能够 drop 区域的标识，使用 drop 指令的元素默认添加 data-* 的自定义 attribute。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">事件</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">dragStart</td>
+<td style="text-align:left">拖拽开始时触发</td>
+</tr>
+<tr>
+<td style="text-align:left">dragMove</td>
+<td style="text-align:left">拖拽元素移动时触发</td>
+</tr>
+<tr>
+<td style="text-align:left">dragEnd</td>
+<td style="text-align:left">拖拽结束时触发</td>
+</tr>
+<tr>
+<td style="text-align:left">ghostCreate</td>
+<td style="text-align:left">幽灵元素创建时触发</td>
+</tr>
+<tr>
+<td style="text-align:left">ghostDestory</td>
+<td style="text-align:left">幽灵元素销毁时触发</td>
+</tr>
+</tbody>
+</table>
+<h3 id="拖拽目的地元素"><a href="#拖拽目的地元素" class="headerlink" title="拖拽目的地元素"></a>拖拽目的地元素</h3><p>对于释放的 drop 指令来说，实现起来就比较简单了，只需要对 drag 指令定义的几个自定义事件进行监听并处理对应的回调事件即可。</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Directive</span>(&#123;</span><br><span class="line">  selector: <span class="string">'[ssDroppable]'</span>,</span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> SSDroppableDirective <span class="keyword">implements</span> OnInit &#123;</span><br><span class="line">  <span class="keyword">public</span> currentElement: Nullable&lt;HTMLElement&gt; = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Input</span>()</span><br><span class="line">  <span class="keyword">public</span> dropAreaFlag = <span class="string">'ssdroppable'</span>;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Output</span>()</span><br><span class="line">  <span class="keyword">public</span> dragEnter = <span class="keyword">new</span> EventEmitter&lt;CustomEvent&gt;();</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Output</span>()</span><br><span class="line">  <span class="keyword">public</span> dragOver = <span class="keyword">new</span> EventEmitter&lt;CustomEvent&gt;();</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Output</span>()</span><br><span class="line">  <span class="keyword">public</span> dragLeave = <span class="keyword">new</span> EventEmitter&lt;CustomEvent&gt;();</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Output</span>()</span><br><span class="line">  <span class="keyword">public</span> drop = <span class="keyword">new</span> EventEmitter&lt;CustomEvent&gt;();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">constructor</span>(<span class="params"><span class="keyword">public</span> el: ElementRef, <span class="keyword">public</span> zone: NgZone</span>) &#123;</span><br><span class="line">    <span class="keyword">this</span>.currentElement = el.nativeElement;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> ngOnInit(): <span class="built_in">void</span> &#123;</span><br><span class="line">    <span class="keyword">this</span>.onDragEnter = <span class="keyword">this</span>.onDragEnter.bind(<span class="keyword">this</span>);</span><br><span class="line">    <span class="keyword">this</span>.onDragOver = <span class="keyword">this</span>.onDragOver.bind(<span class="keyword">this</span>);</span><br><span class="line">    <span class="keyword">this</span>.onDragLeave = <span class="keyword">this</span>.onDragLeave.bind(<span class="keyword">this</span>);</span><br><span class="line">    <span class="keyword">this</span>.onDrop = <span class="keyword">this</span>.onDrop.bind(<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!<span class="keyword">this</span>.currentElement) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>.currentElement.setAttribute(<span class="keyword">this</span>.dropAreaFlag, <span class="string">'true'</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>.currentElement.addEventListener(<span class="string">'ssDragEnter'</span>, <span class="keyword">this</span>.onDragEnter <span class="keyword">as</span> EventListener);</span><br><span class="line">    <span class="keyword">this</span>.currentElement.addEventListener(<span class="string">'ssDragOver'</span>, <span class="keyword">this</span>.onDragOver <span class="keyword">as</span> EventListener);</span><br><span class="line">    <span class="keyword">this</span>.currentElement.addEventListener(<span class="string">'ssDragLeave'</span>, <span class="keyword">this</span>.onDragLeave <span class="keyword">as</span> EventListener);</span><br><span class="line">    <span class="keyword">this</span>.currentElement.addEventListener(<span class="string">'ssDrop'</span>, <span class="keyword">this</span>.onDrop <span class="keyword">as</span> EventListener);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 被拖动元素进入当前元素所占据的屏幕空间时触发</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="keyword">public</span> onDragEnter(e: CustomEvent): <span class="built_in">void</span> &#123;</span><br><span class="line">    <span class="keyword">this</span>.zone.run(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">this</span>.dragEnter.emit(e);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 被拖拽元素在当前元素上方时触发</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="keyword">public</span> onDragOver(e: CustomEvent): <span class="built_in">void</span> &#123;</span><br><span class="line">    <span class="keyword">this</span>.zone.run(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">this</span>.dragOver.emit(e);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 被拖动元素没有放下就离开当前元素时触发</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="keyword">public</span> onDragLeave(e: CustomEvent): <span class="built_in">void</span> &#123;</span><br><span class="line">    <span class="keyword">this</span>.zone.run(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">this</span>.dragLeave.emit(e);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 释放事件</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="keyword">public</span> onDrop(e: CustomEvent): <span class="built_in">void</span> &#123;</span><br><span class="line">    <span class="keyword">this</span>.zone.run(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">this</span>.drop.emit(e);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="缩略图指令"><a href="#缩略图指令" class="headerlink" title="缩略图指令"></a>缩略图指令</h2><p>在视频剪辑软件中，轨道区域的视频片段都会显示对应时间的截图，方便用户定位指定画面所在的位置以进行进一步的操作，同样地我们也需要对视频片段的缩略图进行展示。</p>
+<p>在大方向上我们有两种方式实现此类效果：</p>
+<ul>
+<li>当用户开始上传视频但未完成时，对视频进行配齐操作，我们需要对视频文件根据比例截取图片并展示</li>
+<li>当视频上传完成后，云服务生成视频截图雪碧图，用户刷新页面后，使用雪碧图进行展示</li>
+</ul>
+<h3 id="视频文件画布截图"><a href="#视频文件画布截图" class="headerlink" title="视频文件画布截图"></a>视频文件画布截图</h3><p>与之前检测视频文件可用性时的实现逻辑类似，往文档中插入 video 标签，并进行 play 播放，利用 Canvas 画布绘制视频指定时间的画面，当时间更新后对画布内容使用 <code>toDataURL</code> 输出视频截图。</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> SSVideoPreviewDirective <span class="keyword">implements</span> OnInit &#123;</span><br><span class="line">  <span class="meta">@Input</span>()</span><br><span class="line">  <span class="keyword">public</span> previewList;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Input</span>()</span><br><span class="line">  <span class="keyword">public</span> blobUrl;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/** 开始时间（单位：秒） */</span></span><br><span class="line">  <span class="meta">@Input</span>()</span><br><span class="line">  <span class="keyword">public</span> beginTime: <span class="built_in">number</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/** 当前视频素材截取片段持续时长（单位：秒） */</span></span><br><span class="line">  <span class="meta">@Input</span>()</span><br><span class="line">  <span class="keyword">public</span> duration: <span class="built_in">number</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/** 步长，每张截图相隔时间（单位：秒） */</span></span><br><span class="line">  <span class="meta">@Input</span>()</span><br><span class="line">  <span class="keyword">public</span> scaleRatio: <span class="built_in">number</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> ngOnInit(): <span class="built_in">void</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.imgList &amp;&amp; <span class="keyword">this</span>.imgList.length &gt; <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="keyword">this</span>.renderVideoPreviewByImageList();</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">this</span>.blobUrl) &#123;</span><br><span class="line">      <span class="keyword">this</span>.renderVideoPreviewByBlobUrl();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 每段视频数据都会保存可播放的 Blob Url</span></span><br><span class="line">  <span class="keyword">public</span> renderVideoPreviewByBlobUrl() &#123;</span><br><span class="line">    <span class="comment">// 缩略图总数量</span></span><br><span class="line">    <span class="keyword">const</span> count = <span class="built_in">Math</span>.ceil(<span class="keyword">this</span>.duration / <span class="keyword">this</span>.scaleRatio);</span><br><span class="line">    <span class="keyword">const</span> frag = <span class="built_in">document</span>.createDocumentFragment();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> durationList = [];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; count; i++) &#123;</span><br><span class="line">      <span class="comment">// 第 i 张显示截图的时间</span></span><br><span class="line">      <span class="keyword">const</span> currentTime = <span class="keyword">this</span>.beginTime + i * <span class="keyword">this</span>.scaleRatio;</span><br><span class="line"></span><br><span class="line">      durationList.push(currentTime);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> promise = <span class="keyword">this</span>.videoPicture(&#123; videoUrl: <span class="keyword">this</span>.blobUrl, seconds: durationList &#125;);</span><br><span class="line"></span><br><span class="line">    promise.then(<span class="function">(<span class="params">imgList: <span class="built_in">string</span>[]</span>) =&gt;</span> &#123;</span><br><span class="line">      imgList.forEach(<span class="function">(<span class="params">base64: <span class="built_in">string</span></span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">const</span> div = <span class="built_in">document</span>.createElement(<span class="string">'div'</span>);</span><br><span class="line"></span><br><span class="line">        div.style.display = <span class="string">'inline-block'</span>;</span><br><span class="line">        div.style.width = <span class="string">'80px'</span>;</span><br><span class="line">        div.style.height = <span class="string">'44px'</span>;</span><br><span class="line">        div.style.backgroundRepeat = <span class="string">'no-repeat'</span>;</span><br><span class="line">        div.style.backgroundImage = <span class="string">`url("<span class="subst">$&#123;base64&#125;</span>")`</span>;</span><br><span class="line">        div.style.backgroundSize = <span class="string">'contain'</span>;</span><br><span class="line">        div.style.flexShrink = <span class="string">'0'</span>;</span><br><span class="line"></span><br><span class="line">        frag.appendChild(div);</span><br><span class="line">      &#125;);</span><br><span class="line"></span><br><span class="line">      <span class="keyword">this</span>.currentElement.innerHTML = <span class="string">''</span>;</span><br><span class="line">      <span class="keyword">this</span>.currentElement.appendChild(frag);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 获取一段时间的视频截图</span></span><br><span class="line"><span class="comment">   *</span></span><br><span class="line"><span class="comment">   * @param videoData 视频数据</span></span><br><span class="line"><span class="comment">   * @param width 截图宽度（默认 80px）* 8 是为了让截出来的图片不模糊</span></span><br><span class="line"><span class="comment">   * @param height 截图高度（默认 44px）* 8 是为了让截出来的图片不模糊</span></span><br><span class="line"><span class="comment">   * @param seconds 截取视频的秒   [1,3,4,5,6]表示截取视频 1 3 4 5 6秒的图片</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  videoPicture(&#123;</span><br><span class="line">    videoUrl,</span><br><span class="line">    videoData,</span><br><span class="line">    width = <span class="number">80</span> * <span class="number">8</span>,</span><br><span class="line">    height = <span class="number">44</span> * <span class="number">8</span>,</span><br><span class="line">    seconds,</span><br><span class="line">  &#125;: &#123;</span><br><span class="line">    videoUrl?: <span class="built_in">string</span>;</span><br><span class="line">    videoData?: File;</span><br><span class="line">    width?: <span class="built_in">number</span>;</span><br><span class="line">    height?: <span class="built_in">number</span>;</span><br><span class="line">    seconds: <span class="built_in">number</span>[];</span><br><span class="line">  &#125;) &#123;</span><br><span class="line">    <span class="comment">// 创建一个视频元素</span></span><br><span class="line">    <span class="keyword">const</span> container = <span class="built_in">document</span>.createElement(<span class="string">'div'</span>);</span><br><span class="line">    container.className = <span class="string">'video-picture'</span>;</span><br><span class="line">    container.style.position = <span class="string">'absolute'</span>;</span><br><span class="line">    <span class="comment">// container.style.visibility = 'hidden';</span></span><br><span class="line">    container.style.left = <span class="string">'-9999px'</span>;</span><br><span class="line">    <span class="keyword">const</span> video = <span class="built_in">document</span>.createElement(<span class="string">'video'</span>);</span><br><span class="line">    video.width = width;</span><br><span class="line">    video.height = height;</span><br><span class="line">    video.src = videoUrl || <span class="built_in">window</span>.URL.createObjectURL(videoData);</span><br><span class="line">    container.appendChild(video);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 创建一个canvas</span></span><br><span class="line">    <span class="keyword">const</span> canvas = <span class="built_in">document</span>.createElement(<span class="string">'canvas'</span>);</span><br><span class="line">    canvas.width = width; <span class="comment">//视频原有尺寸</span></span><br><span class="line">    canvas.height = height; <span class="comment">//视频原有尺寸</span></span><br><span class="line">    container.appendChild(canvas);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 截图</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="params">resolve</span> =&gt;</span> &#123;</span><br><span class="line">      video.addEventListener(<span class="string">'loadeddata'</span>, <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        video.currentTime = <span class="number">1</span>;</span><br><span class="line">        video.play();</span><br><span class="line">      &#125;);</span><br><span class="line">      video.addEventListener(<span class="string">'playing'</span>, <span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">        video.pause();</span><br><span class="line">        <span class="keyword">const</span> captureVideoPromises = [];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; seconds.length; i++) &#123;</span><br><span class="line">          <span class="keyword">const</span> captureVideoPromise = <span class="keyword">await</span> <span class="keyword">this</span>.captureVideoPromise(canvas, video, seconds[i]);</span><br><span class="line">          captureVideoPromises.push(captureVideoPromise);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">Promise</span>.all(captureVideoPromises).then(<span class="function"><span class="params">allSrcs</span> =&gt;</span> &#123;</span><br><span class="line">          container.remove();</span><br><span class="line">          allSrcs.sort(<span class="function">(<span class="params">a, b</span>) =&gt;</span> a.beginTime - b.beginTime);</span><br><span class="line">          <span class="keyword">const</span> srcs = allSrcs.map(<span class="function"><span class="params">val</span> =&gt;</span> val.src);</span><br><span class="line">          resolve(srcs);</span><br><span class="line">        &#125;);</span><br><span class="line">      &#125;);</span><br><span class="line"></span><br><span class="line">      <span class="built_in">document</span>.body.appendChild(container);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 视频截图</span></span><br><span class="line"><span class="comment">   * @param canvas</span></span><br><span class="line"><span class="comment">   * @param video</span></span><br><span class="line"><span class="comment">   * @param beginTime 截取图片的视频时间点</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="keyword">private</span> captureVideoPromise(canvas, video, beginTime) &#123;</span><br><span class="line">    <span class="keyword">const</span> videoWidth = video.width;</span><br><span class="line">    <span class="keyword">const</span> videoHeight = video.height;</span><br><span class="line">    <span class="comment">// 视频的当前画面渲染到画布上</span></span><br><span class="line">    <span class="keyword">const</span> ctx = canvas.getContext(<span class="string">'2d'</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="params">resolve</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> cutImg = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        video.removeEventListener(<span class="string">'timeupdate'</span>, cutImg);</span><br><span class="line"></span><br><span class="line">        ctx.drawImage(video, <span class="number">0</span>, <span class="number">0</span>, videoWidth, videoHeight);</span><br><span class="line">        <span class="keyword">const</span> dataUrl = canvas.toDataURL(<span class="string">'image/png'</span>);</span><br><span class="line">        resolve(&#123; beginTime: beginTime, src: dataUrl &#125;);</span><br><span class="line">      &#125;;</span><br><span class="line">      video.addEventListener(<span class="string">'timeupdate'</span>, cutImg);</span><br><span class="line">      video.currentTime = beginTime;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="雪碧图实现缩略图"><a href="#雪碧图实现缩略图" class="headerlink" title="雪碧图实现缩略图"></a>雪碧图实现缩略图</h3><p>实现思路：</p>
+<ol>
+<li>计算总共需要显示的截图数量</li>
+<li>循环创建 DOM 元素，并计算当前位置缩略图对应雪碧图中的位置信息，以 background 背景样式实现缩略图展示</li>
+<li>最后统一插入到文档中</li>
+</ol>
+<p>这里的计算方法值得总结一下：</p>
+<p>每个视频框架对应着一个视频素材，用户可以在视频框架上添加锚点，所以在视频框架内是以 视频-锚点-视频-锚点-视频 间隔存在的，锚点后视频的开始时间是上一段视频的结束时间。阿里云的雪碧图是每秒截取一张图片，也就是第 0 秒对应第一张截图，第 100 秒对应的是第二组</p>
+<p><img src="https://img.mrsingsing.com/sprite-preview.png" alt="sprite-preview"></p>
+<blockquote>
+<p>结合代码说明：</p>
+<ul>
+<li>duration 当前视频素材截取片段持续时长（单位：秒）</li>
+<li>scaleRatio 游标尺的比例尺</li>
+<li>beginTime 当前视频素材截取片段在当前视频素材的开始时间（单位：秒）</li>
+<li>imgList 雪碧图数组集合</li>
+</ul>
+</blockquote>
+<ol>
+<li>通过当前视频素材的截取片段总持续时长和比例尺计算出总共需要显示的截图数量，不够显示一张完整缩略图则显示缩略图的部分，采用截取图片的策略</li>
+<li>当前视频素材的截取片段的第一张缩略图即为截取片段开始时间那一秒，例如一个位于锚点后的视频素材截取片段的开始时间是当前视频素材的第 120 秒，那么第一张就是 120 秒处的截图</li>
+<li>雪碧图每张为 10x10 的规则，第 0-99 秒为第一张雪碧图，第 100-199 秒为第二张雪碧图，只需当前时间（秒数）除以 100 并向下取整，就可获知当前缩略图在数组的哪张雪碧图中</li>
+<li>找到雪碧图，我们还需要确认在雪碧图中的方位，根据当前时间取模 100 的结果是否等于 0 可得知是否为雪碧图的第一张，否则向上取整取模 100 可知其所处位置</li>
+<li>将自然顺序转换为由 0 开始的索引顺序</li>
+<li>计算水平偏移值：索引个位数即代表所需缩略图左侧距离雪碧图所在行左侧共有多少张缩略图，可由 <code>(index % 10) * width</code> 计算水平偏移值</li>
+<li>计算垂直偏移值：索引十位数即代表所需缩略图顶端距离雪碧图所在列顶端共有多少张略略图，可由 <code>Math.floor(index / 10) * height</code> 计算垂直偏移值</li>
+</ol>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> SSVideoPreviewDirective <span class="keyword">implements</span> OnInit &#123;</span><br><span class="line">  <span class="keyword">public</span> renderVideoPreviewByImageList(): <span class="built_in">void</span> &#123;</span><br><span class="line">    <span class="comment">// 总共需要显示的截图张数</span></span><br><span class="line">    <span class="keyword">const</span> count = <span class="built_in">Math</span>.ceil(<span class="keyword">this</span>.duration / <span class="keyword">this</span>.scaleRatio);</span><br><span class="line">    <span class="keyword">const</span> frag = <span class="built_in">document</span>.createDocumentFragment();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; count; i++) &#123;</span><br><span class="line">      <span class="keyword">const</span> div = <span class="built_in">document</span>.createElement(<span class="string">'div'</span>);</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 第 i 张显示截图的时间</span></span><br><span class="line">      <span class="keyword">const</span> currentTime = <span class="keyword">this</span>.beginTime + i * <span class="keyword">this</span>.scaleRatio;</span><br><span class="line">      <span class="comment">// 截图数组中第几组成员</span></span><br><span class="line">      <span class="keyword">const</span> groupIndex = <span class="built_in">Math</span>.floor(currentTime / <span class="number">100</span>);</span><br><span class="line">      <span class="comment">// 100x100 里的第几张</span></span><br><span class="line">      <span class="keyword">const</span> remainder = <span class="built_in">parseInt</span>(<span class="string">`<span class="subst">$&#123;currentTime&#125;</span>`</span>) % <span class="number">100</span> === <span class="number">0</span> ? <span class="number">1</span> : <span class="built_in">Math</span>.ceil(currentTime) % <span class="number">100</span>;</span><br><span class="line">      <span class="comment">//  对应在图片组中的索引</span></span><br><span class="line">      <span class="keyword">const</span> index = remainder === <span class="number">0</span> ? <span class="number">99</span> : remainder - <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">const</span> url = <span class="keyword">this</span>.imgList[groupIndex];</span><br><span class="line">      <span class="keyword">const</span> x = (index % <span class="number">10</span>) * <span class="number">80</span>;</span><br><span class="line">      <span class="keyword">const</span> y = <span class="built_in">Math</span>.floor(index / <span class="number">10</span>) * <span class="number">44</span>;</span><br><span class="line"></span><br><span class="line">      div.style.display = <span class="string">'inline-block'</span>;</span><br><span class="line">      div.style.width = <span class="string">'80px'</span>;</span><br><span class="line">      div.style.height = <span class="string">'44px'</span>;</span><br><span class="line">      div.style.backgroundRepeat = <span class="string">'no-repeat'</span>;</span><br><span class="line">      div.style.backgroundImage = <span class="string">`url("<span class="subst">$&#123;url&#125;</span>")`</span>;</span><br><span class="line">      div.style.backgroundPosition = <span class="string">`-<span class="subst">$&#123;x&#125;</span>px -<span class="subst">$&#123;y&#125;</span>px`</span>;</span><br><span class="line">      div.style.backgroundSize = <span class="string">'800px 440px'</span>;</span><br><span class="line">      div.style.flexShrink = <span class="string">'0'</span>;</span><br><span class="line"></span><br><span class="line">      frag.appendChild(div);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>.currentElement.innerHTML = <span class="string">''</span>;</span><br><span class="line">    <span class="keyword">this</span>.currentElement.appendChild(frag);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在对这种缩略图的技术实现方案进行调研时，发现了另一种巧妙实现方式：</p>
+<p>对当个 DOM 元素设定多个 background-image 和 background-position，指定 backgroud-size 为固定宽度，背景图的引用也是一张雪碧图，只需要对 background-image 和 background-position 进行计算操作即可。</p>
+<p>但是这种实现方式有前提，就是雪碧图必须是 1xn 这种形式的，这是因为 background-image 设置多个值时，背景图片会依次从左向右排列，如果是 10x10 这样的规则，那么雪碧图的宽度会占满，就无法实现一个设置定义一张缩略图了。</p>
+<p><img src="https://img.mrsingsing.com/tencent-preview.png" alt="tencent-preview"></p>
+<p>但是鉴于阿里云截图只能采用 10 x 10 的规格，所以我们最终仍旧采用已有的方案。<br>其他功能</p>
+<p>以上罗列详细讲解了该系统部分核心功能的实现方案，但碍于篇幅实在太长，就不完全展示了，实现上都是大同小异。下面就简述其他部分功能实现的难点及解决思路。</p>
+<h2 id="其他功能"><a href="#其他功能" class="headerlink" title="其他功能"></a>其他功能</h2><h3 id="快捷菜单"><a href="#快捷菜单" class="headerlink" title="快捷菜单"></a>快捷菜单</h3><p>也许你会疑问，不就一个右键菜单吗，有啥难的？</p>
+<p>轨道工作区的快捷菜单实现的难度在于视频框架内嵌套了锚点这个内置的元素，该区域绑定了大量的鼠标相关事件 click、mousedown、mousemove、mouseup、contextmeu 等等，而交互上锚点的拖拽、右键菜单等都需要与外层的视频框架区分开来，所以在这个区域大绝大部分的元素都设置了 poiner-events: none 阻止事件冒泡。</p>
+<p>这在交互层面又和点击空白区域取消选中、隐藏菜单等操作会形成冲突，这需要在 document 上绑定 click 事件，但是阻止冒泡又会无法到达 document。以及轨道工作区两个右键菜单之间的互斥关系的处理，都是较难处理的地方。</p>
+<p>此处我也实现了一个右键点击的指令，在初始化指令时会先监听 document 的 click 事件，如果指令中缓存的菜单节点为空，或 click 事件对象的 path 属性（也就是事件冒泡的路径）包含菜单节点（也就是在菜单上方 click），则不进行隐藏菜单的操作，否则则需要隐藏。</p>
+<p><img src="https://img.mrsingsing.com/contextmenu.gif" alt="contextmenu"></p>
+<h3 id="游标进度条"><a href="#游标进度条" class="headerlink" title="游标进度条"></a>游标进度条</h3><p>当播放器开始播放时，交互上需要把轨道区看作是进度条，游标需要根据播放器播放的时间实时移动到游标尺对应的时间上。而且，当游标移动至工作区视口中线时，则需要定在中线位置，改为轨道区域向后滚动；当轨道区域尾部滚动至工作区右侧重合时，游标则需要再次移动，直至到视频播放结束。</p>
+<p>实现上只需要将播放器的时间回调方法提供的 duration 时间参数，根据游标尺比例尺转化为轨道工作区定位游标需要移动到的偏移值，再通过 scrollTo 方法滚动到指定位置即可。需要注意的是处理好游标下个移动的位置与工作区视口中线距离之间的判断，这是区分游标移动还是工作区移动的关键。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文只着重描述了教育行业云剪辑项目的重点难点的解决方案，在项目开发过程对数据结构的定义、不同实体的增删改查、不同区域的事件通信及数据同步、锚点互动的配置、全局的视频上传悬浮球、实时草稿保存和合成前数据的校验等等，每个细分功能的实现都是一个个挑战。在开发评审阶段所有前端都感觉困难无比的工程，最终经过将近一个月的设计评审开发测试后，顺利上线运行，为多个科目数百个课程，数万课次的录播视频配齐提供高质高效率的服务。</p>
+<p>通过这个迭代对 Web 端可视化配置类型系统有了更深层次的理解，特别是设计师提出的多样化的用户交互，不仅让我对效率类工具的产品设计和用户体验分析能力有了飞速的进步，同时能在需求实现的同时打破了层层技术壁垒。</p>
+<p>本文详细讲述了核心轨道工作区的技术实现方案，下篇将讲述基于阿里云播放器的二次封装的逻辑实现。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/web-video-editor-infra/" rel="next" title="云视频剪辑配齐工具实践复盘（架构篇）">
+                <i class="fa fa-chevron-left"></i> 云视频剪辑配齐工具实践复盘（架构篇）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/blog/images/avatar.jpeg" alt="tsejx">
+            
+              <p class="site-author-name" itemprop="name">tsejx</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/blog/archives/">
+                
+                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/tsejx" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/blog/images/cc-by-nc-sa.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#上传视频"><span class="nav-number">1.</span> <span class="nav-text">上传视频</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#选择文件上传"><span class="nav-number">1.1.</span> <span class="nav-text">选择文件上传</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#拖拽文件上传"><span class="nav-number">1.2.</span> <span class="nav-text">拖拽文件上传</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#上传视频最佳实践"><span class="nav-number">1.3.</span> <span class="nav-text">上传视频最佳实践</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#音视频文件信息"><span class="nav-number">2.</span> <span class="nav-text">音视频文件信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#游标"><span class="nav-number">3.</span> <span class="nav-text">游标</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#定位游标"><span class="nav-number">3.1.</span> <span class="nav-text">定位游标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#预览游标"><span class="nav-number">3.2.</span> <span class="nav-text">预览游标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#磁吸游标"><span class="nav-number">3.3.</span> <span class="nav-text">磁吸游标</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#游标尺"><span class="nav-number">4.</span> <span class="nav-text">游标尺</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#拖拽指令"><span class="nav-number">5.</span> <span class="nav-text">拖拽指令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#被拖拽元素"><span class="nav-number">5.1.</span> <span class="nav-text">被拖拽元素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#拖拽目的地元素"><span class="nav-number">5.2.</span> <span class="nav-text">拖拽目的地元素</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#缩略图指令"><span class="nav-number">6.</span> <span class="nav-text">缩略图指令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#视频文件画布截图"><span class="nav-number">6.1.</span> <span class="nav-text">视频文件画布截图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#雪碧图实现缩略图"><span class="nav-number">6.2.</span> <span class="nav-text">雪碧图实现缩略图</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他功能"><span class="nav-number">7.</span> <span class="nav-text">其他功能</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#快捷菜单"><span class="nav-number">7.1.</span> <span class="nav-text">快捷菜单</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#游标进度条"><span class="nav-number">7.2.</span> <span class="nav-text">游标进度条</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">8.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tsejx</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/blog/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/blog/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/blog/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
